@@ -21,9 +21,12 @@ generate_figure <- function(location.dir, location.file) {
 
     # prep & load config info / data
     init_vars()
-    # do these next:
-    load_file_head() # IN PROGRESS
-    #load_data() # ON DECK
+    load_file_head()
+    load_data()
 
     message("-------- Statistical Analysis --------")
+
+    # move onto stats analysis
+    #if (Stats.Outlier != FALSE) { run_outlier() }
+    #run_stats_prep()
 }

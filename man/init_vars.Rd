@@ -6,9 +6,6 @@
 \usage{
 init_vars()
 }
-\value{
-nothing
-}
 \description{
 Reset the variables to the defaults used to load and generate another figure
 }

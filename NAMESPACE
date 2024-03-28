@@ -3,4 +3,5 @@
 export(convert_text)
 export(generate_figure)
 export(init_vars)
+export(load_data)
 export(load_file_head)

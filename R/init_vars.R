@@ -2,7 +2,6 @@
 #'
 #' @description Reset the variables to the defaults used to load and generate another figure
 #'
-#' @return nothing
 #' @export
 #'
 #' @examples
@@ -141,5 +140,5 @@ init_vars <- function() {
     stats$Tukey.levels <- "" ### CHANGED ###
 
     # clear out plot generated values
-    fig$plot.labels <- "" ### CHANGED ###
+    fig$Plot.Labels <- "" ### CHANGED ### PAY ATTENTION AND MAKE UPERCASE!
 }
