@@ -32,6 +32,6 @@ generate_figure <- function(location.dir, location.file) {
 
     # run actual tests
     if ("ANOVA" %in% stats$Test) { run_anova() }
-    #if ("STTest" %in% Stats.Test) { run_sttest() }
+    if ("STTest" %in% stats$Test) { run_sttest() }
     #if ("PTTest" %in% Stats.Test) { run_ttest(TRUE) } # NOT YET IMPLEMENTED!
 }
