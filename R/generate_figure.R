@@ -46,4 +46,28 @@ generate_figure <- function(location.dir, location.file) {
         stats$group1Mute = stats$Transform.Treatment[1]
         fig$Plot.HLine = data.frame(y=c(1),size=c(1),color=c("black"))
     }
+
+    # if the Y-values were adjusted (eg all divided by 1,000 - in run_stats_prep()) this will append the modification
+    # to the end of your y-axis label - you can select one or two lines...
+    if (is.numeric(fig$Y.Rig)) {
+        if (fig$Y.Rig.Newline) {
+            # Two Lines
+            #Fig.Y = bquote(bold(atop(.(Fig.Y), "(" * .(Fig.Y.Supp[[1]]) * ")")))
+            fig$Y = bquote(atop(.(fig$Y), "(" * .(fig$Y.Supp[[1]]) * ")"))
+        } else {
+            # Single Line
+            fig$Y = bquote(.(fig$Y)~"("*.(fig$Y.Supp[[1]])*")")
+        }
+        # general math expression:
+        #Fig.Y = bquote(.(Fig.Y)~"He"~r[xy]==~B^2)
+
+        # following will successfully store the expression...
+        #r = do.call(substitute, as.list(str2expression("r[xy]")))
+        # error prone BUT it will parse a expression stored in a string...
+        #Fig.Y = bquote(.(parse(text=Fig.Y)))
+        # FULL list of current html4
+        #"&Alpha;~&Beta;~&Gamma;~&Delta;~&Epsilon;~&Pi;~&Sigma;~&Tau;~&Phi;~&Omega;~&alpha;~&beta;~&gamma;~&delta;~&epsilon;~&pi;~&sigma;~&tau;~&phi;~&omega;~&bull;~&isin;~&notin;~&radic;~&infin;~&asymp;~&micro;"
+
+        #assign("Fig.Y", Fig.Y, envir = .GlobalEnv) ### CHANGED - no longer needed ###
+    }
 }
