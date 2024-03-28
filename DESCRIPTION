@@ -14,5 +14,7 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     methods,
+    outliers,
     sfsmisc,
+    stats,
     utils

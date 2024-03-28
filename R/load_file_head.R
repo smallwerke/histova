@@ -15,35 +15,35 @@ load_file_head = function() {
     #getwd()
     #setwd(the$Location.Dir)
     #getwd()
-    fullPath = paste0(the$Location.Dir, "/", the$Location.File)
+    fullPath <- paste0(the$Location.Dir, "/", the$Location.File)
 
     # forced reset
     init_vars()
 
     # set the override placeholder to NULL
-    Override.tmp = NULL
-    Fig.Y.tmp = NULL
+    Override.tmp <- NULL
+    Fig.Y.tmp <- NULL
 
     # read in the comments and set any specified variables (title, legend, etc)
     CON = file(fullPath, open = "r")
-    l = readLines(CON, 1)
+    l <- readLines(CON, 1)
     while(substring(l, 1, 1) == '#') {
         #message(sprintf("---- Load data (line: %s)", l))
 
         # pull out the information
-        lA = strsplit(substring(l, 2), "\t");
+        lA <- strsplit(substring(l, 2), "\t");
 
         # if the line is a comment skip to the next iteration
         if (substring(l, 2, 2) == '#') {
-            l = readLines(CON, 1);
+            l <- readLines(CON, 1);
             next
         } else {
-            l = readLines(CON, 1);
+            l <- readLines(CON, 1);
         }
 
         # maintain backwards compatibility - simply move this to a new line for analysis...
-        if (lA[[1]][1] == "Stats STTest Pairs") { lA[[1]] = c("Stats Test", "STTest", lA[[1]][-1]) }
-        else if (lA[[1]][1] == "Stats PTTest Pairs") { lA[[1]] = c("Stats Test", "PTTest", lA[[1]][-1]) }
+        if (lA[[1]][1] == "Stats STTest Pairs") { lA[[1]] <- c("Stats Test", "STTest", lA[[1]][-1]) }
+        else if (lA[[1]][1] == "Stats PTTest Pairs") { lA[[1]] <- c("Stats Test", "PTTest", lA[[1]][-1]) }
 
         ################ OVERRIDE? ################
         if (lA[[1]][1] == "Override") {
@@ -121,10 +121,10 @@ load_file_head = function() {
             else if (lA[[1]][1] == "Colors") { fig$Colors <- strsplit(lA[[1]][2], "[, ]+")[[1]]
             } else if (lA[[1]][1] == "Colors Unique") {
                 #Colors Unique	#000000, #FFD700, 4, 1.8
-                colorDets = strsplit(lA[[1]][2], ",")[[1]]
-                while (length(colorDets) < 4) { colorDets = append(colorDets, NA) }
-                colorDets[3] = as.numeric(colorDets[3])
-                fig$Colors.Unique[nrow(fig$Colors.Unique)+1,] = colorDets
+                colorDets <- strsplit(lA[[1]][2], ",")[[1]]
+                while (length(colorDets) < 4) { colorDets <- append(colorDets, NA) }
+                colorDets[3] <- as.numeric(colorDets[3])
+                fig$Colors.Unique[nrow(fig$Colors.Unique)+1,] <- colorDets
                 #assign("Fig.Colors.Unique", Fig.Colors.Unique, envir = .GlobalEnv) ### CHANGED ###
             } else if (lA[[1]][1] == "Colors Alpha") {
                 if ((as.numeric(lA[[1]][2]) >= 0) && (as.numeric(lA[[1]][2]) <= 1)) {
@@ -216,7 +216,7 @@ load_file_head = function() {
                 if (lA[[1]][2] %in% c("Group1", "group1", 1)) { fig$Legend.Color.Source <- "Group1" }
                 else { fig$Legend.Color.Source <- "All" }
             }
-            else if (lA[[1]][1] == "Legend Title") { fig$Legend.Title.tmp = lA[[1]][2] } ### CHANGED - this was not being assigned to globalenv previously ###
+            else if (lA[[1]][1] == "Legend Title") { fig$Legend.Title.tmp <- lA[[1]][2] } ### CHANGED - this was not being assigned to globalenv previously ###
             else if (lA[[1]][1] == "Legend Position") {
                 if (tolower(lA[[1]][2]) == "top") { fig$Legend.Position <- "top" }
                 else if (tolower(lA[[1]][2]) == "right") { fig$Legend.Position <- "right" }
@@ -252,9 +252,9 @@ load_file_head = function() {
         }
 
         ################ Title & Axis Labels (REQ) ################
-        if (lA[[1]][1] == "Title Main") { fig$Title.tmp = lA[[1]][2] } ### CHANGED - was not being assigned to global env ###
-        else if (lA[[1]][1] == "X Leg") { fig$X.tmp = lA[[1]][2] } ### CHANGED - was not being assigned to global env ###
-        else if (lA[[1]][1] == "Y Leg") { fig$Y.tmp = lA[[1]][2] } ### CHANGED - was not being assigned to global env ###
+        if (lA[[1]][1] == "Title Main") { fig$Title.tmp <- lA[[1]][2] } ### CHANGED - was not being assigned to global env ###
+        else if (lA[[1]][1] == "X Leg") { fig$X.tmp <- lA[[1]][2] } ### CHANGED - was not being assigned to global env ###
+        else if (lA[[1]][1] == "Y Leg") { fig$Y.tmp <- lA[[1]][2] } ### CHANGED - was not being assigned to global env ###
         ################ Height of Y-axis and Horizontal Line/s (REQ) ################
         else if (lA[[1]][1] == "Y Min") { fig$Y.Min <- as.numeric(lA[[1]][2]) }
         else if (lA[[1]][1] == "Y Max") { fig$Y.Max <- as.numeric(lA[[1]][2]) }
@@ -262,9 +262,9 @@ load_file_head = function() {
         # any breaks in the y-axis? can handle comma delimited array of break details
         else if (lA[[1]][1] == "Y Break") {
             fig$Y.Break <- TRUE
-            tmp = unlist(strsplit(lA[[1]][2], ","))
+            tmp <- unlist(strsplit(lA[[1]][2], ","))
             # scales column is optional, if absent 'fixed' is default for ggbreak
-            if (length(tmp) < 3) { tmp[3] = "fixed" }
+            if (length(tmp) < 3) { tmp[3] <- "fixed" }
             # add a new row to the break data frame
             fig$Y.Break.df[nrow(fig$Y.Break.df) + 1,] <- tmp
             # start and stop columns must be numeric for ggbreak, scales column can be character
@@ -273,15 +273,15 @@ load_file_head = function() {
         }
         # can handle comma delimited array of horizontal lines
         else if (lA[[1]][1] == "HLine") {
-            tmp = unlist(strsplit(lA[[1]][2], ","))
+            tmp <- unlist(strsplit(lA[[1]][2], ","))
             # if the HLine provided by the user doesn't specify the size and color start by using the default
             # going to deal with the overide option later since I don't want to impose config file line order requirements
-            if (length(tmp) < 2) { tmp[2] = fig$Plot.HLine.Def.Size }
-            if (length(tmp) < 3) { tmp[3] = fig$Plot.HLine.Def.Color }
+            if (length(tmp) < 2) { tmp[2] <- fig$Plot.HLine.Def.Size }
+            if (length(tmp) < 3) { tmp[3] <- fig$Plot.HLine.Def.Color }
             if(is.na(fig$Plot.HLine$y[1])) {
-                fig$Plot.HLine[1,] = list(as.numeric(tmp[1]), as.numeric(tmp[2]), tmp[3])
+                fig$Plot.HLine[1,] <- list(as.numeric(tmp[1]), as.numeric(tmp[2]), tmp[3])
             } else {
-                fig$Plot.HLine[nrow(fig$Plot.HLine) + 1,] = list(as.numeric(tmp[1]), as.numeric(tmp[2]), tmp[3])
+                fig$Plot.HLine[nrow(fig$Plot.HLine) + 1,] <- list(as.numeric(tmp[1]), as.numeric(tmp[2]), tmp[3])
             }
             #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - should now be taken care of above when being setup... ###
         }
@@ -298,31 +298,31 @@ load_file_head = function() {
         ################ Stats Tests (REQ) ################
         else if (lA[[1]][1] == "Stats Test") {
             # set the default value to FALSE whenever a user assigns any specific test
-            stats$Test[1] = FALSE ### CHANGED - was not explicitly changing global env previously... ###
+            stats$Test[1] <- FALSE ### CHANGED - was not explicitly changing global env previously... ###
             ### CHANGED - IS THERE A REASON I AM NOT CHECKING FOR ANOVA ALREADY IN THE stats$Test LIST? ###
-            if (lA[[1]][2] %in% c("ANOVA", "anova", "Anova")) { stats$Test = c(stats$Test, "ANOVA") } ### CHANGED - was not explicitly changing global env previously... ###
+            if (lA[[1]][2] %in% c("ANOVA", "anova", "Anova")) { stats$Test <- c(stats$Test, "ANOVA") } ### CHANGED - was not explicitly changing global env previously... ###
             else if (lA[[1]][2] %in% c("STTest", "sttest", "STtest")) {
-                if (!"STTest" %in% stats$Test) { stats$Test = c(stats$Test, "STTest") } ### CHANGED - was not explicitly changing global env previously... ###
+                if (!"STTest" %in% stats$Test) { stats$Test <- c(stats$Test, "STTest") } ### CHANGED - was not explicitly changing global env previously... ###
                 # for a TTtest the comparison groups need to be submitted
                 # set default test
-                STTest.tails = "two.sided"
+                STTest.tails <- "two.sided"
                 # set default variance
-                STTest.variance = "equal"
+                STTest.variance <- "equal"
                 # set default pairing
-                STTest.paired = "unpaired"
+                STTest.paired <- "unpaired"
                 # check to see if the pairing is being defined AND if it
                 if (length(lA[[1]]) > 7) {
-                    if (tolower(lA[[1]][8]) %in% c("paired", "unpaired")) { STTest.paired = tolower(lA[[1]][8]) }
+                    if (tolower(lA[[1]][8]) %in% c("paired", "unpaired")) { STTest.paired <- tolower(lA[[1]][8]) }
                     else { warning(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][8], STTest.paired)) }
                 }
                 # check to see if the variance is being defined AND if it
                 if (length(lA[[1]]) > 6) {
-                    if (tolower(lA[[1]][7]) %in% c("equal", "unequal")) { STTest.variance = tolower(lA[[1]][7]) }
+                    if (tolower(lA[[1]][7]) %in% c("equal", "unequal")) { STTest.variance <- tolower(lA[[1]][7]) }
                     else { warning(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][7], STTest.variance)) }
                 }
                 # check to see if a test is request AND if it is workable...
                 if (length(lA[[1]]) > 5) {
-                    if (tolower(lA[[1]][6]) %in% c("two.sided", "greater", "less")) { STTest.tails = tolower(lA[[1]][6]) }
+                    if (tolower(lA[[1]][6]) %in% c("two.sided", "greater", "less")) { STTest.tails <- tolower(lA[[1]][6]) }
                     else { warning(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][6], STTest.tails)) }
                 }
                 # retain backwards compatability when the config file had sep lines for test & parings...
@@ -331,20 +331,20 @@ load_file_head = function() {
                 }
             }
             else if (lA[[1]][2] %in% c("PTTest", "pttest", "PTtest", "Pttest")) {
-                if (!"PTTest" %in% stats$Test) { stats$Test = c(stats$Test, "PTTest") } ### CHANGED - was not explicitly changing global env previously... ###
+                if (!"PTTest" %in% stats$Test) { stats$Test <- c(stats$Test, "PTTest") } ### CHANGED - was not explicitly changing global env previously... ###
                 # for a TTtest the comparison groups need to be submitted
                 # set default test
-                PTTest.tails = "two.sided"
+                PTTest.tails <- "two.sided"
                 # set default variance
-                PTTest.variance = "equal"
+                PTTest.variance <- "equal"
                 # check to see if the variance is being defined AND if it
                 if (length(lA[[1]]) > 6) {
-                    if (tolower(lA[[1]][7]) %in% c("equal", "unequal")) { PTTest.variance = tolower(lA[[1]][7]) }
+                    if (tolower(lA[[1]][7]) %in% c("equal", "unequal")) { PTTest.variance <- tolower(lA[[1]][7]) }
                     else { warning(sprintf("---- Argument in PTTest (%s) NOT VALID, using default (%s) instead", lA[[1]][7], PTTest.variance)) }
                 }
                 # check to see if a test is request AND if it is workable...
                 if (length(lA[[1]]) > 5) {
-                    if (lA[[1]][6] %in% c("two.sided", "greater", "less")) { PTTest.tails = lA[[1]][6] }
+                    if (lA[[1]][6] %in% c("two.sided", "greater", "less")) { PTTest.tails <- lA[[1]][6] }
                     else { warning(sprintf("---- Argument in PTTest (%s) NOT VALID, using default (%s) instead", lA[[1]][6], PTTest.tails)) }
                 }
                 # retain backwards compatability when the config file had sep lines for test & parings...
@@ -360,8 +360,8 @@ load_file_head = function() {
                 # a specified treatment is required, if it isn't there, leave it set at FALSE
                 if (!is.na(lA[[1]][3])) {
                     stats$Transform <- "ToverC"
-                    tc = c(lA[[1]][3])
-                    if (!is.na(lA[[1]][4])) { tc = c(convert_text(lA[[1]][3]), convert_text(lA[[1]][4])) }
+                    tc <- c(lA[[1]][3])
+                    if (!is.na(lA[[1]][4])) { tc <- c(convert_text(lA[[1]][3]), convert_text(lA[[1]][4])) }
                     stats$Transform.Treatment <- tc
                 }
             } else if (lA[[1]][2] %in% c("TimeCourse", "TIMECOURSE")) {
@@ -406,20 +406,20 @@ load_file_head = function() {
         rm(Legend.Title.Replace, envir = fig)
     }
     if (fig$Convert) {
-        fig$Title.tmp = convert_text(fig$Title.tmp)
-        fig$Y.tmp = convert_text(fig$Y.tmp)
-        fig$X.tmp = convert_text(fig$X.tmp)
-        fig$Legend.Title.tmp = convert_text(fig$Legend.Title.tmp)
+        fig$Title.tmp <- convert_text(fig$Title.tmp)
+        fig$Y.tmp <- convert_text(fig$Y.tmp)
+        fig$X.tmp <- convert_text(fig$X.tmp)
+        fig$Legend.Title.tmp <- convert_text(fig$Legend.Title.tmp)
     }
 
     # IF a master HLine style was provided replace the current value and cleanup
     if (is.na(fig$Plot.HLine.OVRD.Color) == FALSE) {
-        fig$Plot.HLine$color = fig$Plot.HLine.OVRD.Color
+        fig$Plot.HLine$color <- fig$Plot.HLine.OVRD.Color
         message(sprintf("OVERRIDING ALL horizontal line colors, set to: \'%s\'", fig$Plot.HLine$color[1]))
         #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - should no longer be needed as assigned on the fly ###
     }
     if (is.na(fig$Plot.HLine.OVRD.Size) == FALSE) {
-        fig$Plot.HLine$size = fig$Plot.HLine.OVRD.Size
+        fig$Plot.HLine$size <- fig$Plot.HLine.OVRD.Size
         message(sprintf("OVERRIDING ALL horizontal line sizes, set to: \'%s\'", fig$Plot.HLine$size[1]))
         #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - should no longer be needed as assigned on the fly ###
     }

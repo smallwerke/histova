@@ -27,6 +27,6 @@ generate_figure <- function(location.dir, location.file) {
     message("-------- Statistical Analysis --------")
 
     # move onto stats analysis
-    #if (Stats.Outlier != FALSE) { run_outlier() }
+    if (stats$Outlier != FALSE) { run_outlier() }
     #run_stats_prep()
 }
