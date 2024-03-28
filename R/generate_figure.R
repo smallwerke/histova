@@ -43,7 +43,7 @@ generate_figure <- function(location.dir, location.file) {
         run_stats_prep()
 
         # remove the treatment group (it will be indicated by a line at 1)
-        stats$group1Mute = stats$Transform.Treatment[1]
+        stats$Group1.Mute = stats$Transform.Treatment[1]
         fig$Plot.HLine = data.frame(y=c(1),size=c(1),color=c("black"))
     }
 
@@ -70,4 +70,41 @@ generate_figure <- function(location.dir, location.file) {
 
         #assign("Fig.Y", Fig.Y, envir = .GlobalEnv) ### CHANGED - no longer needed ###
     }
+
+    # this may not be 100% necessary if the
+    # the t-tests should be run on the remaining groups POST transformation
+    # but BEFORE removal of the control group
+    if (stats$Transform == "ToverC") {
+        if ("STTest" %in% stats$Test) { run_sttest() }
+        #if ("PTTest" %in% Stats.Test) { run_ttest(TRUE) }
+    }
+
+    # remove a group from being displayed (eg for treatment / control figures)
+    if ((stats$Group1.Mute != FALSE) && (stats$Anova.Group2 == FALSE)) {
+
+        warning(sprintf("group1Mute is set to %s, attempting to remove this group! (file: %s)", stats$Group1.Mute, the$Location.File))
+
+        raw$base = subset(raw$base, Group1!=stats$Group1.Mute)
+        raw$base[] = lapply(raw$base, function(x) if(is.factor(x)) factor(x) else x)
+        #assign("raw", raw, envir = .GlobalEnv) ### CHANGED - no longer needed ###
+
+        raw$summary = subset(raw$summary, Group1!=stats$Group1.Mute)
+        raw$summary[] = lapply(raw$summary, function(x) if(is.factor(x)) factor(x) else x)
+        #assign("raw.summary", raw.summary, envir = .GlobalEnv) ### CHANGED - no longer needed ###
+
+        raw$summary.multi = subset(raw$summary.multi, Group1!=stats$Group1.Mute)
+        raw$summary.multi[] = lapply(raw$summary.multi, function(x) if(is.factor(x)) factor(x) else x)
+        #assign("raw.summary.multi", raw.summary.multi, envir = .GlobalEnv) ### CHANGED - no longer needed ###
+    }
+
+    # the ANOVA test should be run on the remaining groups POST transformation
+    if (stats$Transform == "ToverC") {
+        if ("ANOVA" %in% stats$Test) { run_anova() }
+        # following vars are set in run_anova() (raw.anova.multi, raw.aov.multi, raw.aov.tukey.multi)
+    }
+
+    message("-------- Build Histogram --------")
+#    set_aesthetics()
+#    build_histo()
+
 }

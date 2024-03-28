@@ -121,7 +121,7 @@ init_vars <- function() {
     stats$Transform <- FALSE
     stats$Transform.Treatment <- ""
     stats$Outlier <- "TWO"
-    stats$group1Mute <- FALSE ### CHANGED ###
+    stats$Group1.Mute <- FALSE ### CHANGED ###
 
     ################ Split on Group 2? (REQ) ################
     stats$Anova.Group2 <- FALSE
