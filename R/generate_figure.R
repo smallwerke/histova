@@ -40,10 +40,10 @@ generate_figure <- function(location.dir, location.file) {
     if (stats$Transform == "ToverC") {
         run_transform()
         # run the stats prep again to set the summary tables to the new values
-#        run_stats_prep()
+        run_stats_prep()
 
         # remove the treatment group (it will be indicated by a line at 1)
-#        group1Mute = Stats.Transform.Treatment[1]
-#        Fig.Plot.HLine = data.frame(y=c(1),size=c(1),color=c("black"))
+        stats$group1Mute = stats$Transform.Treatment[1]
+        fig$Plot.HLine = data.frame(y=c(1),size=c(1),color=c("black"))
     }
 }
