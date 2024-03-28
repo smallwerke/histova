@@ -1,2 +1,5 @@
 the <- new.env(parent = emptyenv())
 fig <- new.env(parent = emptyenv())
+notes <- new.env(parent = emptyenv())
+raw <- new.env(parent = emptyenv())
+stats <- new.env(parent = emptyenv())

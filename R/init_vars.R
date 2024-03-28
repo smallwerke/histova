@@ -43,11 +43,101 @@ init_vars <- function() {
         fig$Scatter.Size <- NA
         fig$Scatter.Stroke <- NA
         fig$Plot.Whisker <- "FALSE"
+
+        ################ Line Design Options (OPT) ################
+        fig$Axis.X.Main.Size <- 0.8
+        fig$Axis.X.Main.Color <- "black"
+        fig$Axis.Y.Main.Size <- 0.8
+        fig$Axis.Y.Main.Color <- "black"
+        fig$Axis.X.Tick.Size <- 0.6
+        fig$Axis.X.Tick.Color <- "black"
+        fig$Axis.X.Tick.Length <- 0.1
+        fig$Axis.Y.Tick.Size <- 0.6
+        fig$Axis.Y.Tick.Color <- "black"
+        fig$Axis.Y.Tick.Length <- 0.1
+        fig$Plot.ErrorBar.Size <- 0.8
+        fig$Plot.ErrorBar.EndWidth <- 0.4
+        fig$Plot.ErrorBar.Color <- "black"
+        fig$Plot.HLine.Def.Size <- 1
+        fig$Plot.HLine.Def.Color <- "black"
+        fig$Plot.HLine.OVRD.Size <- NA
+        fig$Plot.HLine.OVRD.Color <- NA
+
+        ################ Legend Display Options (OPT) ################
+        fig$Legend.Display <- FALSE
+        fig$Legend.Color.Source <- "All"
+        fig$Legend.Title <- "Groups"
+        fig$Legend.Title.tmp <- ""
+        fig$Legend.Position <- "bottom"
+        fig$Legend.Key.Size <- 0.25
+
+        ################ Stats Labels (OPT) ################
+        stats$Letters.Offset <- FALSE
+        stats$Letters.Size <- 18
+        stats$Caption.Display <- TRUE
+        stats$Caption.Size <- 6
+
+        ################ Figure Save (OPT) ################
+        fig$Save.Width <- 8
+        fig$Save.Height <- 8.5
+        fig$Save.DPI <- 320
+        fig$Save.Units <- "in"
+        fig$Save.Type <- "jpg"
     }
 
     ################ Title & Axis Labels (REQ) ################
     fig$Title <- ""
+    fig$Title.tmp <- ""
+    fig$X <- ""
+    fig$Y <- ""
 
     ################ Height of Y-axis and Horizontal Line/s (REQ) ################
     fig$Y.Min <- 0
+    fig$Y.Max <- ""
+    fig$Y.Interval <- ""
+    fig$Y.Break <- FALSE
+    fig$Y.Break.df <- data.frame(matrix(ncol=3, nrow=0))
+    colnames(fig$Y.Break.df) <- c("start","stop", "scales")
+    fig$Plot.HLine <- data.frame(y=c(NA),size=c(0),color=c(""))
+
+    ################ Alter the Axis (REQ) ################
+    fig$Y.Rig <- FALSE
+    fig$Y.Rig.Newline <- FALSE
+    # if there is additional info from Y manipulation store here, not editable in CONFIG
+    fig$Y.Supp <- ""
+
+    ################ Stats Labels (OPT) ################
+    # set by the script - RESET per run:
+    notes$Stats.Method <- ""
+    notes$Stats.Outlier <- ""
+
+    ################ Stats Tests (REQ) ################
+    stats$Test <- c()
+    stats$STTest.Pairs <- data.frame()
+    stats$PTTest.Pairs <- data.frame()
+
+    ################ Stats Transformation or Outlier (REQ) ################
+    stats$Transform <- FALSE
+    stats$Transform.Treatment <- ""
+    stats$Outlier <- "TWO"
+    stats$group1Mute <- FALSE ### CHANGED ###
+
+    ################ Split on Group 2? (REQ) ################
+    stats$Anova.Group2 <- FALSE
+    fig$Facet.Split <- TRUE
+
+    # clear out all the variables generated in the run_stats_prep()
+    raw$base <- "" ### CHANGED ###
+    raw$multi <- ""
+    raw$anova.multi <- ""
+    raw$aov.multi <- ""
+    raw$aov.tukey.multi <- ""
+    raw$summary <- ""
+    raw$summary.multi <- ""
+
+    # clear out ANOVA generated values
+    stats$Tukey.levels <- "" ### CHANGED ###
+
+    # clear out plot generated values
+    fig$plot.labels <- "" ### CHANGED ###
 }
