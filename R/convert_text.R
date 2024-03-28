@@ -9,7 +9,8 @@
 #' @export
 #'
 #' @examples
-#' fig$Title.tmp <- convert_text(fig$Title.tmp)
+#' title <- "Is it finally &Pi; day?"
+#' title <- convert_text(title)
 convert_text <- function (label) {
 
     # convert

@@ -16,5 +16,6 @@ A string with unicode in place of html markdown
 do a simple swap of html based characters for special symbols needed in titles & labels
 }
 \examples{
-fig$Title.tmp <- convert_text(fig$Title.tmp)
+title <- "Is it finally &Pi; day?"
+title <- convert_text(title)
 }
