@@ -16,6 +16,7 @@ Imports:
     methods,
     outliers,
     plyr,
+    scales,
     sfsmisc,
     stats,
     utils
