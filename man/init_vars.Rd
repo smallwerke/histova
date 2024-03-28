@@ -10,7 +10,7 @@ init_vars()
 nothing
 }
 \description{
-Initialize variables to defaults
+Reset the variables to the defaults used to load and generate another figure
 }
 \examples{
 init_vars()

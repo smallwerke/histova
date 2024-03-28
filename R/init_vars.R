@@ -1,5 +1,7 @@
 #' Initialize variables to defaults
 #'
+#' @description Reset the variables to the defaults used to load and generate another figure
+#'
 #' @return nothing
 #' @export
 #'
