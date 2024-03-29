@@ -43,6 +43,7 @@ generate_label_df <- function(n){
     #
     ##########################################
     # build the variables required in this function - some are redundant and could/should be cleaned up...
+    message("---- Generate Figure Labels")
     comparison = Value ~ statGroups
     flev = 'statGroups'
     yOff = stats$Letters.Offset
@@ -85,6 +86,7 @@ generate_label_df <- function(n){
     pttest.labels = data.frame(row.names = labels.df$statGroups, plot.labels = labels.df$statGroups, stringsAsFactors = FALSE)
     pttest.labels['labels'] = ""
 
+
     # build the letters that will be used from each test, they will be combined into one table later
     # what tests are being carried out and need statistics reporting?
     if ("ANOVA" %in% stats$Test) {
@@ -111,7 +113,7 @@ generate_label_df <- function(n){
         # check to ensure that there is something to work with OTHERWISE throw a warning
         # and assign 'A' to everything
         if (length(unique(stats$Tukey.Levels[!is.na(1)])) == 1) {
-            anova.labels = data.frame(labels = rep('--', 6), plot.labels = raw$summary.multi[[2]]$statGroups)
+            anova.labels = data.frame(labels = rep('--', 6), plot.labels = raw$summary.multi[[1]]$statGroups)
             warning(sprintf("UNABLE to determine significance based on the tukey results! (%s) \n\tAll groups assigned as having NO SIGNIFICANT DIFFERENCE! (file: %s)", paste("", stats$Tukey.levels, collapse=""), the$Location.File ))
 
             # get the work done 'by hand'
@@ -122,13 +124,13 @@ generate_label_df <- function(n){
             # ordered by the mean, descending...
             # *** DEFINE STAT NOTE BELOW IF CHANGING APPLIED STATS ***
             stats$Tukey.Labels <- multcompView::multcompLetters2(comparison, stats$Tukey.Levels, HSDdata, Letters=c(LETTERS), threshold=alpha)
-            names(stats$Tukey.Labels[['Letters']])
             fig$Plot.Labels <- names(stats$Tukey.Labels[['Letters']])
+            #names(stats$Tukey.Labels[['Letters']])
 
             # Create a data frame out of the factor levels and Tukey's homogenous group letters
             # this has the letter description and the statGroup name in the data frame...
-            anova.labels <- data.frame(fig$Plot.Labels, labels = stats$Tukey.Labels[['Letters']], stringsAsFactors = FALSE)
-            data.frame(fig$Plot.Labels, labels = stats$Tukey.Labels[['Letters']], stringsAsFactors = FALSE)
+            anova.labels <- data.frame(plot.labels = fig$Plot.Labels, labels = stats$Tukey.Labels[['Letters']], stringsAsFactors = FALSE)
+            #data.frame(fig$Plot.Labels, labels = stats$Tukey.Labels[['Letters']], stringsAsFactors = FALSE)
         }
 
         # for figure notes - currently using one-way ANOVA w/ Tukey Post-Hoc Test with a threshold of alpha = 0.05

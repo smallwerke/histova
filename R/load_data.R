@@ -19,7 +19,7 @@ load_data <- function () {
     if (is.numeric(fig$Y.Rig)) {
         warning(sprintf("MODIFYING VALUES: DIVIDING ALL BY %s (file: %s)", fig$Y.Rig, the$Location.File))
         rawIN['Value'] = rawIN['Value']/fig$Y.Rig
-        Fig$Y.Min <- fig$Y.Min/fig$Y.Rig
+        fig$Y.Min <- fig$Y.Min/fig$Y.Rig
         fig$Y.Max <- fig$Y.Max/fig$Y.Rig
         fig$Y.Interval <- fig$Y.Interval/fig$Y.Rig
 

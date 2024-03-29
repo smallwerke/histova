@@ -111,7 +111,7 @@ generate_figure <- function(location.dir, location.file) {
     if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
         for (HL in 1:nrow(fig$Plot.HLine)) {
             message(sprintf("adding a horizontal line to the figure at: \'%s\'", fig$Plot.HLine$y[HL]))
-            gplot = gplot + ggplot2::geom_hline(yintercept=fig$Plot.HLine$y[HL], linetype="solid", color=fig$Plot.HLine$color[HL], linewidth=fig$Plot.HLine$size[HL])
+            the$gplot = the$gplot + ggplot2::geom_hline(yintercept=fig$Plot.HLine$y[HL], linetype="solid", color=fig$Plot.HLine$color[HL], linewidth=fig$Plot.HLine$size[HL])
         }
     }
 
