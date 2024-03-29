@@ -105,6 +105,6 @@ generate_figure <- function(location.dir, location.file) {
 
     message("-------- Build Histogram --------")
     set_aesthetics()
-#    build_histo()
+    build_histo()
 
 }

@@ -13,7 +13,11 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
+    ggbreak,
+    ggplot2,
+    ggtext,
     methods,
+    multcompView,
     outliers,
     plyr,
     scales,

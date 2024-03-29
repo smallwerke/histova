@@ -4,12 +4,13 @@
 #' current focus is on the color of the bars & the points being used along with size
 #'
 #' output the correct set of named lists
-#'   Fig.Colors -> list for the histogram
-#'   Fig.Scatter.Colors.List -> colors for the scatter
-#'   Fig.Scatter.Shape.List -> list of shapes
-#'   Fig.Scatter.Size.List -> list of sizes
+#' <br>Fig.Colors -> list for the histogram
+#' <br>Fig.Scatter.Colors.List -> colors for the scatter
+#' <br>Fig.Scatter.Shape.List -> list of shapes
+#' <br>Fig.Scatter.Size.List -> list of sizes
+#'
 #' output of the stroke size
-#'   Fig.Scatter.Stroke -> the one size for stroking the scatter
+#' <br>Fig.Scatter.Stroke -> the one size for stroking the scatter
 #'
 #' @export
 #'

@@ -137,7 +137,8 @@ init_vars <- function() {
     raw$summary.multi <- ""
 
     # clear out ANOVA generated values
-    stats$Tukey.levels <- "" ### CHANGED ###
+    stats$Tukey.Levels <- "" ### CHANGED ###
+    stats$Tukey.Labels <- ""
 
     # clear out plot generated values
     fig$Plot.Labels <- "" ### CHANGED ### PAY ATTENTION AND MAKE UPERCASE!
