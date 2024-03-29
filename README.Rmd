@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-**NOTE: This is very much a work in progress. I am currently beginning to port over a functioning script that I use on a routine basis and am looking to get it into package format. It is designed around the work I am doing routinely in a molecular biology lab and it might be of use to others.**
+**NOTE: This is very much a work in progress. The current script appears functional but is in the process of going through extensive testing, documentation, and code cleanup. However the initial very basic test file worked. It is designed around the work I am doing routinely in a molecular biology lab and it might be of use to others.**
 
 # histova
 
@@ -30,6 +30,8 @@ You can install the development *aka* **UNCOMPLETE** version of histova from [Gi
 # install.packages("devtools")
 devtools::install_github("smallwerke/histova")
 ```
+
+I will be adding example configuration files in the near future along with more detailed examples.
 
 ## Example
 

@@ -1,10 +1,10 @@
 Package: histova
 Title: Histogram ANOVA
-Version: 0.0.0.9000
+Version: 3.4.3.0000
 Authors@R: 
     person("Niels", , , "6153030+smallwerke@users.noreply.github.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0481-5464"))
-Description: This package pulls in data and display settings from a text file and outputs a figure. Designed for routine data generated in the field of biology where the same aesthetics are going to be implemented for a large number of figures.
+Description: This package pulls in data and display settings from a text file and outputs a figure. Designed for routine data generated in the field of biology where the same aesthetics are going to be implemented for a large number of figures. The version number is reflected of the internal development this code has gone through in script form.
 License: AGPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
