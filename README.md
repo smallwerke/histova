@@ -40,33 +40,43 @@ with more detailed examples.
 *this is just the boilerplate text that RStudio dumps out… I’ll edit
 this once there are actual examples to be had…*
 
-This is a basic example which shows you how to solve a common problem:
+Basic use of the histova sript. Very simple process that generates a
+figure by specifying the source directory and the config file. The
+output figure is saved to the source directory.
+
+### First Version
+
+This is an old basic example of an early version of the script with
+minimal options.
 
 ``` r
 library(histova)
 ## basic example code
+d = "/Users/Shared/HISTOVA_DATA"
+f = "test.txt"
+histova::generate_figure(d,f)
+#> ----------------  ----------------  ----------------
+#> -------- Prep & Load config settings and data --------
+#> ---- Load config (file: test.txt)
+#> ---- Load data (file: test.txt)
+#>  6 final Group1_Group2 (statGroups - should be unique!) ids:
+#>   G1_24hrs G2_24hrs G3_24hrs G4_24hrs G5_24hrs G6_24hrs
+#> -------- Statistical Analysis --------
+#> ---- Outlier checking
+#> Warning in run_outlier(): ONE TAILED REMOVAL on group G2_24hrs (file: test.txt)
+#> ---- Prep stats overview
+#> -------- Build Histogram --------
+#> Figure coordinate ratio for display: 0.1
+#> ---- Generate Figure Labels
+#> Warning in min(x): no non-missing arguments to min; returning Inf
+#> Warning in max(x): no non-missing arguments to max; returning -Inf
+#> saving your new figure to: '/Users/Shared/HISTOVA_DATA/test.jpg'
+#> -------- SAVE Histogram --------
+#> Warning: Using ragg device as default. Ignoring `type` and `antialias`
+#> arguments
+#> Warning in min(x): no non-missing arguments to min; returning Inf
+#> Warning in max(x): no non-missing arguments to max; returning -Inf
+#> ----------------  ----------------  ----------------
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+<img src="man/figures/README-example-1.png" width="100%" />
