@@ -16,6 +16,7 @@ Imports:
     ggbreak,
     ggplot2,
     ggtext,
+    grDevices,
     methods,
     multcompView,
     outliers,

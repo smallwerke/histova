@@ -328,8 +328,6 @@ build_histo <- function(){
     # make the plot accessible...
     #assign("gplot", gplot, envir = .GlobalEnv) ### CHANGED - putting the plot into THE main environment 'the' ###
     the$gplot = gplot
-    # display the plot...
-    gplot
 
     #n = 2
     #generate_label_df(raw.multi[[n]], raw.aov.tukey.multi[[n]], raw.summary.multi[[n]], Value ~ statGroups, 'statGroups', Stats.Letters.Offset)

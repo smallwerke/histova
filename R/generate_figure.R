@@ -107,4 +107,31 @@ generate_figure <- function(location.dir, location.file) {
     set_aesthetics()
     build_histo()
 
+    # add a line to the figure...
+    if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
+        for (HL in 1:nrow(fig$Plot.HLine)) {
+            message(sprintf("adding a horizontal line to the figure at: \'%s\'", fig$Plot.HLine$y[HL]))
+            gplot = gplot + ggplot2::geom_hline(yintercept=fig$Plot.HLine$y[HL], linetype="solid", color=fig$Plot.HLine$color[HL], linewidth=fig$Plot.HLine$size[HL])
+        }
+    }
+
+    # print out the plot for viewing in RStudio - probably good idea to make this an optional setting...
+    print(the$gplot)
+
+    # save the image to the working directory using the modified txt filename - this WILL
+    # overwrite an existing image...
+    the$Location.Image = paste0(the$Location.Dir, "/", sub("txt", fig$Save.Type, the$Location.File))
+    message(sprintf("saving your new figure to: \'%s\'", the$Location.Image))
+    message("-------- SAVE Histogram --------")
+
+    # implement cairo package to better embed fonts into the output
+    if (fig$Save.Type %in% c("tex", "svg")) {
+        ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, limitsize = FALSE)
+    } else if (fig$Save.Type == "pdf") {
+        ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = grDevices::cairo_pdf, limitsize = FALSE)
+    } else {
+        ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, type="cairo", limitsize = FALSE)
+    }
+    message("----------------  ----------------  ----------------")
+
 }
