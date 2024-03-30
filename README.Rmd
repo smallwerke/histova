@@ -39,13 +39,29 @@ I will be adding example configuration files in the near future along with more 
 
 Basic use of the histova sript. Very simple process that generates a figure by specifying the source directory and the config file. The output figure is saved to the source directory.
 
+### Load Package
+
+```{r exampleLoad}
+library(histova)
+```
+
+**The following images are the default output from RStudio, the saved versions from the script have complete font embedding and higher resoltion.**
+
+### Two Groups
+
+This is an old basic example of an early version of the script with minimal options.
+
+```{r example2}
+d = "/Users/Shared/HISTOVA_DATA"
+f = "test-2_groups.txt"
+histova::generate_figure(d,f)
+```
+
 ### First Version
 
 This is an old basic example of an early version of the script with minimal options.
 
-```{r example}
-library(histova)
-## basic example code
+```{r example1}
 d = "/Users/Shared/HISTOVA_DATA"
 f = "test.txt"
 histova::generate_figure(d,f)

@@ -44,14 +44,71 @@ Basic use of the histova sript. Very simple process that generates a
 figure by specifying the source directory and the config file. The
 output figure is saved to the source directory.
 
+### Load Package
+
+``` r
+library(histova)
+```
+
+**The following images are the default output from RStudio, the saved
+versions from the script have complete font embedding and higher
+resoltion.**
+
+### Two Groups
+
+This is an old basic example of an early version of the script with
+minimal options.
+
+``` r
+d = "/Users/Shared/HISTOVA_DATA"
+f = "test-2_groups.txt"
+histova::generate_figure(d,f)
+#> ----------------  ----------------  ----------------
+#> -------- Prep & Load config settings and data --------
+#> ---- Load config (file: test-2_groups.txt)
+#> ---- Load data (file: test-2_groups.txt)
+#>  12 final Group1_Group2 (statGroups - should be unique!) ids:
+#>   G1_24hrs G2_24hrs G3_24hrs G4_24hrs G5_24hrs G6_24hrs G1_48hrs G2_48hrs G3_48hrs G4_48hrs G5_48hrs G6_48hrs
+#> -------- Statistical Analysis --------
+#> ---- Outlier checking
+#> ---- Prep stats overview
+#> ---- ANOVA w/ Tukeys Post Hoc
+#> ---- Student T-Test
+#> ** CHECK DATA - variances between group1 G1_48hrs & group2 G3_48hrs ARE NOT homogenous with a p-value: 0.00336347783100344
+#> Warning in run_sttest(): ** CHECK DATA - variances between group1 G1_48hrs &
+#> group2 G3_48hrs ARE NOT homogenous with a p-value: 0.00336347783100344 (file:
+#> test-2_groups.txt)
+#> ran a UNPAIRED students t-test on group1 G1_48hrs to group2 G3_48hrs, with tail: LESS, variance: EQUAL, p-value: 0.383700232956247
+#> -------- Build Histogram --------
+#> setting y-axis to use scientific notation, replacing existing scale_y_continuous...
+#> Scale for y is already present.
+#> Adding another scale for y, which will replace the existing scale.
+#> Figure coordinate ratio for display: 0.75
+#> 
+#> ---- Generate Figure Labels
+#> 
+#> ---- Generate Figure Labels
+#> 
+#> adding a horizontal line to the figure at: '8.5'
+#> 
+#> adding a horizontal line to the figure at: '4.25'
+#> 
+#> saving your new figure to: '/Users/Shared/HISTOVA_DATA/test-2_groups.jpg'
+#> 
+#> -------- SAVE Histogram --------
+#> Warning: Using ragg device as default. Ignoring `type` and `antialias`
+#> arguments
+#> ----------------  ----------------  ----------------
+```
+
+<img src="man/figures/README-example2-1.png" width="100%" />
+
 ### First Version
 
 This is an old basic example of an early version of the script with
 minimal options.
 
 ``` r
-library(histova)
-## basic example code
 d = "/Users/Shared/HISTOVA_DATA"
 f = "test.txt"
 histova::generate_figure(d,f)
@@ -79,4 +136,4 @@ histova::generate_figure(d,f)
 #> ----------------  ----------------  ----------------
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example1-1.png" width="100%" />
