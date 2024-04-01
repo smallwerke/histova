@@ -48,7 +48,11 @@ output figure is saved to the source directory.
 
 ``` r
 library(histova)
+
+knitr::include_graphics("inst/extdata/test.jpg")
 ```
+
+<img src="inst/extdata/test.jpg" width="100%" />
 
 **The following images are the default output from RStudio, the saved
 versions from the script have complete font embedding and higher
