@@ -6,12 +6,13 @@
 #' @param location.dir The directory the data file is contained in
 #' @param location.file The file containing the data
 #' @param printPlot T/F Should the finished plot be printed (default to FALSE)
+#' @param savePlot T/F Should the finished plot be saved to disk (default to TRUE)
 #'
 #' @export
 #'
 #' @examples
 #' generate_figure("/Users/Shared/HISTOVA_DATA", "test.txt")
-generate_figure <- function(location.dir, location.file, printPlot = FALSE) {
+generate_figure <- function(location.dir, location.file, printPlot = FALSE, savePlot = TRUE) {
 
     # consider adding some error checking here???
     the$Location.File = location.file
@@ -121,17 +122,19 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE) {
 
     # save the image to the working directory using the modified txt filename - this WILL
     # overwrite an existing image...
-    the$Location.Image = paste0(the$Location.Dir, "/", sub("txt", fig$Save.Type, the$Location.File))
-    message(sprintf("saving your new figure to: \'%s\'", the$Location.Image))
-    message("-------- SAVE Histogram --------")
+    if (savePlot) {
+        the$Location.Image = paste0(the$Location.Dir, "/", sub("txt", fig$Save.Type, the$Location.File))
+        message("-------- SAVE Histogram --------")
+        message(sprintf("saving your new figure to: \'%s\'", the$Location.Image))
 
-    # implement cairo package to better embed fonts into the output
-    if (fig$Save.Type %in% c("tex", "svg")) {
-        ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, limitsize = FALSE)
-    } else if (fig$Save.Type == "pdf") {
-        ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = grDevices::cairo_pdf, limitsize = FALSE)
-    } else {
-        ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, type="cairo", limitsize = FALSE)
+        # implement cairo package to better embed fonts into the output
+        if (fig$Save.Type %in% c("tex", "svg")) {
+            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, limitsize = FALSE)
+        } else if (fig$Save.Type == "pdf") {
+            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = grDevices::cairo_pdf, limitsize = FALSE)
+        } else {
+            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, type="cairo", limitsize = FALSE)
+        }
     }
     message("----------------  ----------------  ----------------")
 

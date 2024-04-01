@@ -50,7 +50,7 @@ library(stringr) # for the str_remove call
 
 ### One Group
 
-The most basic version of this script is simply for building a histogram with only *one* group type defined out of the two that are possible. No statistics were run on this data and the individual data scatter is not beind displayed.
+The most basic version of this script is simply for building a histogram with only *one* group type defined out of the two that are possible. No statistics were run on this data and the individual data scatter is not being displayed.
 
 ```{r example1}
 f = "test-1_group-basic_no_stats.txt"

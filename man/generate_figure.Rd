@@ -4,7 +4,12 @@
 \alias{generate_figure}
 \title{Generate Figure}
 \usage{
-generate_figure(location.dir, location.file, printPlot = FALSE)
+generate_figure(
+  location.dir,
+  location.file,
+  printPlot = FALSE,
+  savePlot = TRUE
+)
 }
 \arguments{
 \item{location.dir}{The directory the data file is contained in}
@@ -12,6 +17,8 @@ generate_figure(location.dir, location.file, printPlot = FALSE)
 \item{location.file}{The file containing the data}
 
 \item{printPlot}{T/F Should the finished plot be printed (default to FALSE)}
+
+\item{savePlot}{T/F Should the finished plot be saved to disk (default to TRUE)}
 }
 \description{
 putting it all together

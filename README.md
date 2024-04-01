@@ -60,7 +60,7 @@ incomplete.***
 The most basic version of this script is simply for building a histogram
 with only *one* group type defined out of the two that are possible. No
 statistics were run on this data and the individual data scatter is not
-beind displayed.
+being displayed.
 
 ``` r
 f = "test-1_group-basic_no_stats.txt"
@@ -77,8 +77,8 @@ histova::generate_figure(d,f)
 #> -------- Build Histogram --------
 #> Figure coordinate ratio for display: 0.3
 #> ---- Generate Figure Labels
-#> saving your new figure to: '/private/var/folders/cc/2hgnkp915jd5ks4z8mpqhrg00000gs/T/RtmpMcf6IJ/temp_libpath1219bfbb308/histova/extdata/test-1_group-basic_no_stats.jpg'
 #> -------- SAVE Histogram --------
+#> saving your new figure to: '/private/var/folders/cc/2hgnkp915jd5ks4z8mpqhrg00000gs/T/RtmpLR37pl/temp_libpath2db46540265/histova/extdata/test-1_group-basic_no_stats.jpg'
 #> Warning: Using ragg device as default. Ignoring `type` and `antialias`
 #> arguments
 #> Warning in min(x): no non-missing arguments to min; returning Inf
