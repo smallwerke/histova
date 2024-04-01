@@ -44,7 +44,6 @@ Basic use of the histova sript. Very simple process that generates a figure by s
 ```{r exampleLoad}
 library(histova)
 
-knitr::include_graphics("inst/extdata/test.jpg")
 ```
 
 **The following images are the default output from RStudio, the saved versions from the script have complete font embedding and higher resoltion.**
@@ -56,9 +55,10 @@ knitr::include_graphics("inst/extdata/test.jpg")
 This is an old basic example of an early version of the script with minimal options.
 
 ```{r example2}
-d = "/Users/Shared/HISTOVA_DATA"
-f = "test-2_groups.txt"
+f = "test-1_group-basic_no_stats.txt"
+d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f)
+knitr::include_graphics("inst/extdata/test-1_group-basic_no_stats.jpg")
 ```
 
 ### First Version

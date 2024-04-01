@@ -48,11 +48,7 @@ output figure is saved to the source directory.
 
 ``` r
 library(histova)
-
-knitr::include_graphics("inst/extdata/test.jpg")
 ```
-
-<img src="inst/extdata/test.jpg" width="100%" />
 
 **The following images are the default output from RStudio, the saved
 versions from the script have complete font embedding and higher
@@ -64,48 +60,32 @@ This is an old basic example of an early version of the script with
 minimal options.
 
 ``` r
-d = "/Users/Shared/HISTOVA_DATA"
-f = "test-2_groups.txt"
+f = "test-1_group-basic_no_stats.txt"
+d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f)
 #> ----------------  ----------------  ----------------
 #> -------- Prep & Load config settings and data --------
-#> ---- Load config (file: test-2_groups.txt)
-#> ---- Load data (file: test-2_groups.txt)
-#>  12 final Group1_Group2 (statGroups - should be unique!) ids:
-#>   G1_24hrs G2_24hrs G3_24hrs G4_24hrs G5_24hrs G6_24hrs G1_48hrs G2_48hrs G3_48hrs G4_48hrs G5_48hrs G6_48hrs
+#> ---- Load config (file: test-1_group-basic_no_stats.txt)
+#> ---- Load data (file: test-1_group-basic_no_stats.txt)
+#>  6 final Group1_Group2 (statGroups - should be unique!) ids:
+#>   G1 G2 G3 G4 G5 G6
 #> -------- Statistical Analysis --------
 #> ---- Outlier checking
 #> ---- Prep stats overview
-#> ---- ANOVA w/ Tukeys Post Hoc
-#> ---- Student T-Test
-#> ** CHECK DATA - variances between group1 G1_48hrs & group2 G3_48hrs ARE NOT homogenous with a p-value: 0.00336347783100344
-#> Warning in run_sttest(): ** CHECK DATA - variances between group1 G1_48hrs &
-#> group2 G3_48hrs ARE NOT homogenous with a p-value: 0.00336347783100344 (file:
-#> test-2_groups.txt)
-#> ran a UNPAIRED students t-test on group1 G1_48hrs to group2 G3_48hrs, with tail: LESS, variance: EQUAL, p-value: 0.383700232956247
 #> -------- Build Histogram --------
-#> setting y-axis to use scientific notation, replacing existing scale_y_continuous...
-#> Scale for y is already present.
-#> Adding another scale for y, which will replace the existing scale.
-#> Figure coordinate ratio for display: 0.75
-#> 
+#> Figure coordinate ratio for display: 0.3
 #> ---- Generate Figure Labels
-#> 
-#> ---- Generate Figure Labels
-#> 
-#> adding a horizontal line to the figure at: '8.5'
-#> 
-#> adding a horizontal line to the figure at: '4.25'
-#> 
-#> saving your new figure to: '/Users/Shared/HISTOVA_DATA/test-2_groups.jpg'
-#> 
+#> saving your new figure to: '/private/var/folders/cc/2hgnkp915jd5ks4z8mpqhrg00000gs/T/RtmpMcf6IJ/temp_libpath121936284734/histova/extdata/test-1_group-basic_no_stats.jpg'
 #> -------- SAVE Histogram --------
 #> Warning: Using ragg device as default. Ignoring `type` and `antialias`
 #> arguments
+#> Warning in min(x): no non-missing arguments to min; returning Inf
+#> Warning in max(x): no non-missing arguments to max; returning -Inf
 #> ----------------  ----------------  ----------------
+knitr::include_graphics("inst/extdata/test-1_group-basic_no_stats.jpg")
 ```
 
-<img src="man/figures/README-example2-1.png" width="100%" />
+<img src="inst/extdata/test-1_group-basic_no_stats.jpg" width="100%" />
 
 ### First Version
 
@@ -129,8 +109,6 @@ histova::generate_figure(d,f)
 #> -------- Build Histogram --------
 #> Figure coordinate ratio for display: 0.1
 #> ---- Generate Figure Labels
-#> Warning in min(x): no non-missing arguments to min; returning Inf
-#> Warning in max(x): no non-missing arguments to max; returning -Inf
 #> saving your new figure to: '/Users/Shared/HISTOVA_DATA/test.jpg'
 #> -------- SAVE Histogram --------
 #> Warning: Using ragg device as default. Ignoring `type` and `antialias`
@@ -139,5 +117,3 @@ histova::generate_figure(d,f)
 #> Warning in max(x): no non-missing arguments to max; returning -Inf
 #> ----------------  ----------------  ----------------
 ```
-
-<img src="man/figures/README-example1-1.png" width="100%" />
