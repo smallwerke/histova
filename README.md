@@ -48,16 +48,20 @@ output figure is saved to the source directory.
 
 ``` r
 library(histova)
+library(stringr) # for the str_remove call
 ```
 
-**The following images are the default output from RStudio, the saved
-versions from the script have complete font embedding and higher
-resoltion.**
+***The following examples are loading the final jpg figure that is
+produced. It is possible to have the package output a figure to RStudio
+for immediate examination though the font configuration is often
+incomplete.***
 
-### Two Groups
+### One Group
 
-This is an old basic example of an early version of the script with
-minimal options.
+The most basic version of this script is simply for building a histogram
+with only *one* group type defined out of the two that are possible. No
+statistics were run on this data and the individual data scatter is not
+beind displayed.
 
 ``` r
 f = "test-1_group-basic_no_stats.txt"
@@ -75,7 +79,7 @@ histova::generate_figure(d,f)
 #> -------- Build Histogram --------
 #> Figure coordinate ratio for display: 0.3
 #> ---- Generate Figure Labels
-#> saving your new figure to: '/private/var/folders/cc/2hgnkp915jd5ks4z8mpqhrg00000gs/T/RtmpMcf6IJ/temp_libpath121936284734/histova/extdata/test-1_group-basic_no_stats.jpg'
+#> saving your new figure to: '/private/var/folders/cc/2hgnkp915jd5ks4z8mpqhrg00000gs/T/RtmpMcf6IJ/temp_libpath121927c6aade/histova/extdata/test-1_group-basic_no_stats.jpg'
 #> -------- SAVE Histogram --------
 #> Warning: Using ragg device as default. Ignoring `type` and `antialias`
 #> arguments
@@ -86,34 +90,3 @@ knitr::include_graphics("inst/extdata/test-1_group-basic_no_stats.jpg")
 ```
 
 <img src="inst/extdata/test-1_group-basic_no_stats.jpg" width="100%" />
-
-### First Version
-
-This is an old basic example of an early version of the script with
-minimal options.
-
-``` r
-d = "/Users/Shared/HISTOVA_DATA"
-f = "test.txt"
-histova::generate_figure(d,f)
-#> ----------------  ----------------  ----------------
-#> -------- Prep & Load config settings and data --------
-#> ---- Load config (file: test.txt)
-#> ---- Load data (file: test.txt)
-#>  6 final Group1_Group2 (statGroups - should be unique!) ids:
-#>   G1_24hrs G2_24hrs G3_24hrs G4_24hrs G5_24hrs G6_24hrs
-#> -------- Statistical Analysis --------
-#> ---- Outlier checking
-#> Warning in run_outlier(): ONE TAILED REMOVAL on group G2_24hrs (file: test.txt)
-#> ---- Prep stats overview
-#> -------- Build Histogram --------
-#> Figure coordinate ratio for display: 0.1
-#> ---- Generate Figure Labels
-#> saving your new figure to: '/Users/Shared/HISTOVA_DATA/test.jpg'
-#> -------- SAVE Histogram --------
-#> Warning: Using ragg device as default. Ignoring `type` and `antialias`
-#> arguments
-#> Warning in min(x): no non-missing arguments to min; returning Inf
-#> Warning in max(x): no non-missing arguments to max; returning -Inf
-#> ----------------  ----------------  ----------------
-```

@@ -43,30 +43,18 @@ Basic use of the histova sript. Very simple process that generates a figure by s
 
 ```{r exampleLoad}
 library(histova)
-
+library(stringr) # for the str_remove call
 ```
 
-**The following images are the default output from RStudio, the saved versions from the script have complete font embedding and higher resoltion.**
+***The following examples are loading the final jpg figure that is produced. It is possible to have the package output a figure to RStudio for immediate examination though the font configuration is often incomplete.***
 
-### Two Groups
+### One Group
 
+The most basic version of this script is simply for building a histogram with only *one* group type defined out of the two that are possible. No statistics were run on this data and the individual data scatter is not beind displayed.
 
-
-This is an old basic example of an early version of the script with minimal options.
-
-```{r example2}
+```{r example1}
 f = "test-1_group-basic_no_stats.txt"
 d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f)
 knitr::include_graphics("inst/extdata/test-1_group-basic_no_stats.jpg")
-```
-
-### First Version
-
-This is an old basic example of an early version of the script with minimal options.
-
-```{r example1}
-d = "/Users/Shared/HISTOVA_DATA"
-f = "test.txt"
-histova::generate_figure(d,f)
 ```
