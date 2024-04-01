@@ -85,6 +85,7 @@
 ## "Stats Transform:TimeCourse" -> group1 defines the time points; group 2 the control & treatment/s 
 ## Stats Outlier -> Outlier detection (FALSE, ONE, TWO) FALSE: no detection; ONE: one tailed; TWO: two tailed (careful when using paired t-tests)
 ## DEF: "Stats Transform:FALSE"; "Stats Outlier:TWO"
+#Stats Outlier	FALSE
 ################ Split on Group 2? (REQ) ################
 ## Stats Anova Group2  -> TRUE: compare only within each group2 & include borders around each; FALSE: compare between all the group2's [a unique Group1_Group2 id is always generated]
 ## Facet Split -> Group2 based header & border (TRUE: Group2 value as a header above the section of the figure [!! incompatible with "Stats Transform:TimeCourse" !!]; FALSE: no Group2 header)

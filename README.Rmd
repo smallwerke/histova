@@ -35,9 +35,9 @@ I will be adding example configuration files in the near future along with more 
 
 ## Example
 
-*this is just the boilerplate text that RStudio dumps out... I'll edit this once there are actual examples to be had...*
-
 Basic use of the histova sript. Very simple process that generates a figure by specifying the source directory and the config file. The output figure is saved to the source directory.
+
+All of the example config files are included in the extdata directory.
 
 ### Load Package
 

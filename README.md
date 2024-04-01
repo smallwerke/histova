@@ -37,12 +37,11 @@ with more detailed examples.
 
 ## Example
 
-*this is just the boilerplate text that RStudio dumps out… I’ll edit
-this once there are actual examples to be had…*
-
 Basic use of the histova sript. Very simple process that generates a
 figure by specifying the source directory and the config file. The
 output figure is saved to the source directory.
+
+All of the example config files are included in the extdata directory.
 
 ### Load Package
 
@@ -74,12 +73,11 @@ histova::generate_figure(d,f)
 #>  6 final Group1_Group2 (statGroups - should be unique!) ids:
 #>   G1 G2 G3 G4 G5 G6
 #> -------- Statistical Analysis --------
-#> ---- Outlier checking
 #> ---- Prep stats overview
 #> -------- Build Histogram --------
 #> Figure coordinate ratio for display: 0.3
 #> ---- Generate Figure Labels
-#> saving your new figure to: '/private/var/folders/cc/2hgnkp915jd5ks4z8mpqhrg00000gs/T/RtmpMcf6IJ/temp_libpath121927c6aade/histova/extdata/test-1_group-basic_no_stats.jpg'
+#> saving your new figure to: '/private/var/folders/cc/2hgnkp915jd5ks4z8mpqhrg00000gs/T/RtmpMcf6IJ/temp_libpath1219bfbb308/histova/extdata/test-1_group-basic_no_stats.jpg'
 #> -------- SAVE Histogram --------
 #> Warning: Using ragg device as default. Ignoring `type` and `antialias`
 #> arguments
