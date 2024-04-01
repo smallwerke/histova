@@ -5,12 +5,13 @@
 #'
 #' @param location.dir The directory the data file is contained in
 #' @param location.file The file containing the data
+#' @param printPlot T/F Should the finished plot be printed (default to FALSE)
 #'
 #' @export
 #'
 #' @examples
 #' generate_figure("/Users/Shared/HISTOVA_DATA", "test.txt")
-generate_figure <- function(location.dir, location.file) {
+generate_figure <- function(location.dir, location.file, printPlot = FALSE) {
 
     # consider adding some error checking here???
     the$Location.File = location.file
@@ -116,7 +117,7 @@ generate_figure <- function(location.dir, location.file) {
     }
 
     # print out the plot for viewing in RStudio - probably good idea to make this an optional setting...
-    print(the$gplot)
+    if (printPlot) { print(the$gplot) }
 
     # save the image to the working directory using the modified txt filename - this WILL
     # overwrite an existing image...
