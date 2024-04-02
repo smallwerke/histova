@@ -6,7 +6,12 @@
 #'
 #' @export
 #'
+#' @importFrom rlang .data
 build_histo <- function(){
+
+    # using the .data feature from rlang as specified:
+    # https://cran.r-project.org/web/packages/ggplot2/vignettes/ggplot2-in-packages.html
+    # to address warnings from check()
 
     # Determine if any calculations are to be done for the Stat Letter Offset
     if (! isTRUE(stats$Letters.Offset)) {
@@ -26,7 +31,7 @@ build_histo <- function(){
     # Time Course Figure
     ##########################################
     if (stats$Transform == "TimeCourse") {
-        gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(y=mean, label = Group2, x = Group1, fill=Group2, width=.85)) +
+        gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(y=mean, label = .data$Group2, x = .data$Group1, fill = .data$Group2, width=.85)) +
             ggplot2::geom_bar(
                 alpha = fig$Colors.Alpha,
                 color = fig$Bar.Border.Color,
@@ -46,9 +51,9 @@ build_histo <- function(){
         ##########################################
     } else if (fig$Plot.Whisker %in% c("BOX", "VIOLIN")) {
         if (fig$Legend.Color.Source == "Group1") {
-            gplot = ggplot2::ggplot(raw$base, ggplot2::aes(Group1, Value, label = Group1, fill=Group1))
+            gplot = ggplot2::ggplot(raw$base, ggplot2::aes(.data$Group1, .data$Value, label = .data$Group1, fill = .data$Group1))
         } else {
-            gplot = ggplot2::ggplot(raw$base, ggplot2::aes(Group1, Value, label = Group1, fill=statGroups))
+            gplot = ggplot2::ggplot(raw$base, ggplot2::aes(.data$Group1, .data$Value, label = .data$Group1, fill = .data$statGroups))
         }
         if (fig$Plot.Whisker == "BOX") {
             gplot = gplot +
@@ -70,9 +75,9 @@ build_histo <- function(){
         ##########################################
     } else {
         if (fig$Legend.Color.Source == "Group1") {
-            gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(Group1, mean, label = Group1, fill=Group1))
+            gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(.data$Group1, .data$mean, label = .data$Group1, fill = .data$Group1))
         } else {
-            gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(Group1, mean, label = Group1, fill=statGroups))
+            gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(.data$Group1, .data$mean, label = .data$Group1, fill = .data$statGroups))
         }
         gplot = gplot + ggplot2::geom_bar(
             alpha= fig$Colors.Alpha,
@@ -156,7 +161,7 @@ build_histo <- function(){
     if (fig$Scatter.Disp) {
         if (stats$Transform == "TimeCourse") {
             gplot = gplot + ggplot2::geom_point(
-                data=raw$base, ggplot2::aes(x=Group1, y=Value, group=statGroups, color=Group2, shape=Group2, size=Group2),
+                data=raw$base, ggplot2::aes(x = .data$Group1, y = .data$Value, group = .data$statGroups, color = .data$Group2, shape = .data$Group2, size = .data$Group2),
                 position = ggplot2::position_dodge2(width=0.85,padding=0.35),
                 stat='identity',
                 alpha=fig$Scatter.Alpha,
@@ -167,7 +172,7 @@ build_histo <- function(){
             #guides(fill = guide_legend(override.aes = list(shape = NA)))
         } else if (fig$Legend.Color.Source == "Group1") {
             gplot = gplot + ggplot2::geom_point(
-                data=raw$base, ggplot2::aes(x=as.numeric(Group1) + 0.0, y=Value, color=Group1, shape=Group1, size=Group1),
+                data=raw$base, ggplot2::aes(x = as.numeric(.data$Group1) + 0.0, y = .data$Value, color = .data$Group1, shape = .data$Group1, size = .data$Group1),
                 position=ggplot2::position_dodge2(width=0.7,padding=0.1),
                 alpha=fig$Scatter.Alpha,
                 stroke=fig$Scatter.Stroke,
@@ -175,7 +180,7 @@ build_histo <- function(){
             )
         } else {
             gplot = gplot + ggplot2::geom_point(
-                data=raw$base, ggplot2::aes(x=as.numeric(Group1) + 0.0, y=Value, color=statGroups, shape=statGroups, size=statGroups),
+                data=raw$base, ggplot2::aes(x = as.numeric(.data$Group1) + 0.0, y = .data$Value, color = .data$statGroups, shape = .data$statGroups, size = .data$statGroups),
                 position=ggplot2::position_dodge2(width=0.7,padding=0.1),
                 alpha=fig$Scatter.Alpha,
                 stroke=fig$Scatter.Stroke,
@@ -194,14 +199,14 @@ build_histo <- function(){
     if (fig$Plot.Whisker == "FALSE") {
         if (stats$Transform == "TimeCourse") {
             gplot = gplot + ggplot2::geom_errorbar(
-                ggplot2::aes(ymin=mean-se,ymax=mean+se),
+                ggplot2::aes(ymin = .data$mean - .data$se, ymax = .data$mean + .data$se),
                 color=fig$Plot.ErrorBar.Color,
                 width=fig$Plot.ErrorBar.EndWidth,
                 linewidth=fig$Plot.ErrorBar.Size,
                 position = ggplot2::position_dodge(width=0.85))
         } else {
             gplot = gplot + ggplot2::geom_errorbar(
-                ggplot2::aes(ymin=mean-se,ymax=mean+se),
+                ggplot2::aes(ymin = .data$mean - .data$se, ymax = .data$mean + .data$se),
                 color=fig$Plot.ErrorBar.Color,
                 width=fig$Plot.ErrorBar.EndWidth,
                 linewidth=fig$Plot.ErrorBar.Size,
@@ -275,9 +280,9 @@ build_histo <- function(){
             notes$Stats.Method <- paste(notes$Stats.Method, sprintf("For group %s: ", l), sep=s)
             #gplot = gplot + geom_text(data = generate_label_df(raw.multi[[n]], raw.aov.multi[[n]], raw.aov.tukey.multi[[n]], raw.summary.multi[[n]], Value ~ statGroups, 'statGroups', Stats.Letters.Offset), size = (Stats.Letters.Size / 2.834645669), fontface="bold", aes(x = Group1, y = V1, label = labels))
             if (stats$Transform == "TimeCourse") {
-                gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = V1, label = labels), position = ggplot2::position_dodge(0.85))
+                gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.85))
             } else {
-                gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = V1, label = labels), position = ggplot2::position_dodge(0.7))
+                gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
             }
         }
         # add border lines between / around the facet grids in order to make it clear that the stats are separate...
@@ -292,9 +297,9 @@ build_histo <- function(){
         notes$Stats.Method <- paste(notes$Stats.Method, "Statistical test: ", sep=s)
         #gplot = gplot + geom_text(data = generate_label_df(raw, raw.aov.multi, raw.aov.tukey.multi, raw.summary.multi, Value ~ statGroups, 'statGroups', Stats.Letters.Offset), size = (Stats.Letters.Size / 2.834645669), fontface="bold", aes(x = Group1, y = V1, label = labels))
         if (stats$Transform == "TimeCourse") {
-            gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = V1, label = labels), position = ggplot2::position_dodge(0.85))
+            gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.85))
         } else {
-            gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = V1, label = labels), position = ggplot2::position_dodge(0.7))
+            gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
         }
     }
 

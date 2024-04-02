@@ -12,6 +12,7 @@
 #'
 #' @examples
 #' generate_figure("/Users/Shared/HISTOVA_DATA", "test.txt")
+#'
 generate_figure <- function(location.dir, location.file, printPlot = FALSE, savePlot = TRUE) {
 
     # consider adding some error checking here???
@@ -86,15 +87,20 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
 
         warning(sprintf("group1Mute is set to %s, attempting to remove this group! (file: %s)", stats$Group1.Mute, the$Location.File))
 
-        raw$base = subset(raw$base, Group1!=stats$Group1.Mute)
+        # convenient function but causes notes in packages...
+        #raw$base = subset(raw$base, Group1!=stats$Group1.Mute) ### CHANGED - to address Group1 not being in NAMESPACE ###
+        # traditional and 'more reliable'
+        raw$base = raw$base[raw$base$Group1 != stats$Group1.Mute, ]
         raw$base[] = lapply(raw$base, function(x) if(is.factor(x)) factor(x) else x)
         #assign("raw", raw, envir = .GlobalEnv) ### CHANGED - no longer needed ###
 
-        raw$summary = subset(raw$summary, Group1!=stats$Group1.Mute)
+        #raw$summary = subset(raw$summary, Group1!=stats$Group1.Mute)
+        raw$summary = raw$summary[raw$summary$Group1 != stats$Group1.Mute, ]
         raw$summary[] = lapply(raw$summary, function(x) if(is.factor(x)) factor(x) else x)
         #assign("raw.summary", raw.summary, envir = .GlobalEnv) ### CHANGED - no longer needed ###
 
-        raw$summary.multi = subset(raw$summary.multi, Group1!=stats$Group1.Mute)
+        #raw$summary.multi = subset(raw$summary.multi, Group1!=stats$Group1.Mute)
+        raw$summary.multi = raw$summary.multi[raw$summary.multi$Group1 != stats$Group1.Mute, ]
         raw$summary.multi[] = lapply(raw$summary.multi, function(x) if(is.factor(x)) factor(x) else x)
         #assign("raw.summary.multi", raw.summary.multi, envir = .GlobalEnv) ### CHANGED - no longer needed ###
     }

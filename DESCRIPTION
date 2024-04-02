@@ -21,6 +21,7 @@ Imports:
     multcompView,
     outliers,
     plyr,
+    rlang,
     scales,
     sfsmisc,
     stats,

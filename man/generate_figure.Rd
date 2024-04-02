@@ -26,4 +26,5 @@ set the directory and file location first and then call this function to run thr
 }
 \examples{
 generate_figure("/Users/Shared/HISTOVA_DATA", "test.txt")
+
 }
