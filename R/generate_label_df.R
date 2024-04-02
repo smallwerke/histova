@@ -177,7 +177,6 @@ generate_label_df <- function(n){
 
     # merge the stats results into one data frame for use in displaying the results
     main.labels = merge(anova.labels, pttest.labels, by='plot.labels', all=TRUE)
-    the$HOLD = main.labels
     #main.labels = plyr::mutate(main.labels, labels = ifelse(labels.x == '', labels.y, ifelse(labels.y == '', labels.x, paste(labels.x, labels.y, sep = ' ')))) ### CHANGED - check() was throwing notes ###
     main.labels = plyr::mutate(main.labels, labels = ifelse(main.labels$labels.x == '', main.labels$labels.y, ifelse(main.labels$labels.y == '', main.labels$labels.x, paste(main.labels$labels.x, main.labels$labels.y, sep = ' '))))
     main.labels$labels.x = NULL
