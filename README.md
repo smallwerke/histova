@@ -65,7 +65,9 @@ being displayed.
 ``` r
 f = "test-1_group-basic_no_stats.txt"
 d = stringr::str_remove(histova_example(f), paste0("/",f))
-histova::generate_figure(d,f)
+# running generate_figure with plot display & save turned off since readme 
+# saves in a temporary location
+histova::generate_figure(d,f, FALSE, FALSE)
 #> ----------------  ----------------  ----------------
 #> -------- Prep & Load config settings and data --------
 #> ---- Load config (file: test-1_group-basic_no_stats.txt)
@@ -77,12 +79,6 @@ histova::generate_figure(d,f)
 #> -------- Build Histogram --------
 #> Figure coordinate ratio for display: 0.3
 #> ---- Generate Figure Labels
-#> -------- SAVE Histogram --------
-#> saving your new figure to: '/private/var/folders/cc/2hgnkp915jd5ks4z8mpqhrg00000gs/T/RtmpLR37pl/temp_libpath2db46540265/histova/extdata/test-1_group-basic_no_stats.jpg'
-#> Warning: Using ragg device as default. Ignoring `type` and `antialias`
-#> arguments
-#> Warning in min(x): no non-missing arguments to min; returning Inf
-#> Warning in max(x): no non-missing arguments to max; returning -Inf
 #> ----------------  ----------------  ----------------
 knitr::include_graphics("inst/extdata/test-1_group-basic_no_stats.jpg")
 ```

@@ -55,6 +55,8 @@ The most basic version of this script is simply for building a histogram with on
 ```{r example1}
 f = "test-1_group-basic_no_stats.txt"
 d = stringr::str_remove(histova_example(f), paste0("/",f))
-histova::generate_figure(d,f)
+# running generate_figure with plot display & save turned off since readme 
+# saves in a temporary location
+histova::generate_figure(d,f, FALSE, FALSE)
 knitr::include_graphics("inst/extdata/test-1_group-basic_no_stats.jpg")
 ```
