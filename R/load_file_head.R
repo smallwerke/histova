@@ -391,19 +391,19 @@ load_file_head = function() {
 
     if (exists("Title.Replace", envir=fig)) {
         fig$Title.tmp <- fig$Title.Replace
-        rm(Title.Replace, envir = fig)
+        rm("Title.Replace", envir = fig)
     }
     if (exists("Y.Replace", envir=fig)) {
         fig$Y.tmp <- fig$Y.Replace
-        rm(Y.Replace, envir = fig)
+        rm("Y.Replace", envir = fig)
     }
     if (exists("X.Replace", envir=fig)) {
         fig$X.tmp <- fig$X.Replace
-        rm(X.Replace, envir = fig)
+        rm("X.Replace", envir = fig)
     }
     if (exists("Legend.Title.Replace", envir=fig)) {
         fig$Legend.Title.tmp <- fig$Legend.Title.Replace
-        rm(Legend.Title.Replace, envir = fig)
+        rm("Legend.Title.Replace", envir = fig)
     }
     if (fig$Convert) {
         fig$Title.tmp <- convert_text(fig$Title.tmp)
@@ -423,7 +423,7 @@ load_file_head = function() {
         message(sprintf("OVERRIDING ALL horizontal line sizes, set to: \'%s\'", fig$Plot.HLine$size[1]))
         #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - should no longer be needed as assigned on the fly ###
     }
-    rm(Plot.HLine.Def.Color, Plot.HLine.Def.Size, Plot.HLine.OVRD.Color, Plot.HLine.OVRD.Size, envir = fig)
+    rm("Plot.HLine.Def.Color", "Plot.HLine.Def.Size", "Plot.HLine.OVRD.Color", "Plot.HLine.OVRD.Size", envir = fig)
 
     fig$Title <- fig$Title.tmp
     fig$Y <- fig$Y.tmp
