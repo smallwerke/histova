@@ -4,7 +4,11 @@
 **NOTE: This is very much a work in progress. The current script appears
 functional but is in the process of going through extensive testing,
 documentation, and code cleanup. However the initial very basic test
-file worked. It is designed around the work I am doing routinely in a
+files are working. A few ggplot2 related warning messages still print
+during figure generation but the code is functional. I will be uploading
+additional example configuration files in the near future and adding
+documentation. The config header file DOES explain all of the existing
+options. It is designed around the work I am doing routinely in a
 molecular biology lab and it might be of use to others.**
 
 # histova
@@ -32,8 +36,21 @@ from [GitHub](https://github.com/) with:
 devtools::install_github("smallwerke/histova")
 ```
 
-I will be adding example configuration files in the near future along
-with more detailed examples.
+## Overview
+
+I will be adding more example configuration files in the near future
+along with more detailed examples. The basic premise is that the figures
+are generated based off of a simple text file that controls the
+appearance, statistical tests, and holds the raw data. This is often
+pasted in from excel or directly from an instrument. The file is tab
+delimited with the configuration options at the head.
+
+The header lines all begin with `#` with `##` denoting a comment and `#`
+a configuration setting. The default values and typical options are
+detailed in the config header. Example files are in
+[inst/extdata](https://github.com/smallwerke/histova/tree/main/inst/extdata).
+
+Data lines are in the format of value.
 
 ## Example
 
