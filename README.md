@@ -50,7 +50,7 @@ a configuration setting. The default values and typical options are
 detailed in the config header. Example files are in
 [inst/extdata](https://github.com/smallwerke/histova/tree/main/inst/extdata).
 
-Data lines are in the format of value.
+Data lines are in the format of value-\>group1-\>group2.
 
 ## Example
 

@@ -37,7 +37,7 @@ I will be adding more example configuration files in the near future along with 
 
 The header lines all begin with `#` with `##` denoting a comment and `#` a configuration setting. The default values and typical options are detailed in the config header. Example files are in [inst/extdata](https://github.com/smallwerke/histova/tree/main/inst/extdata).
 
-Data lines are in the format of value\tgroup1\tgroup2.
+Data lines are in the format of value->group1->group2.
 
 ## Example
 
