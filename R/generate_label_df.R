@@ -114,7 +114,7 @@ generate_label_df <- function(n){
         # and assign 'A' to everything
         if (length(unique(stats$Tukey.Levels[!is.na(1)])) == 1) {
             anova.labels = data.frame(labels = rep('--', 6), plot.labels = raw$summary.multi[[1]]$statGroups)
-            warning(sprintf("UNABLE to determine significance based on the tukey results! (%s) \n\tAll groups assigned as having NO SIGNIFICANT DIFFERENCE! (file: %s)", paste("", stats$Tukey.levels, collapse=""), the$Location.File ))
+            histova_msg(sprintf("UNABLE to determine significance based on the tukey results! (%s) \n\tAll groups assigned as having NO SIGNIFICANT DIFFERENCE! (file: %s)", paste("", stats$Tukey.levels, collapse=""), the$Location.File ), type="warn")
 
             # get the work done 'by hand'
         } else {

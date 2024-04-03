@@ -218,7 +218,7 @@ build_histo <- function(){
     #
     # swap Y axis labels to scientific notation...
     if (fig$Y.Rig == "SCI") {
-        message(sprintf("setting y-axis to use scientific notation, replacing existing scale_y_continuous..."))
+        histova_msg(sprintf("setting y-axis to use scientific notation, replacing existing scale_y_continuous..."))
         if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
             gplot = gplot + ggplot2::scale_y_continuous(
                 labels = function(x) format(x, scientific = TRUE),
@@ -259,7 +259,7 @@ build_histo <- function(){
             fig$Coord.Fixed.Ratio <- 1/(abs(fig$Y.Max-fig$Y.Min) / length(raw$summary[['statGroups']]))
             ratio.reset = TRUE
         }
-        message(sprintf("Figure coordinate ratio for display: %s", fig$Coord.Fixed.Ratio))
+        histova_msg(sprintf("Figure coordinate ratio for display: %s", fig$Coord.Fixed.Ratio))
         gplot = gplot + ggplot2::coord_fixed(ratio = fig$Coord.Fixed.Ratio)
         # reset the variable to SQUARE for when override is being used so that the ratio
         # is calculated correctly for each figure
@@ -307,13 +307,19 @@ build_histo <- function(){
         if (notes$Stats.Method == "Statistical test: ") { notes$Stats.Method <- paste(notes$Stats.Method, "----") }
         gplot = gplot + ggplot2::labs(caption = paste(notes$Stats.Method, notes$Stats.Outlier, sep="\n"))
     }
+    # REGARDLESS print the statistical notes to the logfile
+    histova_msg("---- Stat Notes:", PRINT = FALSE)
+    histova_msg(notes$Stats.Method, PRINT = FALSE)
+    histova_msg(notes$Stats.Outlier, PRINT = FALSE)
+    histova_msg("----", PRINT = FALSE)
+
     # is it possible to create figures with the exact same internal size?
     #grid.arrange(grobs=lapply(list(gplot), set_panel_size, height=unit(18, "cm"), width=unit(18, "cm")))
 
     # add the y-axis breaks to the figure
     if (fig$Y.Break == TRUE) {
         for(i in 1:nrow(fig$Y.Break.df)) {
-            message(sprintf("adding a break to the y-axis between %s and %s with scales of \'%s\'", fig$Y.Break.df[i,]$start, fig$Y.Break.df[i,]$stop, fig$Y.Break.df[i,]$scales))
+            histova_msg(sprintf("adding a break to the y-axis between %s and %s with scales of \'%s\'", fig$Y.Break.df[i,]$start, fig$Y.Break.df[i,]$stop, fig$Y.Break.df[i,]$scales))
             gplot = gplot + ggbreak::scale_y_break(c(fig$Y.Break.df[i,]$start, fig$Y.Break.df[i,]$stop), scales = fig$Y.Break.df[i,]$scales)
         }
     }

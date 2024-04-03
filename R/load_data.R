@@ -8,7 +8,7 @@
 #' load_data()
 load_data <- function () {
 
-    message(sprintf("---- Load data (file: %s)", the$Location.File))
+    histova_msg(sprintf("---- Load data (file: %s)", the$Location.File))
     # read in the data
     fullPath <- paste0(the$Location.Dir, "/", the$Location.File)
     rawIN <- utils::read.table(fullPath, sep="\t", header=TRUE, comment.char = '#', check.names = FALSE)
@@ -17,7 +17,7 @@ load_data <- function () {
     # address any value manipulations - this can apply a standard division to ALL data values (eg divide by 1,000)
     # prepare the Y axis label supplement that contains details on what was done to the data
     if (is.numeric(fig$Y.Rig)) {
-        warning(sprintf("MODIFYING VALUES: DIVIDING ALL BY %s (file: %s)", fig$Y.Rig, the$Location.File))
+        histova_msg(sprintf("MODIFYING VALUES: DIVIDING ALL BY %s (file: %s)", fig$Y.Rig, the$Location.File), type="warn")
         rawIN['Value'] = rawIN['Value']/fig$Y.Rig
         fig$Y.Min <- fig$Y.Min/fig$Y.Rig
         fig$Y.Max <- fig$Y.Max/fig$Y.Rig
@@ -54,5 +54,5 @@ load_data <- function () {
         rawIN$statGroups <- factor(rawIN$Group1, levels = unique(rawIN$Group1))
     }
     raw$base <- rawIN ### CHANGED - using $base as location... ####
-    message(sprintf("\t%s final Group1_Group2 (statGroups - should be unique!) ids:\n\t%s", length(levels(raw$base$statGroups)), paste("", levels(raw$base$statGroups), collapse="")))
+    histova_msg(sprintf("\t%s final Group1_Group2 (statGroups - should be unique!) ids:\n\t%s", length(levels(raw$base$statGroups)), paste("", levels(raw$base$statGroups), collapse="")))
 }

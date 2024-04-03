@@ -8,7 +8,7 @@
 #' load_file_head()
 load_file_head = function() {
 
-    message(sprintf("---- Load config (file: %s)", the$Location.File))
+    histova_msg(sprintf("---- Load config (file: %s)", the$Location.File))
 
     # doesn't like when packages change the working directory...
     # drop this approach and generate a fullPath var instead to open a file connection
@@ -48,20 +48,20 @@ load_file_head = function() {
         ################ OVERRIDE? ################
         if (lA[[1]][1] == "Override") {
             if (lA[[1]][2] %in% c("TRUE", "True", "true", "1")) {
-                if (isTRUE(the$Override)) { message("turning override ON AND overwriting previous override!!") }
-                else { message("turning override ON!!") }
+                if (isTRUE(the$Override)) { histova_msg("turning override ON AND overwriting previous override!!") }
+                else { histova_msg("turning override ON!!") }
 
                 # set override to true from here on out
                 Override.tmp <- TRUE
                 # turn off override protection if it was set
                 the$Override <- FALSE
                 # set all variables back to their default before moving on
-                message("resetting variables to defaults BEFORE loading config")
+                histova_msg("resetting variables to defaults BEFORE loading config")
                 init_vars()
             } else if (lA[[1]][2] %in% c("FALSE", "False", "false", "0")) {
-                message("turning override OFF!")
+                histova_msg("turning override OFF!")
                 the$Override <- FALSE
-                message("resetting variables to defaults BEFORE loading config")
+                histova_msg("resetting variables to defaults BEFORE loading config")
                 init_vars()
             }
         }
@@ -313,17 +313,17 @@ load_file_head = function() {
                 # check to see if the pairing is being defined AND if it
                 if (length(lA[[1]]) > 7) {
                     if (tolower(lA[[1]][8]) %in% c("paired", "unpaired")) { STTest.paired <- tolower(lA[[1]][8]) }
-                    else { warning(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][8], STTest.paired)) }
+                    else { histova_msg(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][8], STTest.paired), type="warn") }
                 }
                 # check to see if the variance is being defined AND if it
                 if (length(lA[[1]]) > 6) {
                     if (tolower(lA[[1]][7]) %in% c("equal", "unequal")) { STTest.variance <- tolower(lA[[1]][7]) }
-                    else { warning(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][7], STTest.variance)) }
+                    else { histova_msg(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][7], STTest.variance), type="warn") }
                 }
                 # check to see if a test is request AND if it is workable...
                 if (length(lA[[1]]) > 5) {
                     if (tolower(lA[[1]][6]) %in% c("two.sided", "greater", "less")) { STTest.tails <- tolower(lA[[1]][6]) }
-                    else { warning(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][6], STTest.tails)) }
+                    else { histova_msg(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][6], STTest.tails), type="warn") }
                 }
                 # retain backwards compatability when the config file had sep lines for test & parings...
                 if (length(lA[[1]]) > 2) {
@@ -340,12 +340,12 @@ load_file_head = function() {
                 # check to see if the variance is being defined AND if it
                 if (length(lA[[1]]) > 6) {
                     if (tolower(lA[[1]][7]) %in% c("equal", "unequal")) { PTTest.variance <- tolower(lA[[1]][7]) }
-                    else { warning(sprintf("---- Argument in PTTest (%s) NOT VALID, using default (%s) instead", lA[[1]][7], PTTest.variance)) }
+                    else { histova_msg(sprintf("---- Argument in PTTest (%s) NOT VALID, using default (%s) instead", lA[[1]][7], PTTest.variance), type="warn") }
                 }
                 # check to see if a test is request AND if it is workable...
                 if (length(lA[[1]]) > 5) {
                     if (lA[[1]][6] %in% c("two.sided", "greater", "less")) { PTTest.tails <- lA[[1]][6] }
-                    else { warning(sprintf("---- Argument in PTTest (%s) NOT VALID, using default (%s) instead", lA[[1]][6], PTTest.tails)) }
+                    else { histova_msg(sprintf("---- Argument in PTTest (%s) NOT VALID, using default (%s) instead", lA[[1]][6], PTTest.tails), type="warn") }
                 }
                 # retain backwards compatability when the config file had sep lines for test & parings...
                 if (length(lA[[1]]) > 2) {
@@ -415,12 +415,12 @@ load_file_head = function() {
     # IF a master HLine style was provided replace the current value and cleanup
     if (is.na(fig$Plot.HLine.OVRD.Color) == FALSE) {
         fig$Plot.HLine$color <- fig$Plot.HLine.OVRD.Color
-        message(sprintf("OVERRIDING ALL horizontal line colors, set to: \'%s\'", fig$Plot.HLine$color[1]))
+        histova_msg(sprintf("OVERRIDING ALL horizontal line colors, set to: \'%s\'", fig$Plot.HLine$color[1]))
         #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - should no longer be needed as assigned on the fly ###
     }
     if (is.na(fig$Plot.HLine.OVRD.Size) == FALSE) {
         fig$Plot.HLine$size <- fig$Plot.HLine.OVRD.Size
-        message(sprintf("OVERRIDING ALL horizontal line sizes, set to: \'%s\'", fig$Plot.HLine$size[1]))
+        histova_msg(sprintf("OVERRIDING ALL horizontal line sizes, set to: \'%s\'", fig$Plot.HLine$size[1]))
         #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - should no longer be needed as assigned on the fly ###
     }
     rm("Plot.HLine.Def.Color", "Plot.HLine.Def.Size", "Plot.HLine.OVRD.Color", "Plot.HLine.OVRD.Size", envir = fig)

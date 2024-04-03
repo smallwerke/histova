@@ -1,0 +1,20 @@
+----------------  ----------------  ----------------
+----------------  histova 3.5.0.0  ----------------
+--- run on Wed Apr  3 12:03:34 2024 ---
+----------------  ----------------  ----------------
+-------- Prep & Load config settings and data --------
+---- Load config (file: test-1_group-basic_no_stats.txt)
+---- Load data (file: test-1_group-basic_no_stats.txt)
+	6 final Group1_Group2 (statGroups - should be unique!) ids:
+	 G1 G2 G3 G4 G5 G6
+-------- Statistical Analysis --------
+---- Prep stats overview
+-------- Build Histogram --------
+Figure coordinate ratio for display: 0.3
+---- Stat Notes:
+Statistical test:  ----
+
+----
+-------- SAVE Histogram --------
+saving your new figure to: '/Users/Shared/HISTOVA_DATA/test-1_group-basic_no_stats.jpg'
+----------------  ----------------  ----------------

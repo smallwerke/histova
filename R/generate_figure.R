@@ -18,16 +18,23 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # consider adding some error checking here???
     the$Location.File = location.file
     the$Location.Dir = location.dir
+    if (savePlot) {
+        the$Location.Log = paste0(the$Location.Dir, "/", sub("txt", "histova", the$Location.File))
+        the$LOG = file(the$Location.Log, open = "w")
+    }
 
-    message("----------------  ----------------  ----------------")
-    message("-------- Prep & Load config settings and data --------")
+    histova_msg("----------------  ----------------  ----------------")
+    histova_msg(sprintf("----------------  histova %s  ----------------", utils::packageVersion("histova")) )
+    histova_msg(sprintf("--- run on %s ---", date()) )
+    histova_msg("----------------  ----------------  ----------------")
+    histova_msg("-------- Prep & Load config settings and data --------")
 
     # prep & load config info / data
     init_vars()
     load_file_head()
     load_data()
 
-    message("-------- Statistical Analysis --------")
+    histova_msg("-------- Statistical Analysis --------")
 
     # move onto stats analysis
     if (stats$Outlier != FALSE) { run_outlier() }
@@ -85,7 +92,8 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # remove a group from being displayed (eg for treatment / control figures)
     if ((stats$Group1.Mute != FALSE) && (stats$Anova.Group2 == FALSE)) {
 
-        warning(sprintf("group1Mute is set to %s, attempting to remove this group! (file: %s)", stats$Group1.Mute, the$Location.File))
+        histova_msg(sprintf("group1Mute is set to %s, attempting to remove this group! (file: %s)", stats$Group1.Mute, the$Location.File), type="warn")
+
 
         # convenient function but causes notes in packages...
         #raw$base = subset(raw$base, Group1!=stats$Group1.Mute) ### CHANGED - to address Group1 not being in NAMESPACE ###
@@ -111,14 +119,14 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
         # following vars are set in run_anova() (raw.anova.multi, raw.aov.multi, raw.aov.tukey.multi)
     }
 
-    message("-------- Build Histogram --------")
+    histova_msg("-------- Build Histogram --------")
     set_aesthetics()
     build_histo()
 
     # add a line to the figure...
     if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
         for (HL in 1:nrow(fig$Plot.HLine)) {
-            message(sprintf("adding a horizontal line to the figure at: \'%s\'", fig$Plot.HLine$y[HL]))
+            histova_msg(sprintf("adding a horizontal line to the figure at: \'%s\'", fig$Plot.HLine$y[HL]))
             the$gplot = the$gplot + ggplot2::geom_hline(yintercept=fig$Plot.HLine$y[HL], linetype="solid", color=fig$Plot.HLine$color[HL], linewidth=fig$Plot.HLine$size[HL])
         }
     }
@@ -130,8 +138,8 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # overwrite an existing image...
     if (savePlot) {
         the$Location.Image = paste0(the$Location.Dir, "/", sub("txt", fig$Save.Type, the$Location.File))
-        message("-------- SAVE Histogram --------")
-        message(sprintf("saving your new figure to: \'%s\'", the$Location.Image))
+        histova_msg("-------- SAVE Histogram --------")
+        histova_msg(sprintf("saving your new figure to: \'%s\'", the$Location.Image))
 
         # implement cairo package to better embed fonts into the output
         if (fig$Save.Type %in% c("tex", "svg")) {
@@ -142,6 +150,7 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
             ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, type="cairo", limitsize = FALSE)
         }
     }
-    message("----------------  ----------------  ----------------")
+    histova_msg("----------------  ----------------  ----------------")
+    if (savePlot) { close(the$LOG) }
 
 }

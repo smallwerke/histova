@@ -6,7 +6,7 @@
 #'
 run_outlier <- function() {
 
-    message("---- Outlier checking")
+    histova_msg("---- Outlier checking")
     # determined by the header in the data file...
     # not impacted by the Group2 setting as each Group1_Group2 should create a unique ID combination
     if ((stats$Outlier == "ONE") || (stats$Outlier == "TWO")) {
@@ -38,7 +38,7 @@ run_outlier <- function() {
                 #message(sprintf("2 P: %s", grubbs.test(raw[raw[,'statGroups'] %in% c(l),][,'Value'], type=11)$p.value))
                 if (stats$Outlier == "ONE") {
                     if (outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=10)$p.value <= 0.05) {
-                        warning(sprintf("ONE TAILED REMOVAL on group %s (file: %s)", l, the$Location.File))
+                        histova_msg(sprintf("ONE TAILED REMOVAL on group %s (file: %s)", l, the$Location.File), type="warn")
                         if (outlier.list == "") { outlier.list <- l }
                         else { outlier.list = paste(outlier.list, sprintf(", %s", l), sep="") }
                         raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'] <- append(outliers::rm.outlier(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], fill=FALSE), NA)
@@ -46,7 +46,7 @@ run_outlier <- function() {
                     # check for outliers on both tails
                 } else if (stats$Outlier == "TWO") {
                     if (outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=11)$p.value <= 0.05) {
-                        warning(sprintf("TWO TAILED REMOVAL on group %s (file: %s)", l, the$Location.File))
+                        histova_msg(sprintf("TWO TAILED REMOVAL on group %s (file: %s)", l, the$Location.File), type="warn")
                         if (outlier.list == "") { outlier.list = l }
                         else { outlier.list <- paste(outlier.list, sprintf(", %s", l), sep="") }
 
@@ -57,7 +57,7 @@ run_outlier <- function() {
                 }
                 # write out a message if the test is skipped
             } else {
-                warning(sprintf("NOT ENOUGH VALUES to perform outlier check on group %s (file: %s)", l, the$Location.File))
+                histova_msg(sprintf("NOT ENOUGH VALUES to perform outlier check on group %s (file: %s)", l, the$Location.File), type="warn")
                 if (outlier.skip == "") { outlier.skip <- l }
                 else { outlier.skip <- paste(outlier.skip, sprintf(", %s", l), sep="") }
             }

@@ -14,6 +14,7 @@
 **Initial CRAN submission.**
 - transferred script to packge form
 - resolved all CMD check issues
+- added a .histova logfile that prints out WHEN an image file is generated
 
 # histova v3.4.3
 ## fixed

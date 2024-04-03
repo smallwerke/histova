@@ -39,7 +39,7 @@ set_aesthetics <- function() {
     if (exists("Colors", envir=fig) == FALSE) {
         # setup 'random' colors for the data if nothing has been assigned...
         fig$Colors = scales::hue_pal()(length(unique(raw$base$statGroups)))
-        message(sprintf("No colors specified, %s are needed, ADDING EXTRAS", colorLength))
+        histova_msg(sprintf("No colors specified, %s are needed, ADDING EXTRAS", colorLength))
     }
     # Fig.Colors.Unique is always initiated as an empty list in init_vars
     # if it has data assume we're to use it...
@@ -50,7 +50,7 @@ set_aesthetics <- function() {
 
     #there SHOULD be a Fig.Colors with sufficient entries, IF NOT go ahead and pad it out
     if (length(fig$Colors) < colorLength) {
-        message(sprintf("Only %s colors supplied when %s are needed, ADDING EXTRAS", length(fig$Colors), colorLength))
+        histova_msg(sprintf("Only %s colors supplied when %s are needed, ADDING EXTRAS", length(fig$Colors), colorLength))
         fig$Colors = append(fig$Colors, scales::hue_pal()(colorLength - length(fig$Colors)))
     }
 
@@ -78,7 +78,7 @@ set_aesthetics <- function() {
     }
 
     if (length(fig$Scatter.Color.List) < colorLength) {
-        message(sprintf("Only %s scatter colors supplied when %s are needed, ADDING EXTRAS", length(fig$Scatter.Color.List), colorLength))
+        histova_msg(sprintf("Only %s scatter colors supplied when %s are needed, ADDING EXTRAS", length(fig$Scatter.Color.List), colorLength))
         fig$Scatter.Color.List = append(fig$Scatter.Color.List, scales::hue_pal()(colorLength - length(fig$Scatter.Color.List)))
     }
 
@@ -108,7 +108,7 @@ set_aesthetics <- function() {
 
     # make sure the list is in fact long enough!
     if (length(fig$Scatter.Shape.List) < colorLength) {
-        message(sprintf("Only %s scatter shapes supplied when %s are needed, ADDING EXTRAS", length(fig$Scatter.Shape.List), colorLength))
+        histova_msg(sprintf("Only %s scatter shapes supplied when %s are needed, ADDING EXTRAS", length(fig$Scatter.Shape.List), colorLength))
         fig$Scatter.Shape.List = append(fig$Scatter.Shape.List, rep(4, colorLength - length(fig$Scatter.Shape.List)))
     }
 
@@ -138,7 +138,7 @@ set_aesthetics <- function() {
 
     # make sure the list is in fact long enough!
     if (length(fig$Scatter.Size.List) < colorLength) {
-        message(sprintf("Only %s scatter sizes supplied when %s are needed, ADDING EXTRAS", length(fig$Scatter.Size.List), colorLength))
+        histova_msg(sprintf("Only %s scatter sizes supplied when %s are needed, ADDING EXTRAS", length(fig$Scatter.Size.List), colorLength))
         fig$Scatter.Size.List = append(fig$Scatter.Size.List, rep(1.8, colorLength - length(fig$Scatter.Size.List)))
     }
 

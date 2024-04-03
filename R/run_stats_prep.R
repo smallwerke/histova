@@ -12,7 +12,7 @@
 #' @importFrom magrittr "%>%"
 run_stats_prep <- function () {
 
-    message("---- Prep stats overview")
+    histova_msg("---- Prep stats overview")
     # Create a subset of raw (raw.multi) that stores the data in raw broken down by Group2 for future analysis...
     # no stats are being run on raw.multi, simply used for defining the different groups AND for defining letters for statistical significance.....
     # if TRUE run stats WITHIN each group2
@@ -71,7 +71,6 @@ run_stats_prep <- function () {
         #                            median = stats::median(Value,na.rm=TRUE),
         #                            IQR25 = stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],
         #                            IQR75 = stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]] )
-        message("LOADING THIS ONE!")
         raw$summary <- raw$base %>% dplyr::group_by(.data$statGroups) %>%
                             dplyr::summarise(
                                 Group1 = unique(.data$Group1),
@@ -93,7 +92,6 @@ run_stats_prep <- function () {
         n = 1
         raw$summary.multi = vector(mode="list", length = length(levels(raw$base$Group2)))
         for (l in levels(raw$base[,'Group2'])) {
-            message("1")
             # raw$summary.multi[[n]] = plyr::ddply(raw$base[raw$base[,'Group2'] %in% c(l),], c('statGroups'), plyr::summarise, ### CHANGED - replaced below ###
             #                                      Group1=unique(Group1),
             #                                      Group2=unique(Group2),
