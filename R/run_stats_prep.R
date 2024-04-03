@@ -8,6 +8,8 @@
 #'
 #' @export
 #'
+#' @importFrom rlang .data
+#' @importFrom magrittr "%>%"
 run_stats_prep <- function () {
 
     message("---- Prep stats overview")
@@ -36,10 +38,52 @@ run_stats_prep <- function () {
     # summary of all data is assigned to raw.summary, subsets (when needed) to raw.summary.multi
     #
     # keep this around even with multi since the entire dataset is sent to gplot for making the figure...
+    #utils::globalVariables('raw', 'group_var', 'weight_var')
     if (is.null(raw$base$Group2)) {
-        raw$summary <- plyr::ddply(raw$base, c('statGroups'), plyr::summarise, Group1=unique(Group1), N=sum(!is.na(Value)), mean=mean(Value, na.rm=TRUE),sd=stats::sd(Value, na.rm=TRUE),se=sd/sqrt(N),median=stats::median(Value,na.rm=TRUE),IQR25=stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],IQR75=stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]])
+        # raw$summary <- plyr::ddply(raw$base, c('statGroups'), plyr::summarise, ### CHANGED - replaced below ###
+        #                            Group1 = unique(Group1),
+        #                            N = sum(!is.na(Value)),
+        #                            mean = mean(Value, na.rm=TRUE),
+        #                            sd = stats::sd(Value, na.rm=TRUE),
+        #                            se = sd/sqrt(N),
+        #                            median = stats::median(Value, na.rm=TRUE),
+        #                            IQR25 = stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],
+        #                            IQR75 = stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]] )
+        raw$summary <- raw$base %>% dplyr::group_by(.data$statGroups) %>%
+                            dplyr::summarise(
+                                Group1 = unique(.data$Group1),
+                                N = sum(!is.na(.data$Value)),
+                                mean = mean(.data$Value, na.rm=TRUE),
+                                sd = stats::sd(.data$Value, na.rm=TRUE),
+                                se = .data$sd/sqrt(.data$N),
+                                median = stats::median(.data$Value,na.rm=TRUE),
+                                IQR25 = stats::quantile(.data$Value, probs=(0.25), na.rm=TRUE)[[1]],
+                                IQR75 = stats::quantile(.data$Value, probs=(0.75), na.rm=TRUE)[[1]]
+                            )
     } else {
-        raw$summary <- plyr::ddply(raw$base, c('statGroups'), plyr::summarise, Group1=unique(Group1), Group2=unique(Group2), N=sum(!is.na(Value)), mean=mean(Value, na.rm=TRUE),sd=stats::sd(Value, na.rm=TRUE),se=sd/sqrt(N),median=stats::median(Value,na.rm=TRUE),IQR25=stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],IQR75=stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]])
+        # raw$summary <- plyr::ddply(raw$base, c('statGroups'), plyr::summarise, ### CHANGED - replaced below ###
+        #                            Group1 = unique(Group1),
+        #                            Group2 = unique(Group2),
+        #                            N = sum(!is.na(Value)),
+        #                            mean = mean(Value, na.rm=TRUE),
+        #                            sd = stats::sd(Value, na.rm=TRUE),
+        #                            se = sd/sqrt(N),
+        #                            median = stats::median(Value,na.rm=TRUE),
+        #                            IQR25 = stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],
+        #                            IQR75 = stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]] )
+        message("LOADING THIS ONE!")
+        raw$summary <- raw$base %>% dplyr::group_by(.data$statGroups) %>%
+                            dplyr::summarise(
+                                Group1 = unique(.data$Group1),
+                                Group2 = unique(.data$Group2),
+                                N = sum(!is.na(.data$Value)),
+                                mean = mean(.data$Value, na.rm=TRUE),
+                                sd = stats::sd(.data$Value, na.rm=TRUE),
+                                se = .data$sd/sqrt(.data$N),
+                                median = stats::median(.data$Value,na.rm=TRUE),
+                                IQR25 = stats::quantile(.data$Value, probs=(0.25), na.rm=TRUE)[[1]],
+                                IQR75 = stats::quantile(.data$Value, probs=(0.75), na.rm=TRUE)[[1]]
+                            )
     }
 
     #raw.summary.multi
@@ -49,15 +93,83 @@ run_stats_prep <- function () {
         n = 1
         raw$summary.multi = vector(mode="list", length = length(levels(raw$base$Group2)))
         for (l in levels(raw$base[,'Group2'])) {
-            raw$summary.multi[[n]] = plyr::ddply(raw$base[raw$base[,'Group2'] %in% c(l),], c('statGroups'), plyr::summarise, Group1=unique(Group1), Group2=unique(Group2), N=sum(!is.na(Value)), mean=mean(Value, na.rm=TRUE),sd=stats::sd(Value, na.rm=TRUE),se=sd/sqrt(N),upper=mean+se,median=stats::median(Value,na.rm=TRUE),IQR25=stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],IQR75=stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]])
+            message("1")
+            # raw$summary.multi[[n]] = plyr::ddply(raw$base[raw$base[,'Group2'] %in% c(l),], c('statGroups'), plyr::summarise, ### CHANGED - replaced below ###
+            #                                      Group1=unique(Group1),
+            #                                      Group2=unique(Group2),
+            #                                      N=sum(!is.na(Value)),
+            #                                      mean=mean(Value, na.rm=TRUE),
+            #                                      sd=stats::sd(Value, na.rm=TRUE),
+            #                                      se=sd/sqrt(N),
+            #                                      upper=mean+se,
+            #                                      median=stats::median(Value,na.rm=TRUE),
+            #                                      IQR25=stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],
+            #                                      IQR75=stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]])
+            raw$summary.multi[[n]] <- raw$base[raw$base[,'Group2'] %in% c(l),] %>% dplyr::group_by(.data$statGroups) %>%
+                            dplyr::summarise(
+                                Group1 = unique(.data$Group1),
+                                Group2 = unique(.data$Group2),
+                                N = sum(!is.na(.data$Value)),
+                                mean = mean(.data$Value, na.rm=TRUE),
+                                sd = stats::sd(.data$Value, na.rm=TRUE),
+                                se = .data$sd/sqrt(.data$N),
+                                upper = .data$mean + .data$se,
+                                median = stats::median(.data$Value,na.rm=TRUE),
+                                IQR25 = stats::quantile(.data$Value, probs=(0.25), na.rm=TRUE)[[1]],
+                                IQR75 = stats::quantile(.data$Value, probs=(0.75), na.rm=TRUE)[[1]]
+                            )
             n = n + 1
         }
         # if FALSE run stats on entire dataset regardless...
     } else {
         if(is.null(raw$base$Group2)) {
-            raw$summary.multi = plyr::ddply(raw$base, c('statGroups'), plyr::summarise, Group1=unique(Group1), N=sum(!is.na(Value)), mean=mean(Value, na.rm=TRUE),sd=stats::sd(Value, na.rm=TRUE),se=sd/sqrt(N),upper=mean+se,median=stats::median(Value,na.rm=TRUE),IQR25=stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],IQR75=stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]])
+            # raw$summary.multi = plyr::ddply(raw$base, c('statGroups'), plyr::summarise,  ### CHANGED - replaced below ###
+            #                                 Group1=unique(Group1),
+            #                                 N=sum(!is.na(Value)),
+            #                                 mean=mean(Value, na.rm=TRUE),
+            #                                 sd=stats::sd(Value, na.rm=TRUE),
+            #                                 se=sd/sqrt(N),
+            #                                 upper=mean+se,
+            #                                 median=stats::median(Value,na.rm=TRUE),
+            #                                 IQR25=stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],
+            #                                 IQR75=stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]])
+            raw$summary.multi <- raw$base %>% dplyr::group_by(.data$statGroups) %>%
+                            dplyr::summarise(
+                                Group1 = unique(.data$Group1),
+                                N = sum(!is.na(.data$Value)),
+                                mean = mean(.data$Value, na.rm=TRUE),
+                                sd = stats::sd(.data$Value, na.rm=TRUE),
+                                se = .data$sd/sqrt(.data$N),
+                                upper = .data$mean + .data$se,
+                                median = stats::median(.data$Value,na.rm=TRUE),
+                                IQR25 = stats::quantile(.data$Value, probs=(0.25), na.rm=TRUE)[[1]],
+                                IQR75 = stats::quantile(.data$Value, probs=(0.75), na.rm=TRUE)[[1]]
+                            )
         } else {
-            raw$summary.multi = plyr::ddply(raw$base, c('statGroups'), plyr::summarise, Group1=unique(Group1), Group2=unique(Group2), N=sum(!is.na(Value)), mean=mean(Value, na.rm=TRUE),sd=stats::sd(Value, na.rm=TRUE),se=sd/sqrt(N),upper=mean+se,median=stats::median(Value,na.rm=TRUE),IQR25=stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],IQR75=stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]])
+            # raw$summary.multi = plyr::ddply(raw$base, c('statGroups'), plyr::summarise,  ### CHANGED - replaced below ###
+            #                                 Group1=unique(Group1),
+            #                                 Group2=unique(Group2),
+            #                                 N=sum(!is.na(Value)),
+            #                                 mean=mean(Value, na.rm=TRUE),
+            #                                 sd=stats::sd(Value, na.rm=TRUE),
+            #                                 se=sd/sqrt(N),
+            #                                 upper=mean+se,
+            #                                 median=stats::median(Value,na.rm=TRUE),
+            #                                 IQR25=stats::quantile(Value, probs=(0.25), na.rm=TRUE)[[1]],
+            #                                 IQR75=stats::quantile(Value, probs=(0.75), na.rm=TRUE)[[1]])
+            raw$summary.multi <- raw$base %>% dplyr::group_by(.data$statGroups) %>%
+                            dplyr::summarise(
+                                Group1 = unique(.data$Group1),
+                                Group2 = unique(.data$Group2),
+                                N = sum(!is.na(.data$Value)),
+                                mean = mean(.data$Value, na.rm=TRUE),
+                                sd = stats::sd(.data$Value, na.rm=TRUE),
+                                se = .data$sd/sqrt(.data$N),
+                                upper = .data$mean + .data$se,
+                                median = stats::median(.data$Value,na.rm=TRUE),
+                                IQR25 = stats::quantile(.data$Value, probs=(0.25), na.rm=TRUE)[[1]],
+                                IQR75 = stats::quantile(.data$Value, probs=(0.75), na.rm=TRUE)[[1]]
+                            )
         }
     }
     #assign("raw.summary.multi", raw.summary.multi, envir = .GlobalEnv) ### CHANGED - no longer needed ###

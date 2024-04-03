@@ -1,6 +1,6 @@
 Package: histova
 Title: Histogram ANOVA
-Version: 3.4.3.0000
+Version: 3.4.3.1000
 Authors@R: 
     person("Niels", , , "6153030+smallwerke@users.noreply.github.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0481-5464"))
@@ -13,10 +13,12 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
+    dplyr,
     ggbreak,
     ggplot2,
     ggtext,
     grDevices,
+    magrittr,
     methods,
     multcompView,
     outliers,
