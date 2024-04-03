@@ -23,7 +23,7 @@
 ## added
 ***HLine backwards compatibility is impacted for any previous figure with multiple lines in one HLine setting this will cause issues***
 - can now edit lines and markdown format some titles (plot & x-axis - bold & italics; color or boxes not yet supported)
-- replace \n with <br>; some combinations of ~ throw <del> not supported error...
+- replace \n with \<br\>; **some combinations of ~ throw \<del\> not supported error...**
 - HLine editing is possible with an override & backup setting available (HLines assume backup values unless specified, OVRD will apply to all regardless)
 - new section (Chart Line Designs) in config files, **all font defaults to standard weight, bold default DROPPED**
 # v3.4.1 status
