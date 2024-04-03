@@ -23,7 +23,8 @@
 ## added
 ***HLine backwards compatibility is impacted for any previous figure with multiple lines in one HLine setting this will cause issues***
 - can now edit lines and markdown format some titles (plot & x-axis - bold & italics; color or boxes not yet supported)
-- replace \n with \<br\>; **some combinations of ~ throw \<del\> not supported error...**
+- replace \n with \<br\>
+- **some combinations of ~ throw \<del\> not supported error...**
 - HLine editing is possible with an override & backup setting available (HLines assume backup values unless specified, OVRD will apply to all regardless)
 - new section (Chart Line Designs) in config files, **all font defaults to standard weight, bold default DROPPED**
 # v3.4.1 status
@@ -70,7 +71,7 @@
 - can also chart data based on Group2 subgroupings
 - new variables added to config file: Colors; Stats Anova Group2; Facet Split
 - for groups / comparisons with no data the script should warn and gracefully deal with
-     eg all 0's should simply produce '--' for each stats letter that no stats can be run...
+    - eg all 0's should simply produce '--' for each stats letter that no stats can be run...
 - does a best guess at the Stat Letters Offset value based on the YMax value for export sizes of 1600x831
 - add small notes to the bottom automatically that CAN be cropped detailing the stats that were run
     also any 1 or 2 tailed outlier removal, etc...
