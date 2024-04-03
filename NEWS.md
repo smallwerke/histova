@@ -15,7 +15,6 @@
 - transferred script to packge form
 - resolved all CMD check issues
 
-
 # histova v3.4.3
 ## fixed
 - ggplot2 update (size -> linewidth), updated ggsave option to use cairo library for font embedding
@@ -27,12 +26,12 @@
 - **some combinations of ~ throw \<del\> not supported error...**
 - HLine editing is possible with an override & backup setting available (HLines assume backup values unless specified, OVRD will apply to all regardless)
 - new section (Chart Line Designs) in config files, **all font defaults to standard weight, bold default DROPPED**
-# v3.4.1 status
+# histova v3.4.1
 ## added
 - ability to add y-axis breaks into the config file with "Y Break->start,stop,scale" scale is optional
 - auto move ANOVA stats letters down below when using negative values
 - increased support for colors and individual data points, added legend options as well as ability to edit bar width and borders
-# v3.4 status
+# histova v3.4 
 ## added
 - ability to generate a figure without running any statistical tests
 - run t-tests POST transformation on data again (may NOT be necessary... investigate)
@@ -41,19 +40,19 @@
 - handle special characters in the config file for titles & group names
 - option for 'global settings' function that allows one to over-ride numerous settings for batch figure generation
 - options to specify saved file sizes and dimensions
-# v3.3 status
+# histova v3.3
 ## added
 - statistical test options (t-test options, student & wilcox paired) with ability to set the tails (two.sided, greater, less)
 - data transform: ability to generate treatment/ control figures & 'mute' select groups (eg for treatment/ control)
 - edited 2.4 to allow files with only one group - edits done in the stats call to ignore importing Group2 from the data
 - time course transformation added -> Group1 sets the time, Group2 is the group -> impacts spacing of bars
 - streamlined the config files - many options are now defaulted in the R script and can be changed in config if desired
-# v3.2.4 status
+# histova v3.2.4 
 ## added
 - option to auto control the ratio (SQUARE is now an input) -> largely DEPRECATED with gsave()
 - ability to rotate the X-axis values AND consistent sizing between axis & statistical lettering
 - ability to manipulate the values (eg divide all by 1,000) and label or use scientific notation
-# histova v3.2.3 status
+# histova v3.2.3 
 ## added
 - option to control the figure's ratio enabling one to produce a 'square' or various rectangles...
 # histova v3.2.2
