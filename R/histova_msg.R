@@ -20,7 +20,7 @@ histova_msg <- function(msg, type="msg", breaker=NULL, tabs=0, PRINT=TRUE, LOG=T
             warning(msg)
         }
     }
-    if (LOG) {
+    if ((LOG) && (the$savePlot)) {
         writeLines(msg, the$LOG)
     }
 }

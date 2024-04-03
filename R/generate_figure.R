@@ -11,13 +11,14 @@
 #' @export
 #'
 #' @examples
-#' generate_figure("/Users/Shared/HISTOVA_DATA", "test.txt")
+#' generate_figure("/Users/Shared/HISTOVA_DATA", "test.txt", savePlot = FALSE)
 #'
 generate_figure <- function(location.dir, location.file, printPlot = FALSE, savePlot = TRUE) {
 
     # consider adding some error checking here???
     the$Location.File = location.file
     the$Location.Dir = location.dir
+    the$savePlot = savePlot
     if (savePlot) {
         the$Location.Log = paste0(the$Location.Dir, "/", sub("txt", "histova", the$Location.File))
         the$LOG = file(the$Location.Log, open = "w")

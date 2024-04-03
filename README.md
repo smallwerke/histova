@@ -36,6 +36,9 @@ from [GitHub](https://github.com/) with:
 devtools::install_github("smallwerke/histova")
 ```
 
+This version needs to undergo final testing but appears to be fully
+functioning at this time.
+
 ## Overview
 
 I will be adding more example configuration files in the near future
@@ -85,6 +88,9 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 # running generate_figure with plot display & save turned off since readme 
 # saves in a temporary location
 histova::generate_figure(d,f, FALSE, FALSE)
+#> ----------------  ----------------  ----------------
+#> ----------------  histova 3.5.0.0  ----------------
+#> --- run on Wed Apr  3 12:13:35 2024 ---
 #> ----------------  ----------------  ----------------
 #> -------- Prep & Load config settings and data --------
 #> ---- Load config (file: test-1_group-basic_no_stats.txt)

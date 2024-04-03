@@ -25,6 +25,6 @@ putting it all together
 set the directory and file location first and then call this function to run through the specified file
 }
 \examples{
-generate_figure("/Users/Shared/HISTOVA_DATA", "test.txt")
+generate_figure("/Users/Shared/HISTOVA_DATA", "test.txt", savePlot = FALSE)
 
 }

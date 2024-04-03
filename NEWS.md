@@ -11,7 +11,7 @@
 - added BASIC whisker & violin plot display option, still need to add option to customize (e.g. whiskers)
 
 # histova v3.5.0
-**Initial CRAN submission.**
+**Initial gitHub release.**
 - transferred script to packge form
 - resolved all CMD check issues
 - added a .histova logfile that prints out WHEN an image file is generated

@@ -31,6 +31,8 @@ You can install the development *aka* **UNCOMPLETE** version of histova from [Gi
 devtools::install_github("smallwerke/histova")
 ```
 
+This version needs to undergo final testing but appears to be fully functioning at this time.
+
 ## Overview
 
 I will be adding more example configuration files in the near future along with more detailed examples. The basic premise is that the figures are generated based off of a simple text file that controls the appearance, statistical tests, and holds the raw data. This is often pasted in from excel or directly from an instrument. The file is tab delimited with the configuration options at the head. 
