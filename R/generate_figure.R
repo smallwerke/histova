@@ -15,6 +15,27 @@
 #'
 generate_figure <- function(location.dir, location.file, printPlot = FALSE, savePlot = TRUE) {
 
+    ##########################################
+    # Plans for the next steps of this package
+    # - setup tests using the saved *.rda files within the package strucutre
+    #       appears to work loading test scripts into int/extdata and then calling the location with:
+    #       generate_figure(str_remove(histova_example("test.txt"), "/test.txt"), "test.txt")
+    #           depends on stringr package!
+    #           one note is that every call / modification of a gplot will impact the gplot OBJECT and thus the data in the saved rda (must follow the same process)
+    #           the gplot object - for some strange reason - contains copies of the local environment ON EACH MODIFICATION?!
+    # - run the ugly tests behind the scenes for functionality testing, where in the structure should the .txt files be saved?
+    #       actually reformat these to look good and include them in the examples directory, maybe have a funky one remain to show the width options...
+    # - check the results of these tests against the pre-generated & saved rda files
+    # - resolve all of the current min / max and other errors that are appearing
+    #       these are turning out to be tricky as they are largely quirks from ggplot2 and / or the aes() function...
+    #       promising discussion but not sure it addresses issue fully: https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
+    #       appears to address it: https://cran.r-project.org/web/packages/ggplot2/vignettes/ggplot2-in-packages.html
+    #       *** have changed the subset calls in build_histo to use R's base & more traditional subset method, should work but... ***
+    # - include nice / well designed versions of the current test designs in the readme.rmd page
+    # - add a function for generating the config file header section (have R run through a series of prompts and spit out a file header!)
+    #       include option to generate a batch version where you can load the generated config file and all you would be editing are
+    #       the Labels, Groups (opt?), Stats tests run and it would all be reusing the 'batch' file's style settings (similar to override)
+
     # consider adding some error checking here???
     the$Location.File = location.file
     the$Location.Dir = location.dir
@@ -24,18 +45,16 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
         the$LOG = file(the$Location.Log, open = "w")
     }
 
-    histova_msg("----------------  ----------------  ----------------")
-    histova_msg(sprintf("----------------  histova %s  ----------------", utils::packageVersion("histova")) )
-    histova_msg(sprintf("--- run on %s ---", date()) )
-    histova_msg("----------------  ----------------  ----------------")
-    histova_msg("-------- Prep & Load config settings and data --------")
+    histova_msg(sprintf("histova %s", utils::packageVersion("histova")), type="title", breaker = "above")
+    histova_msg(sprintf("run on %s", date()), type="title", breaker = "below")
+    histova_msg("Prep & Load config settings and data", type = "head")
 
     # prep & load config info / data
     init_vars()
     load_file_head()
     load_data()
 
-    histova_msg("-------- Statistical Analysis --------")
+    histova_msg("Statistical Analysis", type = "head")
 
     # move onto stats analysis
     if (stats$Outlier != FALSE) { run_outlier() }
@@ -120,7 +139,7 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
         # following vars are set in run_anova() (raw.anova.multi, raw.aov.multi, raw.aov.tukey.multi)
     }
 
-    histova_msg("-------- Build Histogram --------")
+    histova_msg("Build Histogram", type="head")
     set_aesthetics()
     build_histo()
 
@@ -139,7 +158,7 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # overwrite an existing image...
     if (savePlot) {
         the$Location.Image = paste0(the$Location.Dir, "/", sub("txt", fig$Save.Type, the$Location.File))
-        histova_msg("-------- SAVE Histogram --------")
+        histova_msg("SAVE Histogram", type="head")
         histova_msg(sprintf("saving your new figure to: \'%s\'", the$Location.Image))
 
         # implement cairo package to better embed fonts into the output
@@ -151,7 +170,6 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
             ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, type="cairo", limitsize = FALSE)
         }
     }
-    histova_msg("----------------  ----------------  ----------------")
+    histova_msg(sprintf("finihsed on %s", date()), type="title", breaker = "below")
     if (savePlot) { close(the$LOG) }
-
 }
