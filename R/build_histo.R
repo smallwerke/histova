@@ -9,6 +9,7 @@
 #' @importFrom rlang .data
 build_histo <- function(){
 
+    histova_msg("Building Histogram", type="subhead")
     # using the .data feature from rlang as specified:
     # https://cran.r-project.org/web/packages/ggplot2/vignettes/ggplot2-in-packages.html
     # to address warnings from check()
@@ -218,7 +219,7 @@ build_histo <- function(){
     #
     # swap Y axis labels to scientific notation...
     if (fig$Y.Rig == "SCI") {
-        histova_msg(sprintf("setting y-axis to use scientific notation, replacing existing scale_y_continuous..."))
+        histova_msg(sprintf("setting y-axis to use scientific notation, replacing existing scale_y_continuous..."), tabs=2)
         if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
             gplot = gplot + ggplot2::scale_y_continuous(
                 labels = function(x) format(x, scientific = TRUE),
@@ -259,7 +260,7 @@ build_histo <- function(){
             fig$Coord.Fixed.Ratio <- 1/(abs(fig$Y.Max-fig$Y.Min) / length(raw$summary[['statGroups']]))
             ratio.reset = TRUE
         }
-        histova_msg(sprintf("Figure coordinate ratio for display: %s", fig$Coord.Fixed.Ratio))
+        histova_msg(sprintf("Figure coordinate ratio for display: %s", fig$Coord.Fixed.Ratio), tabs=2)
         gplot = gplot + ggplot2::coord_fixed(ratio = fig$Coord.Fixed.Ratio)
         # reset the variable to SQUARE for when override is being used so that the ratio
         # is calculated correctly for each figure
@@ -308,7 +309,7 @@ build_histo <- function(){
         gplot = gplot + ggplot2::labs(caption = paste(notes$Stats.Method, notes$Stats.Outlier, sep="\n"))
     }
     # REGARDLESS print the statistical notes to the logfile
-    histova_msg("---- Stat Notes:", PRINT = FALSE)
+    histova_msg("Stat Notes:", type="subhead", PRINT = FALSE)
     histova_msg(notes$Stats.Method, PRINT = FALSE)
     histova_msg(notes$Stats.Outlier, PRINT = FALSE)
     histova_msg("----", PRINT = FALSE)

@@ -6,7 +6,7 @@
 #'
 run_anova <- function() {
 
-    histova_msg("---- ANOVA w/ Tukeys Post Hoc")
+    histova_msg("ANOVA w/ Tukeys Post Hoc", type="subhead")
     ##########################################
     # anova on the data
     #

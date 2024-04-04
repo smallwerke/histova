@@ -8,8 +8,8 @@ run_transform <- function() {
 
     if (stats$Transform == "ToverC") {
 
-        histova_msg("---- Transform: Treatment OVER Control")
-        histova_msg(sprintf("Transforming data to generate treatment over control figure (file: %s)", the$Location.File), type="warn")
+        histova_msg("Transform: Treatment OVER Control", type="subhead")
+        histova_msg(sprintf("Transforming data to generate treatment over control figure (file: %s)", the$Location.File), type="warn", tabs=2)
 
         # we want to divide all groups by the transform control group AND drop that group from the figure as it should all be set to 1
         trans = ""

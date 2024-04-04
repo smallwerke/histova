@@ -8,7 +8,7 @@
 #' load_data()
 load_data <- function () {
 
-    histova_msg(sprintf("---- Load data (file: %s)", the$Location.File))
+    histova_msg(sprintf("Load data (file: %s)", the$Location.File), type="subhead")
     # read in the data
     fullPath <- paste0(the$Location.Dir, "/", the$Location.File)
     rawIN <- utils::read.table(fullPath, sep="\t", header=TRUE, comment.char = '#', check.names = FALSE)
@@ -54,5 +54,6 @@ load_data <- function () {
         rawIN$statGroups <- factor(rawIN$Group1, levels = unique(rawIN$Group1))
     }
     raw$base <- rawIN ### CHANGED - using $base as location... ####
-    histova_msg(sprintf("\t%s final Group1_Group2 (statGroups - should be unique!) ids:\n\t%s", length(levels(raw$base$statGroups)), paste("", levels(raw$base$statGroups), collapse="")))
+    histova_msg(sprintf("%s final Group1_Group2 (statGroups - should be unique!) ids:", length(levels(raw$base$statGroups)) ), tabs=2)
+    histova_msg(sprintf("%s", paste("", levels(raw$base$statGroups), collapse="")), tabs=3)
 }

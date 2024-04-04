@@ -4,7 +4,10 @@
 \alias{init_vars}
 \title{Initialize variables to defaults}
 \usage{
-init_vars()
+init_vars(msg = TRUE)
+}
+\arguments{
+\item{msg}{T/F print out messages, hack as histova_msg call broke the test function...}
 }
 \description{
 Reset the variables to the defaults used to load and generate another figure

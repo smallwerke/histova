@@ -43,7 +43,7 @@ generate_label_df <- function(n){
     #
     ##########################################
     # build the variables required in this function - some are redundant and could/should be cleaned up...
-    message("---- Generate Figure Labels")
+    histova_msg("Generate Figure Labels", type="subhead")
     comparison = Value ~ statGroups
     flev = 'statGroups'
     yOff = stats$Letters.Offset
@@ -114,7 +114,7 @@ generate_label_df <- function(n){
         # and assign 'A' to everything
         if (length(unique(stats$Tukey.Levels[!is.na(1)])) == 1) {
             anova.labels = data.frame(labels = rep('--', 6), plot.labels = raw$summary.multi[[1]]$statGroups)
-            histova_msg(sprintf("UNABLE to determine significance based on the tukey results! (%s) \n\tAll groups assigned as having NO SIGNIFICANT DIFFERENCE! (file: %s)", paste("", stats$Tukey.levels, collapse=""), the$Location.File ), type="warn")
+            histova_msg(sprintf("UNABLE to determine significance based on the tukey results! (%s) \n\tAll groups assigned as having NO SIGNIFICANT DIFFERENCE! (file: %s)", paste("", stats$Tukey.levels, collapse=""), the$Location.File ), type="warn", tabs=2)
 
             # get the work done 'by hand'
         } else {

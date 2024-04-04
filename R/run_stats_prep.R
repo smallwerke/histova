@@ -12,7 +12,7 @@
 #' @importFrom magrittr "%>%"
 run_stats_prep <- function () {
 
-    histova_msg("---- Prep stats overview")
+    histova_msg("Run stats prep (basic summaries)", type="subhead")
     # Create a subset of raw (raw.multi) that stores the data in raw broken down by Group2 for future analysis...
     # no stats are being run on raw.multi, simply used for defining the different groups AND for defining letters for statistical significance.....
     # if TRUE run stats WITHIN each group2

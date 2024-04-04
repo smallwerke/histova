@@ -7,7 +7,7 @@
 histova_msg(
   msg,
   type = "msg",
-  breaker = NULL,
+  breaker = FALSE,
   tabs = 0,
   PRINT = TRUE,
   LOG = TRUE
@@ -16,11 +16,11 @@ histova_msg(
 \arguments{
 \item{msg}{Simple text string to print out / write to file}
 
-\item{type}{msg/warn For what type of print call to use}
+\item{type}{title/head/subhead/msg/warn For what type of print call to use (title, head & subhead include formatting)}
 
-\item{breaker}{Should the text string have border lines before and/or after it}
+\item{breaker}{above/below/both Should the text string have border lines before and/or after it}
 
-\item{tabs}{And indentation for the message}
+\item{tabs}{Any indentation for the message (only compatible with msg and warn)}
 
 \item{PRINT}{T/F Print out to screen}
 

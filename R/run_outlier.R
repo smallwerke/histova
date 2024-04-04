@@ -6,7 +6,7 @@
 #'
 run_outlier <- function() {
 
-    histova_msg("---- Outlier checking")
+    histova_msg("Outlier checking", type="subhead")
     # determined by the header in the data file...
     # not impacted by the Group2 setting as each Group1_Group2 should create a unique ID combination
     if ((stats$Outlier == "ONE") || (stats$Outlier == "TWO")) {

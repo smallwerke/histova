@@ -112,7 +112,7 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # remove a group from being displayed (eg for treatment / control figures)
     if ((stats$Group1.Mute != FALSE) && (stats$Anova.Group2 == FALSE)) {
 
-        histova_msg(sprintf("group1Mute is set to %s, attempting to remove this group! (file: %s)", stats$Group1.Mute, the$Location.File), type="warn")
+        histova_msg(sprintf("group1Mute is set to %s, attempting to remove this group! (file: %s)", stats$Group1.Mute, the$Location.File), type="warn", tabs=2)
 
 
         # convenient function but causes notes in packages...
@@ -159,7 +159,7 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     if (savePlot) {
         the$Location.Image = paste0(the$Location.Dir, "/", sub("txt", fig$Save.Type, the$Location.File))
         histova_msg("SAVE Histogram", type="head")
-        histova_msg(sprintf("saving your new figure to: \'%s\'", the$Location.Image))
+        histova_msg(sprintf("saving your new figure to: \'%s\'", the$Location.Image), tabs=1)
 
         # implement cairo package to better embed fonts into the output
         if (fig$Save.Type %in% c("tex", "svg")) {
@@ -170,6 +170,6 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
             ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, type="cairo", limitsize = FALSE)
         }
     }
-    histova_msg(sprintf("finihsed on %s", date()), type="title", breaker = "below")
+    histova_msg(sprintf("finihsed on %s", date()), type="title", breaker = "both")
     if (savePlot) { close(the$LOG) }
 }

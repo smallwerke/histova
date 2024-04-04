@@ -8,7 +8,7 @@
 #' load_file_head()
 load_file_head = function() {
 
-    histova_msg(sprintf("---- Load config (file: %s)", the$Location.File))
+    histova_msg(sprintf("Load config (file: %s)", the$Location.File), type="subhead")
 
     # doesn't like when packages change the working directory...
     # drop this approach and generate a fullPath var instead to open a file connection
