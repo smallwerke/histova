@@ -1,6 +1,11 @@
 #' Load File Head
 #'
-#' @description Load the configuration from the head of the file specified in the$Location.file
+#' @description
+#' Load the configuration from the head of the file specified in the$Location.file. Each
+#' configuration file should begin with the settings section that details the aesthetics of
+#' the desired figure as well as what kind of statistical tests to carry out. These settings
+#' are all loaded into a few environments within the histova package and stored there
+#' to be accessible between functions. The Override option is controlled in this function.
 #'
 #' @export
 #'
