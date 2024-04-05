@@ -1,12 +1,19 @@
 #' Generate Figure
 #'
-#' @description putting it all together
-#' set the directory and file location first and then call this function to run through the specified file
+#' @description
+#' This is the main function that builds a plot based on the specified configuration file. Pass in
+#' the desired directory and file name in string format. By default the function does not print the
+#' resulting plot but does save the plot and a log file in the same directory where the configuration
+#' file is located.
+#'
+#' The configuration file must end in .txt and follow a specific format. The resulting plot and log
+#' files both take the same name as the config file and simply changes the file extension. The plot
+#' type is specified in the config file (default is .jpg) and the log file is set as .histova.
 #'
 #' @param location.dir The directory the data file is contained in
 #' @param location.file The file containing the data
-#' @param printPlot T/F Should the finished plot be printed (default to FALSE)
-#' @param savePlot T/F Should the finished plot be saved to disk (default to TRUE)
+#' @param printPlot Should the finished plot be printed
+#' @param savePlot Should the finished plot & log be saved to disk
 #'
 #' @export
 #'

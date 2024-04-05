@@ -15,6 +15,8 @@ histova_msg <- function(msg, type="msg", breaker=FALSE, tabs=0, PRINT=TRUE, LOG=
     # IF it is a warning message save a copy so that any indents or alterations aren't sent through to warning()
     if (type == "warn") { warnMsg = paste0("FROM ", deparse(sys.calls()[[sys.nframe()-1]]), ": ", msg)  }
 
+    if ((exists("MUTE", where=the)) && (the$MUTE)) { PRINT = FALSE }
+
     # header code
     breakLength = 80
     headPad = 8
@@ -58,7 +60,7 @@ histova_msg <- function(msg, type="msg", breaker=FALSE, tabs=0, PRINT=TRUE, LOG=
         if (type == "warn") { warning(warnMsg, call. = FALSE) }
     }
 
-    if ((LOG) && (the$savePlot)) {
+    if (exists("savePlot", where=the) && (LOG) && (the$savePlot)) {
         writeLines(msg, the$LOG)
     }
 }

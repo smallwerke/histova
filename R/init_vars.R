@@ -2,14 +2,13 @@
 #'
 #' @description Reset the variables to the defaults used to load and generate another figure
 #'
-#' @param msg T/F print out messages, hack as histova_msg call broke the test function...
 #' @export
 #'
 #' @examples
 #' init_vars()
-init_vars <- function(msg = TRUE) {
+init_vars <- function() {
 
-    if (msg) { histova_msg("Initialize envrionment variables", type="subhead") }
+    histova_msg("Initialize envrionment variables", type="subhead")
     if (!exists("Override", envir=the)) { the$Override <- FALSE }
     if (isFALSE(the$Override)) {
         ################ Label Size and Appearance (OPT) ################
