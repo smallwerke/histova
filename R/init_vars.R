@@ -1,6 +1,14 @@
 #' Initialize variables to defaults
 #'
-#' @description Reset the variables to the defaults used to load and generate another figure
+#' @description
+#' Reset the variables to the defaults used to load and generate another figure. These
+#' variables can all be set / changed in the config file. Nothing is passed in or
+#' returned as the function is simply resetting the working environments. The variables
+#' that are reset can be changed by enabling 'Override' in a config file to keep a
+#' persistent aesthetic across multiple figures without having to set everything in each
+#' config file. This is also designed to facilitate rapid style changes across multiple figures
+#' as the setting only needs to be edited in one config file and will be essentially
+#' inhereted by all subsequent figures provided the 'Override' option is not explicitly set.
 #'
 #' @export
 #'
