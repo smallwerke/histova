@@ -7,4 +7,11 @@ test_that("init_vars loads some default data", {
 
   load_file_head()
   expect_equal(fig$Scatter.Disp, FALSE)
+  expect_equal(fig$Y.Max, 20)
+  expect_equal(fig$Y.Interval, 5)
+  expect_equal(fig$Y, "µ values")
+  expect_equal(the$Override, FALSE)
+  expect_equal(stats$Letters.Size, 18)
+
+
 })
