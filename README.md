@@ -55,6 +55,9 @@ detailed in the config header. Example files are in
 
 Data lines are in the format of value-\>group1-\>group2.
 
+I am currently planning on writing a function that will generate a
+config file for you that just needs to have data appended to it.
+
 ## Example
 
 Basic use of the histova sript. Very simple process that generates a
@@ -88,21 +91,27 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 # running generate_figure with plot display & save turned off since readme 
 # saves in a temporary location
 histova::generate_figure(d,f, FALSE, FALSE)
-#> ----------------  ----------------  ----------------
-#> ----------------  histova 3.5.0.0  ----------------
-#> --- run on Wed Apr  3 12:13:35 2024 ---
-#> ----------------  ----------------  ----------------
+#> --------------------------------------------------------------------------------
+#> ------------------------------- histova 3.5.0.0 --------------------------------
+#> ----------------------- run on Mon Apr  8 14:50:09 2024 ------------------------
+#> --------------------------------------------------------------------------------
 #> -------- Prep & Load config settings and data --------
+#> ---- Initialize envrionment variables
 #> ---- Load config (file: test-1_group-basic_no_stats.txt)
+#> ---- Initialize envrionment variables
 #> ---- Load data (file: test-1_group-basic_no_stats.txt)
-#>  6 final Group1_Group2 (statGroups - should be unique!) ids:
-#>   G1 G2 G3 G4 G5 G6
+#>         6 final Group1_Group2 (statGroups - should be unique!) ids:
+#>              G1 G2 G3 G4 G5 G6
 #> -------- Statistical Analysis --------
-#> ---- Prep stats overview
+#> ---- Run stats prep (basic summaries)
 #> -------- Build Histogram --------
-#> Figure coordinate ratio for display: 0.3
+#> ---- Setting Aesthetics
+#> ---- Building Histogram
+#>         Figure coordinate ratio for display: 0.3
 #> ---- Generate Figure Labels
-#> ----------------  ----------------  ----------------
+#> --------------------------------------------------------------------------------
+#> --------------------- finihsed on Mon Apr  8 14:50:09 2024 ---------------------
+#> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-basic_no_stats.jpg")
 ```
 

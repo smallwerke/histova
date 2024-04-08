@@ -41,6 +41,8 @@ The header lines all begin with `#` with `##` denoting a comment and `#` a confi
 
 Data lines are in the format of value->group1->group2.
 
+I am currently planning on writing a function that will generate a config file for you that just needs to have data appended to it.
+
 ## Example
 
 Basic use of the histova sript. Very simple process that generates a figure by specifying the source directory and the config file. The output figure is saved to the source directory.
