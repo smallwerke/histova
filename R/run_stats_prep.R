@@ -1,10 +1,11 @@
 #' Run Stats Prep
 #'
-#' @description Calculate the stats (outlier removal, anova, TUKEY post hoc, summary table)
-#' this function reads in the raw data and then calls the appropriate functions
-#' depending on what tests were specified in the config file...
+#' @description
+#' Calculate the stats (outlier removal, anova, TUKEY post hoc, summary table) that histova needs.
+#' This function accesses the raw data that has been loaded into the environment and then calls
+#' the appropriate functions depending on what tests were specified in the config file...
 #'
-#' No examples specified as the function *depends* on having data loaded by other functions
+#' No examples specified as the function *depends* on having data loaded into the environment by other functions.
 #'
 #' @export
 #'
@@ -13,6 +14,7 @@
 run_stats_prep <- function () {
 
     histova_msg("Run stats prep (basic summaries)", type="subhead")
+
     # Create a subset of raw (raw.multi) that stores the data in raw broken down by Group2 for future analysis...
     # no stats are being run on raw.multi, simply used for defining the different groups AND for defining letters for statistical significance.....
     # if TRUE run stats WITHIN each group2
@@ -23,7 +25,6 @@ run_stats_prep <- function () {
             raw$multi[[n]] = droplevels(raw$base[raw$base[,'Group2'] %in% c(l),])
             n = n + 1
         }
-        #assign("raw.multi", raw.multi, envir = .GlobalEnv) ### CHANGED - no longer needed ###
     }
 
     # REQUIRED for error bars AND placing statistical letters!
@@ -31,14 +32,16 @@ run_stats_prep <- function () {
     # IN BRIEF:
     # ddply is applying a function to each subset of values in the data frame 'raw' as split into groups by 'Group1'
     # and summarising the data for the groups
-    # sum(!is.na(Value)) counting the values in each group that haven't been set to 'NA' eg by remove outlier function above...
+    # sum(!is.na(Value)) counting the values in each group that haven't been set to 'NA' eg by remove outlier function...
     # mean(Value, na.rm=TRUE) calculates the mean of each group dropping any 'NA' values (reducing N for that mean)
     # sd(Value, na.rm=TRUE) runs the standard dev function also dropping any 'NA' values
-    # sd/sqrt(N) determines the stadard error based on the above standard dev...
+    # sd/sqrt(N) determines the standard error based on the above standard dev...
     # summary of all data is assigned to raw.summary, subsets (when needed) to raw.summary.multi
     #
-    # keep this around even with multi since the entire dataset is sent to gplot for making the figure...
-    #utils::globalVariables('raw', 'group_var', 'weight_var')
+    # keep this around even with multi since the entire dataset is sent to gplot for making the figure... utils::globalVariables('raw', 'group_var', 'weight_var')
+    #
+    # this function is now using dplyr for the same operation and sending the data with %>%
+    # this was required to resolve notes during package checking... results should not be impacted
     if (is.null(raw$base$Group2)) {
         # raw$summary <- plyr::ddply(raw$base, c('statGroups'), plyr::summarise, ### CHANGED - replaced below ###
         #                            Group1 = unique(Group1),
@@ -118,7 +121,7 @@ run_stats_prep <- function () {
                             )
             n = n + 1
         }
-        # if FALSE run stats on entire dataset regardless...
+    # if FALSE run stats on entire dataset regardless...
     } else {
         if(is.null(raw$base$Group2)) {
             # raw$summary.multi = plyr::ddply(raw$base, c('statGroups'), plyr::summarise,  ### CHANGED - replaced below ###

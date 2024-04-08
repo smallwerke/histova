@@ -7,9 +7,9 @@
 run_stats_prep()
 }
 \description{
-Calculate the stats (outlier removal, anova, TUKEY post hoc, summary table)
-this function reads in the raw data and then calls the appropriate functions
-depending on what tests were specified in the config file...
+Calculate the stats (outlier removal, anova, TUKEY post hoc, summary table) that histova needs.
+This function accesses the raw data that has been loaded into the environment and then calls
+the appropriate functions depending on what tests were specified in the config file...
 
-No examples specified as the function \emph{depends} on having data loaded by other functions
+No examples specified as the function \emph{depends} on having data loaded into the environment by other functions.
 }
