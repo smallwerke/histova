@@ -1,6 +1,10 @@
 #' Run Outlier
 #'
-#' @description remove any outliers, if requested; DEPENDS on already having loaded data to function as it operates on saved environment variables
+#' @description
+#' Remove any outliers, if requested. DEPENDS on already having loaded data into the environment
+#' to function as it operates on saved environment variables. The histova function load_data() should
+#' load the needed data. The configuration file can specify if one or two tailed outlier checking
+#' should be performed. Only the most extreme outlier will be removed in the current configuration.
 #'
 #' @export
 #'
@@ -39,17 +43,28 @@ run_outlier <- function() {
                 #message(sprintf("2 P: %s", grubbs.test(raw[raw[,'statGroups'] %in% c(l),][,'Value'], type=11)$p.value))
                 if (stats$Outlier == "ONE") {
                     if (outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=10, two.sided = FALSE)$p.value <= 0.05) {
-                        histova_msg(sprintf("ONE TAILED REMOVAL on group %s (file: %s)", l, the$Location.File), type="warn")
-                        if (outlier.list == "") { outlier.list <- l }
-                        else { outlier.list = paste(outlier.list, sprintf(", %s", l), sep="") }
+
+                        # find out what value is going to be removed by rm.outlier and report that
+                        outlier.value = outliers::outlier(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'])
+
+                        histova_msg(sprintf("ONE TAILED REMOVAL on group %s value %s (file: %s)", l, outlier.value, the$Location.File), type="warn", tabs=2)
+                        if (outlier.list == "") { outlier.list <- sprintf("%s (%#.3f)", l, outlier.value) }
+                        else { outlier.list = paste(outlier.list, sprintf(", %s (%#.3f)", l, outlier.value), sep="") }
+
+                        # overwrites the existing group *** NOT NECESSARILY IN THE SAME ORDER! ***
+                        # runs rm.outlier function to remove outlier and appends 'NA' in its place
                         raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'] <- append(outliers::rm.outlier(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], fill=FALSE), NA)
                     }
                     # check for outliers on both tails
                 } else if (stats$Outlier == "TWO") {
                     if (outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=10, two.sided = TRUE)$p.value <= 0.05) {
-                        histova_msg(sprintf("TWO TAILED REMOVAL on group %s (file: %s)", l, the$Location.File), type="warn")
-                        if (outlier.list == "") { outlier.list = l }
-                        else { outlier.list <- paste(outlier.list, sprintf(", %s", l), sep="") }
+
+                        # find out what value is going to be removed by rm.outlier and report that
+                        outlier.value = outliers::outlier(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'])
+
+                        histova_msg(sprintf("TWO TAILED REMOVAL on group %s value %s (file: %s)", l, outlier.value, the$Location.File), type="warn", tabs=2)
+                        if (outlier.list == "") { outlier.list <- sprintf("%s (%#.3f)", l, outlier.value) }
+                        else { outlier.list <- paste(outlier.list, sprintf(", %s (%#.3f)", l, outlier.value), sep="") }
 
                         # overwrites the existing group *** NOT NECESSARILY IN THE SAME ORDER! ***
                         # runs rm.outlier function to remove outlier and appends 'NA' in its place
@@ -70,10 +85,8 @@ run_outlier <- function() {
         if (outlier.list == "") { outlier.list <- "None Found" }
         if (outlier.skip != "") { outlier.list <- paste(outlier.list, "\nToo few values to check outliers: ", outlier.skip) }
         notes$Stats.Outlier <- paste(notes$Stats.Outlier, outlier.list, sep=" ")
-        #assign("raw", raw, envir = .GlobalEnv) ### CHANGED - not needed, assigned directory ###
 
     } else { # if ((stats$Outlier == "ONE") || (stats$Outlier == "TWO")) {
         notes$Stats.Outlier <- paste(notes$Stats.Outlier, "No Outlier Check Performed", sep=" ")
     }
-    #assign("Notes.Stats.Outlier", Notes.Stats.Outlier, envir = .GlobalEnv) ### CHANGED - no longer needed ###
 }
