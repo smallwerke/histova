@@ -14,10 +14,20 @@ run_outlier <- function() {
     # determined by the header in the data file...
     # not impacted by the Group2 setting as each Group1_Group2 should create a unique ID combination
     if ((stats$Outlier == "ONE") || (stats$Outlier == "TWO")) {
-        if (stats$Outlier == "ONE") { notes$Stats.Outlier <- paste(notes$Stats.Outlier, "Outlier Check (one tailed removal)", sep=" ") }
-        else if (stats$Outlier == "TWO") { notes$Stats.Outlier <- paste(notes$Stats.Outlier, "Outlier Check (two tailed removal)", sep=" ") }
+
+        # set some general configs
+        two.sided.val = TRUE
+        if (stats$Outlier == "ONE") {
+            two.sided.val = FALSE
+            notes$Stats.Outlier <- paste(notes$Stats.Outlier, "Outlier Check (one tailed removal)", sep=" ")
+        } else if (stats$Outlier == "TWO") {
+            notes$Stats.Outlier <- paste(notes$Stats.Outlier, "Outlier Check (two tailed removal)", sep=" ")
+        }
         outlier.list <- ""
         outlier.skip <- ""
+
+        # create a data frame to hold any discovered outliers, nrow(raw$outlier) will provide total outlier count (inclding 0)
+        raw$outlier = data.frame()
 
         # cycle through the raw data frame based on the groupings in 'Group1'
         for (l in levels(raw$base[,'statGroups'])) {
@@ -38,40 +48,25 @@ run_outlier <- function() {
                 #
                 # one tailed check can throw a warning message: "In sqrt(s) : NaNs produced" though script
                 # continues running and so far no issue has been discovered; double check if concerned
-                #message(sprintf("VALUES: %s", raw[raw[,'statGroups'] %in% c(l),][,'Value']))
-                #message(sprintf("1 P: %s", grubbs.test(raw[raw[,'statGroups'] %in% c(l),][,'Value'], type=10)$p.value))
-                #message(sprintf("2 P: %s", grubbs.test(raw[raw[,'statGroups'] %in% c(l),][,'Value'], type=11)$p.value))
-                if (stats$Outlier == "ONE") {
-                    if (outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=10, two.sided = FALSE)$p.value <= 0.05) {
+                outlier.pval <- outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=10, two.sided = two.sided.val)$p.value
+                if (outlier.pval <= 0.05) {
 
-                        # find out what value is going to be removed by rm.outlier and report that
-                        outlier.value = outliers::outlier(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'])
+                    # find out what value is going to be removed by rm.outlier and report that
+                    outlier.value = outliers::outlier(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'])
 
-                        histova_msg(sprintf("ONE TAILED REMOVAL on group %s value %s (file: %s)", l, outlier.value, the$Location.File), type="warn", tabs=2)
-                        if (outlier.list == "") { outlier.list <- sprintf("%s (%#.3f)", l, outlier.value) }
-                        else { outlier.list = paste(outlier.list, sprintf(", %s (%#.3f)", l, outlier.value), sep="") }
+                    # save the removed outliers into a separate data frame
+                    raw$outlier = rbind(raw$outlier, data.frame("Value" = c(outlier.value), "pVal" = c(outlier.pval), "statGroups" = c(l)) )
 
-                        # overwrites the existing group *** NOT NECESSARILY IN THE SAME ORDER! ***
-                        # runs rm.outlier function to remove outlier and appends 'NA' in its place
-                        raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'] <- append(outliers::rm.outlier(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], fill=FALSE), NA)
-                    }
-                    # check for outliers on both tails
-                } else if (stats$Outlier == "TWO") {
-                    if (outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=10, two.sided = TRUE)$p.value <= 0.05) {
+                    histova_msg(sprintf("%s TAILED REMOVAL on group %s (value %s, p.val: %#.2e)",
+                                        stats$Outlier, l, outlier.value, outlier.pval
+                                        ), type="warn", tabs=2)
+                    if (outlier.list == "") { outlier.list <- sprintf("%s (%#.3f)", l, outlier.value) }
+                    else { outlier.list = paste(outlier.list, sprintf(", %s (%#.3f)", l, outlier.value), sep="") }
 
-                        # find out what value is going to be removed by rm.outlier and report that
-                        outlier.value = outliers::outlier(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'])
-
-                        histova_msg(sprintf("TWO TAILED REMOVAL on group %s value %s (file: %s)", l, outlier.value, the$Location.File), type="warn", tabs=2)
-                        if (outlier.list == "") { outlier.list <- sprintf("%s (%#.3f)", l, outlier.value) }
-                        else { outlier.list <- paste(outlier.list, sprintf(", %s (%#.3f)", l, outlier.value), sep="") }
-
-                        # overwrites the existing group *** NOT NECESSARILY IN THE SAME ORDER! ***
-                        # runs rm.outlier function to remove outlier and appends 'NA' in its place
-                        raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'] <- append(outliers::rm.outlier(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], fill=FALSE), NA)
-                    }
+                    # overwrites the existing group *** NOT NECESSARILY IN THE SAME ORDER! ***
+                    # runs rm.outlier function to remove outlier and appends 'NA' in its place
+                    raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'] <- append(outliers::rm.outlier(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], fill=FALSE), NA)
                 }
-                # write out a message if the test is skipped
             } else {
                 histova_msg(sprintf("NOT ENOUGH VALUES to perform outlier check on group %s (file: %s)", l, the$Location.File), type="warn")
                 if (outlier.skip == "") { outlier.skip <- l }
