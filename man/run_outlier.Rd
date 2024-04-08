@@ -7,5 +7,8 @@
 run_outlier()
 }
 \description{
-remove any outliers, if requested; DEPENDS on already having loaded data to function as it operates on saved environment variables
+Remove any outliers, if requested. DEPENDS on already having loaded data into the environment
+to function as it operates on saved environment variables. The histova function load_data() should
+load the needed data. The configuration file can specify if one or two tailed outlier checking
+should be performed. Only the most extreme outlier will be removed in the current configuration.
 }
