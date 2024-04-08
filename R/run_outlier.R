@@ -27,6 +27,7 @@ run_outlier <- function() {
 
                 # there are multiple types of tests to run w/ grubbs https://cran.r-project.org/web/packages/outliers/outliers.pdf
                 # type 10: looks for one outlier; type 11: checks highest & lowest value; type 20: checks for two outliers on SAME tail
+                # one or two sided tests are determined by two.sided=FALSE/TRUE
                 # make a list of the data in the Value column of the raw data frame
                 # for all entries that match c(l) (from above) in the 'Group1' column
                 # [raw[,'Group1'] %in% c(l),][,'Value']
@@ -37,7 +38,7 @@ run_outlier <- function() {
                 #message(sprintf("1 P: %s", grubbs.test(raw[raw[,'statGroups'] %in% c(l),][,'Value'], type=10)$p.value))
                 #message(sprintf("2 P: %s", grubbs.test(raw[raw[,'statGroups'] %in% c(l),][,'Value'], type=11)$p.value))
                 if (stats$Outlier == "ONE") {
-                    if (outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=10)$p.value <= 0.05) {
+                    if (outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=10, two.sided = FALSE)$p.value <= 0.05) {
                         histova_msg(sprintf("ONE TAILED REMOVAL on group %s (file: %s)", l, the$Location.File), type="warn")
                         if (outlier.list == "") { outlier.list <- l }
                         else { outlier.list = paste(outlier.list, sprintf(", %s", l), sep="") }
@@ -45,7 +46,7 @@ run_outlier <- function() {
                     }
                     # check for outliers on both tails
                 } else if (stats$Outlier == "TWO") {
-                    if (outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=11)$p.value <= 0.05) {
+                    if (outliers::grubbs.test(raw$base[raw$base[,'statGroups'] %in% c(l),][,'Value'], type=10, two.sided = TRUE)$p.value <= 0.05) {
                         histova_msg(sprintf("TWO TAILED REMOVAL on group %s (file: %s)", l, the$Location.File), type="warn")
                         if (outlier.list == "") { outlier.list = l }
                         else { outlier.list <- paste(outlier.list, sprintf(", %s", l), sep="") }
