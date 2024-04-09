@@ -7,5 +7,7 @@
 run_anova()
 }
 \description{
-calculate the ANOVA values
+Calculate the ANOVA values for the specified groups. Depending on the configuration the ANOVA
+is either run within each Group2 or between all possible Group1_Group2 combinations. All of the
+data is pulled from environment variables.
 }
