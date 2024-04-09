@@ -146,7 +146,7 @@ build_histo <- function(){
             breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
             sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = fig$Plot.HLine$y, labels = fig$Plot.HLine$y)
         )
-    } else {
+    } else if (fig$Y.Break == TRUE) {
         # include a NULL secondary axis otherwise IF a y-axis break is included there will be a second y-axis added
         gplot = gplot + ggplot2::scale_y_continuous(
             expand = c(0, 0),
@@ -154,7 +154,16 @@ build_histo <- function(){
             breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
             sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = NULL, labels = NULL)
         )
+    } else {
+        # if no y-breaks than don't bother with the secondary axis (it will throw an error if left in)
+        gplot = gplot + ggplot2::scale_y_continuous(
+            expand = c(0, 0),
+            limits=c(fig$Y.Min,fig$Y.Max),
+            breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval)
+        )
+
     }
+
     #########################################################
     # add scatter plot into the figure
     #
@@ -228,14 +237,22 @@ build_histo <- function(){
                 breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
                 sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = fig$Plot.HLine$y, labels = format(fig$Plot.HLine$y, scientific = TRUE))
             )
-        } else {
+        } else if (fig$Y.Break == TRUE) {
             # include a NULL secondary axis otherwise IF a y-axis break is included there will be a second y-axis added
             gplot = gplot + ggplot2::scale_y_continuous(
                 labels = function(x) format(x, scientific = TRUE),
                 expand = c(0, 0),
-                limits=c(fig$Y.Min,fig$Y.Max),
+                limits = c(fig$Y.Min,fig$Y.Max),
                 breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
                 sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = NULL, labels = NULL)
+            )
+        } else {
+            # no breaks so no secondary axis (will throw an error if left in)
+            gplot = gplot + ggplot2::scale_y_continuous(
+                labels = function(x) format(x, scientific = TRUE),
+                expand = c(0, 0),
+                limits = c(fig$Y.Min,fig$Y.Max),
+                breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
             )
         }
     }
@@ -320,7 +337,7 @@ build_histo <- function(){
     # add the y-axis breaks to the figure
     if (fig$Y.Break == TRUE) {
         for(i in 1:nrow(fig$Y.Break.df)) {
-            histova_msg(sprintf("adding a break to the y-axis between %s and %s with scales of \'%s\'", fig$Y.Break.df[i,]$start, fig$Y.Break.df[i,]$stop, fig$Y.Break.df[i,]$scales))
+            histova_msg(sprintf("adding a break to the y-axis between %s and %s with scales of \'%s\'", fig$Y.Break.df[i,]$start, fig$Y.Break.df[i,]$stop, fig$Y.Break.df[i,]$scales), tabs=2)
             gplot = gplot + ggbreak::scale_y_break(c(fig$Y.Break.df[i,]$start, fig$Y.Break.df[i,]$stop), scales = fig$Y.Break.df[i,]$scales)
         }
     }

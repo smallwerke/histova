@@ -34,11 +34,12 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     #       actually reformat these to look good and include them in the examples directory, maybe have a funky one remain to show the width options...
     # - check the results of these tests against the pre-generated & saved rda files
     # - resolve all of the current min / max and other errors that are appearing
-    #       these are turning out to be tricky as they are largely quirks from ggplot2 and / or the aes() function...
-    #       promising discussion but not sure it addresses issue fully: https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
+    #       I believe these are now all fixed - they are related to the sec_axis call that was controlling the display of a secondary axis
     #       appears to address it: https://cran.r-project.org/web/packages/ggplot2/vignettes/ggplot2-in-packages.html
     #       *** have changed the subset calls in build_histo to use R's base & more traditional subset method, should work but... ***
     # - include nice / well designed versions of the current test designs in the readme.rmd page
+    # - have the color assignments have an actual group1/group2 name to them to assign them based on name not simply order
+    # - add ability to not have all G1 in each G2... should be able to have distinct G1 per G2...
     # - add a function for generating the config file header section (have R run through a series of prompts and spit out a file header!)
     #       include option to generate a batch version where you can load the generated config file and all you would be editing are
     #       the Labels, Groups (opt?), Stats tests run and it would all be reusing the 'batch' file's style settings (similar to override)
