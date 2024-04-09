@@ -78,6 +78,7 @@
 ## !! IF data is being separated based on group2 - make sure that the group1_group2 comparisons are within the same group2 !!
 ## DEF: "Stats Test":'' (ANOVA = ANOVA w/ Tukeys Post Hoc Test; STTest = Students t-Test; WTTest = Wilcoxen TTest - in development)
 #Stats Test	ANOVA
+#Stats Test	STTest	G1	G5	@	less
 ################ Stats Transformation or Outlier (REQ) ################
 ## "Stats Transform:FALSE" -> no transformation
 ## "Stats Transform:TreatmentControl:Group1:Group2" -> define control group: Group1 required, Group2 required if using 2 groups 

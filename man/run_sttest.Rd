@@ -7,5 +7,7 @@
 run_sttest()
 }
 \description{
-Run Students TTest.
+Run Students TTest against defined groups. The type of test and the groups to
+be compared are assigned in the config file. The test is run off of data loaded
+into the package's environment by previous functions.
 }
