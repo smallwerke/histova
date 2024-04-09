@@ -1,0 +1,146 @@
+## TEST DATA - file name & details
+################ OVERRIDE? ################
+## !! OVERRIDE MUST BE AT THE TOP OF THE DATA FILE !!
+## Ability to save the optional (OPT) headed data for subsequent data files - makes consistent style formatting easier when making multiple figures
+## Override -> (TRUE: store the OPT values from this file until another TRUE is encountered; FALSE: turn override off and clear out the stored values)
+## DEF "Override:''" 
+################ Label Size and Appearance (OPT) ################
+## Set the size of the labels, the distance between the axis labels and the values & the axis value size
+## Text Convert -> scan the title & axis for html codes and convert to unicode; Text Font -> select a font
+## Conversion: (&Alpha; &Sigma; &alpha; &beta; &epsilon; &pi; &sigma; &bull; &isin; &radic; &micro; \n); Fonts: (mono, sans, serif)
+## DEF: "Title Size:32"; "Axis Title Size:26"; Axis Label Size:26"; "Axis Label Sep:20"; "Axis Value Size: 26"; "Legend Label Size:26"; "Text Convert:TRUE"; "Text Font:sans"
+################ Display of the Axis & Plot (OPT) ################
+## X Value Angle -> Set the angle for X axis values (0 = no rotation, number = degree rotation)
+## X Value Display -> display or not the values on the x-axis (TRUE / FALSE)
+## X Tick Display -> display the tick marks on the x-axis (TRUE / FALSE)
+## Coord Fixed Ratio -> Coordinate ratio or manual (FALSE: disabled, SQUARE: 1/(Y Max / # of X Groups), NUM: [eg 1/2, 1/3])
+## Bar Width -> how wide should the bar be (number)
+## Bar Border Color -> color of the border (color code) ~ (TimeCourse def: black)
+## Bar Border Width -> how thick should the bar border be (number) ~ (TimeCourse def: 1)
+## DEF: "X Value Angle:45"; "X Value Display:TRUE"; "X Tick Display:TRUE"; "Coord Fixed Ratio:SQUARE"; "Bar Width:0.8"; "Bar Border Color:white"; "Bar Border Width:0.2"
+################ Colors and General Display Settings (OPT) ################
+## Colors -> list of colors in html format, can handle "," and " " when splitting **Legend Color Source can simplify the color list for multi group figures**
+## Colors Unique -> one row per set color for the group and then the scatter point details (HTML, HTML, SHAPE, SIZE) -> OVERRIDES the Colors setting
+## Colors Alpha -> level of transparency for the given colors (0 to 1)
+## Scatter Display -> display individual data points as gold stars (TRUE / FALSE) gold: #FFD700, shape: 4
+## Scatter Alpha -> set transparency of the scatter points
+## Scatter ColorShapeSize -> set ONE color OR MATCH the group colors OR UNIQUE from group list (MATCH / UNIQUE/ HTML color) followed by NUMERIC Shape & Size for setting ALL
+## Scatter Stroke -> border stroke (a number eg 2) 
+## Whisker Plot -> display as a bar & whisker plot instead of standard histogram *NOT recommended WITH ScatterDisplay:TRUE; NOT compatible with TimeCourse* (Box / Violin / FALSE)
+## DEF: "Colors:''"; "Colors Alpha:1"; "Scatter Display:TRUE"; "Scatter Alpha:1"; "Scatter ColorShapeSize:#FFD700,4,1.8"; "Scatter Stroke:2"; "Whisker Plot:FALSE"
+#Colors Unique	#000000, #FFD700, 4, 1.8
+#Colors Unique	#606060, #FFD700, 2, 3.8
+#Colors Unique	#00c000, #000000, 1, 1.6
+#Colors Unique	#f71480, #606060, 5, 1.6
+#Colors Unique	#0000ff, #606060, 6, 2.6
+#Colors Unique	#ff0000, #606060, 7, 5.6
+#Colors Alpha	0.6
+#Scatter Alpha	0.8
+#Scatter ColorShapeSize	UNIQUE
+#Scatter Stroke	1
+################ Chart Line Designs (OPT) ################
+## Axis (XY) Main Style -> LineSize,LineColor
+## Axis (XY) Tick Style -> LineWidth,LineLength(cm),LineColor
+## Error Bars Style -> LineWidth,EndWidth,Color (does not apply to violin or box plots)
+## HLine Style OVRD -> LineSize,LineColor (applies to all lines regardless of individual style, if nothing specified defaults to 1 & black)
+## DEF: "Axis (XY) Main Style:0.8,black";"Axis (XY) Tick Style:0.6,0.1,black";"Error Bars Style:0.8,0.4,black";"HLine Style:1,black";
+################ Chart Legend (OPT) ################
+## Legend Display -> should the legend be displayed at all (TRUE / FALSE)
+## Legend Color Source -> display colors AND legend reflect Group1 only OR 1 & 2 (Group1 / All) **TimeCourse always = Group2**
+## Legend Title -> title for the legend (markdown)
+## Legend Position -> where to display the legend (Bottom / Right / Left / Top)
+## Legend Size -> size of legend (in save units)
+## DEF: "Legend Display:FALSE"; "Legend Color Source:All"; "Legend Title:Groups"; "Legend Position:Bottom"; "Legend Size:0.25"
+################ Stats Labels (OPT) ################
+## Stat offset -> distance above figure bars (FALSE: default value is guessed for a Letter Size of 12, Y Max value & image export of 1800x935; override with a number)
+## Stat Letter Size -> font size of letters; Stat Caption Display -> display the caption (TRUE or FALSE); Stat Caption Size -> font size of caption
+## DEF: "Stat Offset:FALSE"; "Stat Letter Size:18"; "Stat Caption Display:TRUE"; "Stat Caption Size:6"
+################ Figure Save (OPT) ################
+## Specify the image details for the export (dpi, size, type)
+## Save Units -> ("in", "cm", "mm", "px"); Save Type -> ("tex", "pdf", "jpg", "jpeg", "tiff", "png", "bmp", "svg")
+## DEF: "Save Width:8"; "Save Height:8.5"; "Save DPI: 320"; "Save Units:in"; "Save Type:jpg"
+################ Title & Axis Labels (REQ) ################
+## Title, X and Y axis text (Title & X Leg have markdown enabled)
+## DEF ("Title Main", "X Leg", "Y Leg"): ""
+#Title Main	1 Group ToverC Test
+#X Leg	Basic Figure<br>*only 1 group definition*
+#Y Leg	T / C values
+################ Height of Y-axis and Horizontal Line/s (REQ) ################
+## Set the size of the y axis and the interval and if there are any horizontal lines
+## HLine -> YValue,LineSize,LineColor (one entry per line)
+## Break -> accepts csv list as start,stop,scale(opt, def = "fixed") eg 0,20,2; multiple breaks allowed
+## DEF: ("Y Max", "Y Interval"): ""; "HLine:FALSE"; "Y Min:0"; "Y Break:FALSE"
+#Y Max	5
+#Y Interval	0.6
+################ Alter the Axis (REQ) ################
+## Y Value Rig -> manipulate the y-axis labels (0 or FALSE = no change; SCI = use scientific notation; # = divide all data by #  incl axis values -> make note on axis label!)
+## Y Value Rig Newline -> newline between Y Leg and rigging note (TRUE or FALSE) - can impact yaxis display!
+## DEF: "Y Value Rig:FALSE"; "Y Value Rig Newline:FALSE";
+################ Stats Tests (REQ) ################
+## "Stats Post Test:Tukeys" -> the post hoc test to run ** IN PLANNING - currently ALL are Tukeys... **
+## Stats Test -> what type of primary test to carry out (ANOVA, STTest), a combination is possible (use multiple lines)
+## STTest Comparison Format -> Group1_Group2:Group1_Group2:Symbol:Tails:Variance:Paired
+## First group is compared to group, symbol is placed over second group, Tails is optional that determines tails test (two.sided, greater, less) DEF:two.sided
+## Variance is optional, determines if sample variance is assumed equal or not (equal, unequal) DEF: equal
+## Paired is optional, determines if paired or unpaired student T-test is run (paired, unpaired) DEF: unpaired
+## !! IF data is being separated based on group2 - make sure that the group1_group2 comparisons are within the same group2 !!
+## DEF: "Stats Test":'' (ANOVA = ANOVA w/ Tukeys Post Hoc Test; STTest = Students t-Test; WTTest = Wilcoxen TTest - in development)
+#Stats Test	STTest	G1	G2	!	greater	equal	paired
+#Stats Test	STTest	G1	G3	^	greater	unequal	paired
+#Stats Test	STTest	G1	G4	&	two.sided	equal	paired
+#Stats Test	STTest	G1	G5	*	two.sided	equal	paired
+#Stats Test	STTest	G1	G6	(	two.sided	equal	paired
+################ Stats Transformation or Outlier (REQ) ################
+## "Stats Transform:FALSE" -> no transformation
+## "Stats Transform:TreatmentControl:Group1:Group2" -> define control group: Group1 required, Group2 required if using 2 groups 
+## 	control group will be used to normalize all other groups and will be removed from the figure, a line will be automatically added at '1' for this group
+## 	ANOVA (if requested) will be run post transform & group removal; in order to remove a group (treatment) "Stats Anova Group2" MUST be set to FALSE!
+## "Stats Transform:TimeCourse" -> group1 defines the time points; group 2 the control & treatment/s 
+## Stats Outlier -> Outlier detection (FALSE, ONE, TWO) FALSE: no detection; ONE: one tailed; TWO: two tailed (careful when using paired t-tests)
+## DEF: "Stats Transform:FALSE"; "Stats Outlier:TWO"
+#Stats Transform	TreatmentControl	G1
+#Stats Outlier	FALSE
+################ Split on Group 2? (REQ) ################
+## Stats Anova Group2  -> TRUE: compare only within each group2 & include borders around each; FALSE: compare between all the group2's [a unique Group1_Group2 id is always generated]
+## Facet Split -> Group2 based header & border (TRUE: Group2 value as a header above the section of the figure [!! incompatible with "Stats Transform:TimeCourse" !!]; FALSE: no Group2 header)
+## DEF: "Stats Anova Group2:FALSE"; "Facet Split:TRUE"
+#Facet Split	FALSE
+################ DATA (REQ) ################
+## Make sure that Group1 has adequate labels to distinguish any repeats in Group2...
+Value	Group1
+3.250392	G1
+3.963057143	G1
+5.893049587	G1
+6.212049587	G1
+3.430601563	G1
+4.859768116	G1
+4.622347222	G2
+4.237336207	G2
+4.606137097	G2
+4.852683333	G2
+4.656833333	G2
+5.687579832	G2
+5.182943262	G3
+6.63045	G3
+7.893489583	G3
+6.095218182	G3
+7.086967742	G3
+6.221772727	G3
+8.0994	G4
+11.09730178	G4
+11.58297826	G4
+7.769168367	G4
+6.579172249	G4
+8.615436842	G4
+12.85835664	G5
+15.21363566	G5
+11.25499306	G5
+9.204730496	G5
+9.082958904	G5
+8.672811189	G5
+7.313672131	G6
+5.625172414	G6
+4.287247312	G6
+4.742865979	G6
+4.504482759	G6
+5.472808511	G6

@@ -1,6 +1,10 @@
 #' Run Transform
 #'
-#' @description Carry out any desired transformations.
+#' @description
+#' Carry out any desired transformations on the dataset. Currently the only transformation
+#' available is 'treatment over control'. As with most functions in this package the
+#' data controlling the behavior of the function is stored in the package environment
+#' and the data being manipulated is also in the package environment.
 #'
 #' @export
 #'

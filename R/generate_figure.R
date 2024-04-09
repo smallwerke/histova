@@ -85,6 +85,9 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
         fig$Plot.HLine = data.frame(y=c(1),size=c(1),color=c("black"))
     }
 
+    # add in line to stop activation - useful for building the tests...
+    #stop()
+
     # if the Y-values were adjusted (eg all divided by 1,000 - in run_stats_prep()) this will append the modification
     # to the end of your y-axis label - you can select one or two lines...
     if (is.numeric(fig$Y.Rig)) {
