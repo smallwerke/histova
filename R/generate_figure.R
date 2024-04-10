@@ -150,10 +150,10 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
 
     histova_msg("Build Histogram", type="head")
     set_aesthetics()
+    build_histo()
+
     # add in line to stop activation - useful for building the tests...
     #stop()
-
-    build_histo()
 
     # add a line to the figure...
     if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
