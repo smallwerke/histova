@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-**NOTE: This is very much a work in progress. The current script appears functional but is in the process of going through extensive testing, documentation, and code cleanup. However the initial very basic test files are working. A few ggplot2 related warning messages still print during figure generation but the code is functional. I will be uploading additional example configuration files in the near future and adding documentation. The config header file DOES explain all of the existing options. It is designed around the work I am doing routinely in a molecular biology lab and it might be of use to others.** 
+**NOTE: This is still a work in progress *but* the package is functioning and was able to recreate my previous set of test figures without error. I am still going through and doing some code cleanup & documentation before beginning to add more features. A few ggplot2 related warning messages still print during figure generation but the code is functional. I will be uploading additional example configuration files in the near future and adding documentation. The config header file DOES explain all of the existing options.** 
 
 # histova
 

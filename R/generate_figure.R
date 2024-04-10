@@ -45,10 +45,26 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     #       include option to generate a batch version where you can load the generated config file and all you would be editing are
     #       the Labels, Groups (opt?), Stats tests run and it would all be reusing the 'batch' file's style settings (similar to override)
 
-    # consider adding some error checking here???
+    # check for existence of file before moving on
+    if (!file.exists(paste0(location.dir, "/", location.file)) ) {
+        message("FAIL - file could not be found")
+        stop()
+    }
+    # check for the existence of the environments
+    if ((!exists('the', mode='environment')) || (!exists('fig', mode='environment')) ||
+        (!exists('notes', mode='environment')) || (!exists('raw', mode='environment')) ||
+        (!exists('stats', mode='environment')) ) {
+
+        message("FAIL - environments not available")
+        stop()
+    }
+
+    # file & environments exist! let's get started
     the$Location.File = location.file
     the$Location.Dir = location.dir
     the$savePlot = savePlot
+
+    # setup the connection needed for the logfile (if in use)
     if (savePlot) {
         the$Location.Log = paste0(the$Location.Dir, "/", sub("txt", "histova", the$Location.File))
         the$LOG = file(the$Location.Log, open = "w")
@@ -57,6 +73,7 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     histova_msg(sprintf("histova %s", utils::packageVersion("histova")), type="title", breaker = "above")
     histova_msg(sprintf("run on %s", date()), type="title", breaker = "below")
     histova_msg("Prep & Load config settings and data", type = "head")
+    histova_msg("file found and environments loaded successfully", tabs=2)
 
     # prep & load config info / data
     init_vars()

@@ -1,15 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-**NOTE: This is very much a work in progress. The current script appears
-functional but is in the process of going through extensive testing,
-documentation, and code cleanup. However the initial very basic test
-files are working. A few ggplot2 related warning messages still print
-during figure generation but the code is functional. I will be uploading
-additional example configuration files in the near future and adding
-documentation. The config header file DOES explain all of the existing
-options. It is designed around the work I am doing routinely in a
-molecular biology lab and it might be of use to others.**
+**NOTE: This is still a work in progress *but* the package is
+functioning and was able to recreate my previous set of test figures
+without error. I am still going through and doing some code cleanup &
+documentation before beginning to add more features. A few ggplot2
+related warning messages still print during figure generation but the
+code is functional. I will be uploading additional example configuration
+files in the near future and adding documentation. The config header
+file DOES explain all of the existing options.**
 
 # histova
 
@@ -92,9 +91,10 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
 #> ------------------------------- histova 3.5.0.0 --------------------------------
-#> ----------------------- run on Wed Apr 10 14:18:54 2024 ------------------------
+#> ----------------------- run on Wed Apr 10 17:16:40 2024 ------------------------
 #> --------------------------------------------------------------------------------
 #> -------- Prep & Load config settings and data --------
+#>         file found and environments loaded successfully
 #> ---- Initialize envrionment variables
 #> ---- Load config (file: test-1_group-ANOVA_scatter_outlier.txt)
 #> ---- Initialize envrionment variables
@@ -114,7 +114,7 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #>         Figure coordinate ratio for display: 0.3
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Wed Apr 10 14:18:54 2024 ---------------------
+#> --------------------- finihsed on Wed Apr 10 17:16:40 2024 ---------------------
 #> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
