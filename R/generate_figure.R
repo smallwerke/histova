@@ -192,6 +192,8 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
             ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, limitsize = FALSE)
         } else if (fig$Save.Type == "pdf") {
             ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = grDevices::cairo_pdf, limitsize = FALSE)
+        } else if (fig$Save.Type %in% c("jpg", "jpeg", "png", "tiff")) {
+            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, limitsize = FALSE)
         } else {
             ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, type="cairo", limitsize = FALSE)
         }
