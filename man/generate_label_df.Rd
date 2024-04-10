@@ -7,11 +7,14 @@
 generate_label_df(n)
 }
 \arguments{
-\item{n}{the number of labels}
+\item{n}{The number of label subset (when Group2 is being compared separately)}
 }
 \value{
 A data frame of labels
 }
 \description{
-generate labels for the figure
+Generate labels for the figures. This is typically called from within build_histo(). As
+is typical for this package most of the information needed to run is stored in the
+package environment. However this function is not editing that many environment variables
+and is returning a data frame.
 }

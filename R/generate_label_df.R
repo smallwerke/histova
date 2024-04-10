@@ -6,7 +6,7 @@
 #' package environment. However this function is not editing that many environment variables
 #' and is returning a data frame.
 #'
-#' @param n the number of labels
+#' @param n The number of label subset (when Group2 is being compared separately)
 #'
 #' @return A data frame of labels
 #' @export
