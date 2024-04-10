@@ -60,13 +60,13 @@ library(stringr) # for the str_remove call
 
 ### One Group
 
-The most basic version of this script is simply for building a histogram with only *one* group type defined out of the two that are possible. No statistics were run on this data and the individual data scatter is not being displayed.
+A rather basic 1 Group version of this script that does include individual data points and the results of a ANOVA test displayed as letters in the figure with a p < 0.05 used for significance.
 
 ```{r example1}
-f = "test-1_group-basic_no_stats.txt"
+f = "test-1_group-ANOVA_scatter_outlier.txt"
 d = stringr::str_remove(histova_example(f), paste0("/",f))
 # running generate_figure with plot display & save turned off since readme 
 # saves in a temporary location
 histova::generate_figure(d,f, FALSE, FALSE)
-knitr::include_graphics("inst/extdata/test-1_group-basic_no_stats.jpg")
+knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```

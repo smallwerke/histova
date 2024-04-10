@@ -80,39 +80,43 @@ incomplete.***
 
 ### One Group
 
-The most basic version of this script is simply for building a histogram
-with only *one* group type defined out of the two that are possible. No
-statistics were run on this data and the individual data scatter is not
-being displayed.
+A rather basic 1 Group version of this script that does include
+individual data points and the results of a ANOVA test displayed as
+letters in the figure with a p \< 0.05 used for significance.
 
 ``` r
-f = "test-1_group-basic_no_stats.txt"
+f = "test-1_group-ANOVA_scatter_outlier.txt"
 d = stringr::str_remove(histova_example(f), paste0("/",f))
 # running generate_figure with plot display & save turned off since readme 
 # saves in a temporary location
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
 #> ------------------------------- histova 3.5.0.0 --------------------------------
-#> ----------------------- run on Mon Apr  8 14:50:09 2024 ------------------------
+#> ----------------------- run on Wed Apr 10 14:18:54 2024 ------------------------
 #> --------------------------------------------------------------------------------
 #> -------- Prep & Load config settings and data --------
 #> ---- Initialize envrionment variables
-#> ---- Load config (file: test-1_group-basic_no_stats.txt)
+#> ---- Load config (file: test-1_group-ANOVA_scatter_outlier.txt)
 #> ---- Initialize envrionment variables
-#> ---- Load data (file: test-1_group-basic_no_stats.txt)
+#> ---- Load data (file: test-1_group-ANOVA_scatter_outlier.txt)
 #>         6 final Group1_Group2 (statGroups - should be unique!) ids:
 #>              G1 G2 G3 G4 G5 G6
 #> -------- Statistical Analysis --------
+#> ---- Outlier checking
+#>         TWO TAILED REMOVAL on group G1 (value 19, p.val: 2.34e-03)
+#> Warning: FROM run_outlier(): TWO TAILED REMOVAL on group G1 (value 19, p.val:
+#> 2.34e-03)
 #> ---- Run stats prep (basic summaries)
+#> ---- ANOVA w/ Tukeys Post Hoc
 #> -------- Build Histogram --------
 #> ---- Setting Aesthetics
 #> ---- Building Histogram
 #>         Figure coordinate ratio for display: 0.3
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Mon Apr  8 14:50:09 2024 ---------------------
+#> --------------------- finihsed on Wed Apr 10 14:18:54 2024 ---------------------
 #> --------------------------------------------------------------------------------
-knitr::include_graphics("inst/extdata/test-1_group-basic_no_stats.jpg")
+knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
 
-<img src="inst/extdata/test-1_group-basic_no_stats.jpg" width="100%" />
+<img src="inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg" width="100%" />
