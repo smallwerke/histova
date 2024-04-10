@@ -28,8 +28,16 @@
 ## Scatter Stroke -> border stroke (a number eg 2) 
 ## Whisker Plot -> display as a bar & whisker plot instead of standard histogram *NOT recommended WITH ScatterDisplay:TRUE; NOT compatible with TimeCourse* (Box / Violin / FALSE)
 ## DEF: "Colors:''"; "Colors Alpha:1"; "Scatter Display:TRUE"; "Scatter Alpha:1"; "Scatter ColorShapeSize:#FFD700,4,1.8"; "Scatter Stroke:2"; "Whisker Plot:FALSE"
-#Colors	#000000, #606060, #00c000, #f71480, #0000ff, #ff0000
-#Scatter Display	FALSE
+#Colors Unique	#000000, #FFD700, 4, 1.8
+#Colors Unique	#606060, #FFD700, 2, 3.8
+#Colors Unique	#00c000, #000000, 1, 1.6
+#Colors Unique	#f71480, #606060, 5, 1.6
+#Colors Unique	#0000ff, #606060, 6, 2.6
+#Colors Unique	#ff0000, #606060, 7, 5.6
+#Colors Alpha	0.6
+#Scatter Alpha	0.8
+#Scatter ColorShapeSize	UNIQUE
+#Scatter Stroke	1
 ################ Chart Line Designs (OPT) ################
 ## Axis (XY) Main Style -> LineSize,LineColor
 ## Axis (XY) Tick Style -> LineWidth,LineLength(cm),LineColor

@@ -31,7 +31,8 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     #           one note is that every call / modification of a gplot will impact the gplot OBJECT and thus the data in the saved rda (must follow the same process)
     #           the gplot object - for some strange reason - contains copies of the local environment ON EACH MODIFICATION?!
     # - run the ugly tests behind the scenes for functionality testing, where in the structure should the .txt files be saved?
-    #       actually reformat these to look good and include them in the examples directory, maybe have a funky one remain to show the width options...
+    #       - actually reformat these to look good and include them in the examples directory, maybe have a funky one remain to show the width options...
+    #       - another OPTION is to built thorough R data files, load them into the appropriate environment for the test at hand and just run that function on the engineered environment
     # - check the results of these tests against the pre-generated & saved rda files
     # - resolve all of the current min / max and other errors that are appearing
     #       I believe these are now all fixed - they are related to the sec_axis call that was controlling the display of a secondary axis
@@ -84,9 +85,6 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
         stats$Group1.Mute = stats$Transform.Treatment[1]
         fig$Plot.HLine = data.frame(y=c(1),size=c(1),color=c("black"))
     }
-
-    # add in line to stop activation - useful for building the tests...
-    #stop()
 
     # if the Y-values were adjusted (eg all divided by 1,000 - in run_stats_prep()) this will append the modification
     # to the end of your y-axis label - you can select one or two lines...
@@ -152,6 +150,9 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
 
     histova_msg("Build Histogram", type="head")
     set_aesthetics()
+    # add in line to stop activation - useful for building the tests...
+    #stop()
+
     build_histo()
 
     # add a line to the figure...

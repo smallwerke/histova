@@ -154,14 +154,4 @@ set_aesthetics <- function() {
     # NA is what the init assigns it AND the result if a non numeric value is passed in...
     if (is.na(fig$Scatter.Stroke)) { fig$Scatter.Stroke = 2 }
 
-    ##############################
-    # ASSIGN THE DATA OUT
-    #
-    #assign("colorLength", colorLength, envir = .GlobalEnv) ### CHANGED - does not appear to be used outside of this function ###
-    #assign("Fig.Colors", Fig.Colors, envir = .GlobalEnv) ### CHANGED - not needed ###
-    #assign("Fig.Scatter.Color.List", Fig.Scatter.Color.List, envir = .GlobalEnv) ### CHANGED - not needed ###
-    #assign("Fig.Scatter.Shape.List", Fig.Scatter.Shape.List, envir = .GlobalEnv) ### CHANGED - not needed ###
-    #assign("Fig.Scatter.Size.List", Fig.Scatter.Size.List, envir = .GlobalEnv) ### CHANGED - not needed ###
-    #assign("Fig.Scatter.Stroke", Fig.Scatter.Stroke, envir = .GlobalEnv) ### CHANGED - not needed ###
-
 }
