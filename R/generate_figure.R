@@ -152,9 +152,6 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     set_aesthetics()
     build_histo()
 
-    # add in line to stop activation - useful for building the tests...
-    #stop()
-
     # add a line to the figure...
     if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
         for (HL in 1:nrow(fig$Plot.HLine)) {

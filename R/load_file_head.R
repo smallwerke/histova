@@ -172,6 +172,7 @@ load_file_head = function() {
                 fig$Scatter.Stroke <-  as.numeric(lA[[1]][2])
             }
             else if (lA[[1]][1] == "Whisker Plot") {
+                # this is also checked in generate_label_df(), if expanding options check there for continuity
                 if (lA[[1]][2] %in% c("TRUE", "True", "true", 1, "BOX", "Box", "box")) { fig$Plot.Whisker <- "BOX" }
                 else if (tolower(lA[[1]][2]) == "violin") { fig$Plot.Whisker <- "VIOLIN" }
                 else { fig$Plot.Whisker <- "FALSE" }

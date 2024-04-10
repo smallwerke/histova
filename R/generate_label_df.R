@@ -1,6 +1,10 @@
 #' Generate Label df
 #'
-#' @description generate labels for the figure
+#' @description
+#' Generate labels for the figures. This is typically called from within build_histo(). As
+#' is typical for this package most of the information needed to run is stored in the
+#' package environment. However this function is not editing that many environment variables
+#' and is returning a data frame.
 #'
 #' @param n the number of labels
 #'
@@ -49,6 +53,10 @@ generate_label_df <- function(n){
     yOff = stats$Letters.Offset
     alpha = 0.05
 
+    # the n corresponds to the Group2 number / index position
+    # n = 1 is the first Group 2; 2 is the second, etc...
+    # this is reflected in the raw$multi where each index position
+    # is a different group2 (e.g. G2 in raw$multi[[2]])
     if (n > 0) {
         #n = 1
         HSDdata = raw$multi[[n]]
@@ -62,7 +70,7 @@ generate_label_df <- function(n){
 
     ##########################################
     # generate the 'basic' table with an empty labels column...
-
+    #
     # Get highest quantile for Tukey's 5 number summary and add a bit of space to buffer between
     # upper quantile and label placement
     # $mean and $se are referring to an external column IN HSDsummary - a calculated summary OF HSD
