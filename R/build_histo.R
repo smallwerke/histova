@@ -134,34 +134,41 @@ build_histo <- function(){
         strip.text.x = ggplot2::element_text(size = fig$Axis.TitleSize, colour = "black"), # defines the above figure sub titles
         strip.background = ggplot2::element_rect(colour="white", fill="white", linewidth=1.5, linetype="solid")
     )
-    # add text into the figure....
-    #annotate("text", label = "Mean = 5", x = 4.5, y = -1, color = "red") +
-    #########################################################
+
+    ###
     # Y axis - add labels to any horizontal lines being added to the figure
     # the labels are going on the secondary y-axis
+    # swap Y axis labels to scientific notation...
+    Y.Rig.SCI = FALSE
+    if (fig$Y.Rig == "SCI") {
+        histova_msg(sprintf("setting y-axis to use scientific notation, replacing existing scale_y_continuous..."), tabs=2)
+        Y.Rig.SCI = TRUE
+    }
     if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
         gplot = gplot + ggplot2::scale_y_continuous(
+            labels = function(x) format(x, scientific = Y.Rig.SCI),
             expand = c(0, 0),
             limits=c(fig$Y.Min,fig$Y.Max),
             breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
-            sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = fig$Plot.HLine$y, labels = fig$Plot.HLine$y)
+            sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = fig$Plot.HLine$y, labels = format(fig$Plot.HLine$y, scientific = Y.Rig.SCI) )
         )
     } else if (fig$Y.Break == TRUE) {
         # include a NULL secondary axis otherwise IF a y-axis break is included there will be a second y-axis added
         gplot = gplot + ggplot2::scale_y_continuous(
+            labels = function(x) format(x, scientific = Y.Rig.SCI),
             expand = c(0, 0),
             limits=c(fig$Y.Min,fig$Y.Max),
-            breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
-            sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = NULL, labels = NULL)
+            breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval)
+            #sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = NULL, labels = NULL)
         )
     } else {
         # if no y-breaks than don't bother with the secondary axis (it will throw an error if left in)
         gplot = gplot + ggplot2::scale_y_continuous(
+            labels = function(x) format(x, scientific = Y.Rig.SCI),
             expand = c(0, 0),
             limits=c(fig$Y.Min,fig$Y.Max),
             breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval)
         )
-
     }
 
     #########################################################
@@ -221,39 +228,6 @@ build_histo <- function(){
                 width=fig$Plot.ErrorBar.EndWidth,
                 linewidth=fig$Plot.ErrorBar.Size,
                 position=ggplot2::position_dodge(0.7))
-        }
-    }
-    ##########################################
-    # Modify the Figure based on file settings...
-    #
-    # swap Y axis labels to scientific notation...
-    if (fig$Y.Rig == "SCI") {
-        histova_msg(sprintf("setting y-axis to use scientific notation, replacing existing scale_y_continuous..."), tabs=2)
-        if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
-            gplot = gplot + ggplot2::scale_y_continuous(
-                labels = function(x) format(x, scientific = TRUE),
-                expand = c(0, 0),
-                limits=c(fig$Y.Min,fig$Y.Max),
-                breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
-                sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = fig$Plot.HLine$y, labels = format(fig$Plot.HLine$y, scientific = TRUE))
-            )
-        } else if (fig$Y.Break == TRUE) {
-            # include a NULL secondary axis otherwise IF a y-axis break is included there will be a second y-axis added
-            gplot = gplot + ggplot2::scale_y_continuous(
-                labels = function(x) format(x, scientific = TRUE),
-                expand = c(0, 0),
-                limits = c(fig$Y.Min,fig$Y.Max),
-                breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
-                sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = NULL, labels = NULL)
-            )
-        } else {
-            # no breaks so no secondary axis (will throw an error if left in)
-            gplot = gplot + ggplot2::scale_y_continuous(
-                labels = function(x) format(x, scientific = TRUE),
-                expand = c(0, 0),
-                limits = c(fig$Y.Min,fig$Y.Max),
-                breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
-            )
         }
     }
 
@@ -338,6 +312,14 @@ build_histo <- function(){
         for(i in 1:nrow(fig$Y.Break.df)) {
             histova_msg(sprintf("adding a break to the y-axis between %s and %s with scales of \'%s\'", fig$Y.Break.df[i,]$start, fig$Y.Break.df[i,]$stop, fig$Y.Break.df[i,]$scales), tabs=2)
             gplot = gplot + ggbreak::scale_y_break(c(fig$Y.Break.df[i,]$start, fig$Y.Break.df[i,]$stop), scales = fig$Y.Break.df[i,]$scales)
+        }
+        # remove the right Y axis from the plot (is added by default with a Y Break)...
+        # BUT not when HLines have been included (as the right y axis holds that info)
+        if (is.na(fig$Plot.HLine$y[1]) == TRUE) {
+             gplot = gplot +  ggplot2::theme(axis.text.y.right = ggplot2::element_blank(),
+                axis.ticks.y.right = ggplot2::element_blank(), axis.line.y.right = ggplot2::element_blank())
+        } else {
+            gplot = gplot +  ggplot2::theme(axis.line.y.right = ggplot2::element_blank())
         }
     }
 
