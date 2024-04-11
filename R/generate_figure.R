@@ -35,7 +35,7 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     #       - another OPTION is to built thorough R data files, load them into the appropriate environment for the test at hand and just run that function on the engineered environment
     # - check the results of these tests against the pre-generated & saved rda files
     # - resolve all of the current min / max and other errors that are appearing
-    #       I believe these are now all fixed - they are related to the sec_axis call that was controlling the display of a secondary axis
+    #       Some are occasionally appearing in combination with y-axis break & HLines... Overall not often though
     #       appears to address it: https://cran.r-project.org/web/packages/ggplot2/vignettes/ggplot2-in-packages.html
     #       *** have changed the subset calls in build_histo to use R's base & more traditional subset method, should work but... ***
     # - include nice / well designed versions of the current test designs in the readme.rmd page

@@ -1,8 +1,10 @@
 #' Build Histogram
 #'
 #' @description
-#' **CURRENT FUNCTIONING FIGURE!**<br>
-#' Basic histogram using above created summary and adding error bars!
+#' Build histogram using data and configuration settings saved in the package environment. This function
+#' tries to put all the possible options specified in the configuration together into a working figure.
+#' Package is typically called by generate_figure after environment variables have been loaded and all
+#' desired statistical tests have been carried out.
 #'
 #' @export
 #'
