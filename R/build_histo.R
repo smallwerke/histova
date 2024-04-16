@@ -241,20 +241,31 @@ build_histo <- function(){
     #
     # break the figure into two separate ones for each secondary grouping
     if ((fig$Facet.Split) && (stats$Transform != "TimeCourse")) {
-        gplot = gplot + ggplot2::facet_grid(~ Group2, scales="fixed", space="fixed")
+        gplot = gplot + ggplot2::facet_grid(~ Group2, scales="free_x", space="free_x")
+        # old facet grid that used fixed scales to allow for coord_fixed
+        #gplot = gplot + ggplot2::facet_grid(~ Group2, scales="fixed", space="fixed")
     }
     #
+    # old code and not very useful until / if there are ever non discrete values for the x-axis
+    # having groups simply provide each group with equal width,
+    # coord_fixed and aspect.ratio DO NOT work with facet_grid(space="free_x")... This option
+    # would have to be avoided if deciding to use coord_fixed or aspect.ratio again...
+    # at the moment all space / sizing is done by the width and height settings for saving the figure...
+    #
     # determine if the fig shape should be modified:
-    if (fig$Coord.Fixed) {
+    #if (fig$Coord.Fixed) {
+    if (FALSE) {
         ratio.reset = NULL
         # determine the ratio for any auto requests
         if (fig$Coord.Fixed.Ratio == "SQUARE") {
-            #assign("Fig.Coord.Fixed.Ratio", 1/(Fig.Y.Max / length(raw.summary[['statGroups']])), envir = .GlobalEnv)
             fig$Coord.Fixed.Ratio <- 1/(abs(fig$Y.Max-fig$Y.Min) / length(raw$summary[['statGroups']]))
             ratio.reset = TRUE
         }
         histova_msg(sprintf("Figure coordinate ratio for display: %s", fig$Coord.Fixed.Ratio), tabs=2)
         gplot = gplot + ggplot2::coord_fixed(ratio = fig$Coord.Fixed.Ratio)
+        # alternative method for controlling the plot dimensions
+        #gplot = gplot + ggplot2::theme(aspect.ratio = 1)
+        #
         # reset the variable to SQUARE for when override is being used so that the ratio
         # is calculated correctly for each figure
         if (isTRUE(ratio.reset)) {

@@ -34,8 +34,10 @@ init_vars <- function() {
         fig$X.Value.Display <- TRUE
         fig$X.Tick.Display <- TRUE
         # .Ratio for when a number is entered in config
+        ### currently disabled ###
         fig$Coord.Fixed <- TRUE
         fig$Coord.Fixed.Ratio <- "SQUARE"
+        ###
         fig$Bar.Width <- 0.8
         fig$Bar.Border.Color <- "white"
         fig$Bar.Border.Width <- 0.2

@@ -76,5 +76,5 @@ test_that("testing the ability to build a histogram", {
     expect_equal(fig$Coord.Fixed.Ratio, "SQUARE")
     expect_equal(notes$Stats.Method, "Statistical test:  one-way ANOVA (F(5,29) = 16.79, p = 8.551e-08) with Tukey's HSD post hoc test (alpha = 0.05)")
     expect_equal(the$gplot$labels$title, "1 Group Test")
-    expect_equal(the$gplot$coordinates$ratio, 0.3)
+    expect_equal(the$gplot$coordinates$ratio, NULL)
 })

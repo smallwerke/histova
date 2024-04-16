@@ -91,7 +91,9 @@ load_file_head = function() {
                 if (lA[[1]][2] %in% c("TRUE", "True", "true", 0)) { fig$X.Tick.Display <- TRUE
                 } else { fig$X.Tick.Display <- FALSE }
             }
+            # THIS SETTING CURRENTLY DISABLED AND NOT IMPLEMENTED IN build_histo FUNCTION
             else if (lA[[1]][1] == "Coord Fixed Ratio") {
+                histova_msg(sprintf("Coord Fixed Ratio is currently disabled! Setting of \"Coord Fixed Ratio %s\" is being ignored.", lA[[1]][2]), type="warn")
                 if (lA[[1]][2] %in% c("FALSE", "False", "false")) {
                     fig$Coord.Fixed <- FALSE
                     fig$Coord.Fixed.Ratio <- ""

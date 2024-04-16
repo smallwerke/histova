@@ -11,6 +11,9 @@
 #'
 histova_msg <- function(msg, type="msg", breaker=FALSE, tabs=0, PRINT=TRUE, LOG=TRUE) {
 
+    # accept multiple different spellings
+    if ((type == "warn") || (type == "warns") || (type == "warning")) { type <- "warn" }
+
     # look into how to best handle warning messages... should they be marked / noted differently in the log file?
     # IF it is a warning message save a copy so that any indents or alterations aren't sent through to warning()
     if (type == "warn") { warnMsg = paste0("FROM ", deparse(sys.calls()[[sys.nframe()-1]]), ": ", msg)  }

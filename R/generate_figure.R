@@ -41,6 +41,9 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # - include nice / well designed versions of the current test designs in the readme.rmd page
     # - have the color assignments have an actual group1/group2 name to them to assign them based on name not simply order
     # - add ability to not have all G1 in each G2... should be able to have distinct G1 per G2...
+    #       this is an issue in ggplot2 on build_histo lines 244 & 258... easy enough to drop unused G1 with scales=free_x but this breaks coord_fixed...
+    #       currently have the ability to only display the active G2 & G1 combinations BUT have turned off the coord_fixed option
+    #       active in init_vars(), load_file_head() & build_hist()
     # - add a function for generating the config file header section (have R run through a series of prompts and spit out a file header!)
     #       include option to generate a batch version where you can load the generated config file and all you would be editing are
     #       the Labels, Groups (opt?), Stats tests run and it would all be reusing the 'batch' file's style settings (similar to override)
@@ -85,6 +88,9 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # move onto stats analysis
     if (stats$Outlier != FALSE) { run_outlier() }
     run_stats_prep()
+
+    histova_msg(sprintf("%s final Group1_Group2 (statGroups - should be unique!) ids:", length(levels(raw$base$statGroups)) ), tabs=2)
+    histova_msg(sprintf("%s", paste("", levels(raw$base$statGroups), collapse="")), tabs=3)
 
     # run actual tests
     if ("ANOVA" %in% stats$Test) { run_anova() }
@@ -164,6 +170,9 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
         if ("ANOVA" %in% stats$Test) { run_anova() }
         # following vars are set in run_anova() (raw.anova.multi, raw.aov.multi, raw.aov.tukey.multi)
     }
+    histova_msg(sprintf("%s final Group1_Group2 (statGroups - should be unique!) ids:", length(levels(raw$base$statGroups)) ), tabs=2)
+    histova_msg(sprintf("%s", paste("", levels(raw$base$statGroups), collapse="")), tabs=3)
+
 
     histova_msg("Build Histogram", type="head")
     set_aesthetics()
