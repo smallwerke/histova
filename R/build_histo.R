@@ -295,6 +295,7 @@ build_histo <- function(){
             panel.spacing = ggplot2::unit(.05, "lines"),
             panel.border = ggplot2::element_rect(color = "black", fill = NA, linewidth=1)
         )
+
     # if FALSE run stats on entire dataset regardless...
     } else {
         s = "\n"
@@ -307,6 +308,7 @@ build_histo <- function(){
             gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
         }
     }
+
     if (isTRUE(stats$Caption.Display)) {
         if (notes$Stats.Method == "Statistical test: ") { notes$Stats.Method <- paste(notes$Stats.Method, "----") }
         gplot = gplot + ggplot2::labs(caption = paste(notes$Stats.Method, notes$Stats.Outlier, sep="\n"))

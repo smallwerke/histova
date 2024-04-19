@@ -47,6 +47,8 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # - add a function for generating the config file header section (have R run through a series of prompts and spit out a file header!)
     #       include option to generate a batch version where you can load the generated config file and all you would be editing are
     #       the Labels, Groups (opt?), Stats tests run and it would all be reusing the 'batch' file's style settings (similar to override)
+    # - Having a y-break active the plot fills the width of the set area better, switching to ymin or nothing set and the plot suddenly becomes square -
+    #       could this be an issue with coord_ratio? ** this appears to be fixed when running with the latest code **
 
     # check for existence of file before moving on
     if (!file.exists(paste0(location.dir, "/", location.file)) ) {
