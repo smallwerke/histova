@@ -74,3 +74,6 @@ knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ## Config
 
 {r test, child="inst/extdata/header_config.txt", eval=TRUE}
+
+```{include} inst/extdata/header_config.txt
+```
