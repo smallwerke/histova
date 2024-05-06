@@ -27,6 +27,5 @@ run_transform <- function() {
             }
         }
         raw$base[raw$base[,'statGroups'] %in% c(trans),][,'Value'] = (raw$base[raw$base[,'statGroups'] %in% c(trans),][,'Value'] / raw$base[raw$base[,'statGroups'] %in% c(trans),][,'Value'])
-        #assign("raw", raw, envir = .GlobalEnv) ### CHANGED - no longer needed ###
     }
 }

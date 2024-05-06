@@ -90,14 +90,13 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 # saves in a temporary location
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
-#> ------------------------------- histova 3.5.0.0 --------------------------------
-#> ----------------------- run on Wed Apr 10 17:16:40 2024 ------------------------
+#> ------------------------------- histova 3.5.0.1 --------------------------------
+#> ----------------------- run on Mon May  6 18:33:06 2024 ------------------------
 #> --------------------------------------------------------------------------------
 #> -------- Prep & Load config settings and data --------
 #>         file found and environments loaded successfully
 #> ---- Initialize envrionment variables
 #> ---- Load config (file: test-1_group-ANOVA_scatter_outlier.txt)
-#> ---- Initialize envrionment variables
 #> ---- Load data (file: test-1_group-ANOVA_scatter_outlier.txt)
 #>         6 final Group1_Group2 (statGroups - should be unique!) ids:
 #>              G1 G2 G3 G4 G5 G6
@@ -107,16 +106,24 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #> Warning: FROM run_outlier(): TWO TAILED REMOVAL on group G1 (value 19, p.val:
 #> 2.34e-03)
 #> ---- Run stats prep (basic summaries)
+#>         6 final Group1_Group2 (statGroups - should be unique!) ids:
+#>              G1 G2 G3 G4 G5 G6
 #> ---- ANOVA w/ Tukeys Post Hoc
+#>         6 final Group1_Group2 (statGroups - should be unique!) ids:
+#>              G1 G2 G3 G4 G5 G6
 #> -------- Build Histogram --------
 #> ---- Setting Aesthetics
+#>         assigning settings for 6 groups (G1 G2 G3 G4 G5 G6)
 #> ---- Building Histogram
-#>         Figure coordinate ratio for display: 0.3
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Wed Apr 10 17:16:40 2024 ---------------------
+#> --------------------- finihsed on Mon May  6 18:33:06 2024 ---------------------
 #> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
 
 <img src="inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg" width="100%" />
+
+## Config
+
+{r test, child=“inst/extdata/header_config.txt”, eval=TRUE}

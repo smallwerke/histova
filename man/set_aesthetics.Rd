@@ -7,15 +7,24 @@
 set_aesthetics()
 }
 \description{
-Generate the lists and variables needed for displaying the correct aesthetics in the figure
-current focus is on the color of the bars & the points being used along with size
+Generate the lists needed for displaying the correct aesthetics in the figure.
+The following logic determines the aesthetic information. The values defined by the
+'Colors Unique' configuration setting is applied first as a set, that is
+it is dumped in the order given in the file header into the corresponding lists, anything not specified
+is set as 'NA', next any colors defined in the old 'Colors' list option is \emph{appended} onto the figure's
+color list. Finally 'Colors Specific' settings are added. These have a named group and will overwrite any
+color/setting specified by either 'Colors Unique' or 'Colors'.
+Finally all remaining 'NA' color values are replaced with valeus from the scales::hue_pal() function
+and all other values (color alpha & scatter details) still set as 'NA' are replaced by default values.
+IF 'Scatter ColorShapeSize' is set to MATCH then all scatter color values will be replaced by
+the corresponding fill color values \emph{regardless} of what is specified in 'Colors Unique', or 'Colors Specific'.
 
-output the correct set of named lists
-\if{html}{\out{<br>}}Fig.Colors -> list for the histogram
-\if{html}{\out{<br>}}Fig.Scatter.Colors.List -> colors for the scatter
-\if{html}{\out{<br>}}Fig.Scatter.Shape.List -> list of shapes
-\if{html}{\out{<br>}}Fig.Scatter.Size.List -> list of sizes
-
-output of the stroke size
-\if{html}{\out{<br>}}Fig.Scatter.Stroke -> the one size for stroking the scatter
+output the correct set of named lists to the 'fig' environment
+\if{html}{\out{<br>}}Color.List -> list for the histogram
+\if{html}{\out{<br>}}Color.Alpha.List -> list for the histogram fill alpha levels
+\if{html}{\out{<br>}}Scatter.Color.List -> colors for the scatter points
+\if{html}{\out{<br>}}Scatter.Shape.List -> list of shapes for the scatter points
+\if{html}{\out{<br>}}Scatter.Size.List -> list of sizes for the scatter points
+\if{html}{\out{<br>}}Scatter.Stroke.List -> list of stroke width for the scatter points
+\if{html}{\out{<br>}}Scatter.Alpha.List -> list of alpha levels for the scatter points
 }

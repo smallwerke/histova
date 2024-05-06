@@ -10,6 +10,10 @@
 - disabled PTTest option, now can set STTest to be paired and set the variance (equal or unequal), need to add WTTest for Wilcox
 - added BASIC whisker & violin plot display option, still need to add option to customize (e.g. whiskers)
 
+# histova v3.5.0.0001
+- added ability to set bar color & alpha as well as scatter point color, shape, size, stroke, and alpha for each displayed group using new config setting of 'Colors Specific' which is nearly identical to 'Colors Unique' but begins with relevant group name
+- no longer required to have G1 match between all G2s, only the G1 for which there is data will be displayed for each G2 window
+
 # histova v3.5.0
 **Initial gitHub release.**
 - transferred script to packge form

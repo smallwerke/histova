@@ -13,12 +13,12 @@
 #' load_file_head()
 load_file_head = function() {
 
+    # forced reset
+    init_vars()
+
     histova_msg(sprintf("Load config (file: %s)", the$Location.File), type="subhead")
 
     fullPath <- paste0(the$Location.Dir, "/", the$Location.File)
-
-    # forced reset
-    init_vars()
 
     # set the override placeholder to NULL
     Override.tmp <- NULL
@@ -121,45 +121,79 @@ load_file_head = function() {
             ################ Colors and Display Individual Points (OPT) ################
             # can handle "," and " " for splitting ([, ]+ looks for "," or " " multiple times for splitting)
             else if (lA[[1]][1] == "Colors") { fig$Colors <- strsplit(lA[[1]][2], "[, ]+")[[1]]
-            } else if (lA[[1]][1] == "Colors Unique") {
+            } else if ((lA[[1]][1] == "Colors Unique") || (lA[[1]][1] == "Colors Specific")) {
                 #Colors Unique	#000000, #FFD700, 4, 1.8
-                colorDets <- strsplit(lA[[1]][2], ",")[[1]]
-                while (length(colorDets) < 4) { colorDets <- append(colorDets, NA) }
-                colorDets[3] <- as.numeric(colorDets[3])
-                fig$Colors.Unique[nrow(fig$Colors.Unique)+1,] <- colorDets
-                #assign("Fig.Colors.Unique", Fig.Colors.Unique, envir = .GlobalEnv) ### CHANGED ###
+                #Colors Unique	COLOR, ALPHA, COLOR, SHAPE, SIZE, STROKE, ALPHA
+                #Unique: will be loaded into color array, followed by any Colors list and finally any specific colors will be
+                #loaded (and override any previously set values)
+                #Colors Specific    G1_G2, HTML, ALPHA, HTML, SHAPE, SIZE, STROKE, ALPHA
+                #Colors Specific	G1_G2, #000000, 0.6, #FFD700, 0.8, 4, 1, 1.8
+                #Specific: first two (G1_G2 & HTML) are minimum required, will check for numeric for alpha or use default (NULL)
+                #then assume HTML is next followed by SHAPE, SIZE & ALPHA with defaults used for any missing values
+
+                # regardless of the setting break the values into an array
+                colorDets <- trimws(strsplit(lA[[1]][2], ",")[[1]])
+
+                # if it is colors unique just go ahead and insert an 'NA' value at the beginning for the G1_G2
+                # value and then treat it the same as Colors Specific
+                if (lA[[1]][1] == "Colors Unique") { colorDets = append(colorDets, NA, 0) }
+
+                if (length(colorDets) < 2) {
+                    histova_msg(sprintf("Colors Specific entry (%s) NOT VALID, at minimum \"G1_G2\", \"HTML\" is required", lA[[1]][2]), type="warn")
+                } else {
+                    #Colors Unique	G1_G2, #000000, 0.6, #FFD700, 0.8, 4, 1, 1.8
+                    #Colors Unique	G1_G2, HTML, ALPHA, HTML, SHAPE, SIZE, STROKE, ALPHA
+                    #Colors Unique	string, color, num, string, num, num, num, num
+                    #MIN: G1_G2, HTML -> G1_G2, HTML, NA, NA, NA, NA, NA, NA
+                    #Basic: G1_G2, HTML, HTML -> G1_G2, HTML, NA, HTML, NA, NA, NA, NA
+                    #NA = DEFAULT
+                    # pad out the length to 7 for now as the following are legal entries:
+                    #Colors Unique	G1_G2, #000000
+                    #Colors Unique	G1_G2, #000000, #FFD700
+                    #Colors Unique	G1_G2, #000000, , 0.8, 4 (or any other length of ending #s)
+                    while (length(colorDets) < 7) { colorDets <- append(colorDets, NA) }
+                    if (is.na(colorDets[3])) { colorDets[3] = "" }
+                    # assume that HTML codes will always evaluate to FALSE for numeric, IF TRUE assume unique ALPHA, otherwise assign NA
+                    if ((!varhandle::check.numeric(colorDets[3])) || (colorDets[3] == "")) { colorDets <- append(colorDets, NA, 2) }
+                    # see if a final item is needed
+                    while (length(colorDets) < 8) { colorDets <- append(colorDets, NA) }
+
+                    # check up on the scatter color, IF it is still lingering as "" then set it as NA (check for NA first as NA will crash the == "")
+                    if ((!is.na(colorDets[4])) && (colorDets[4] == "")) { colorDets[4] <- NA }
+                    # check to see that alpha, size & shape are all numeric OR force as defaults
+                    if (!varhandle::check.numeric(colorDets[5])) { colorDets[5] <- NA }
+                    if (!varhandle::check.numeric(colorDets[6])) { colorDets[6] <- NA }
+                    if (!varhandle::check.numeric(colorDets[7])) { colorDets[7] <- NA }
+                    if (!varhandle::check.numeric(colorDets[8])) { colorDets[8] <- NA }
+
+                    if ((!is.na(colorDets[3])) && ((as.numeric(colorDets[3]) < 0) || (as.numeric(colorDets[3]) > 1))) { colorDets[3] <- NA }
+                    if ((!is.na(colorDets[8])) && ((as.numeric(colorDets[8]) < 0) || (as.numeric(colorDets[8]) > 1))) { colorDets[8] <- NA }
+
+                    # handle all formatting in set_aesthetics now
+                    fig$Colors.Unique[nrow(fig$Colors.Unique)+1,] <- colorDets
+                }
             } else if (lA[[1]][1] == "Colors Alpha") {
                 if ((as.numeric(lA[[1]][2]) >= 0) && (as.numeric(lA[[1]][2]) <= 1)) {
                     fig$Colors.Alpha <- as.numeric(lA[[1]][2])
-                } else {
-                    fig$Colors.Alpha <- 1
                 }
             }
             else if (lA[[1]][1] == "Scatter Display") {
                 if (lA[[1]][2] %in% c("FALSE", "False", "false", 0)) {
                     fig$Scatter.Disp <- FALSE
-                } else {
-                    fig$Scatter.Disp <- TRUE
                 }
             }
             else if (lA[[1]][1] == "Scatter Alpha") {
                 if ((as.numeric(lA[[1]][2]) >= 0) && (as.numeric(lA[[1]][2]) <= 1)) {
                     fig$Scatter.Alpha <- as.numeric(lA[[1]][2])
-                } else {
-                    fig$Scatter.Alpha <- 1
                 }
             }
             else if (lA[[1]][1] == "Scatter ColorShapeSize") {
                 # not doing much checking here, assume that anything from 1 to 3 items
                 # can be supplied here...
-                fig$Scatter.Color <- NA
-                fig$Scatter.Shape <- NA
-                fig$Scatter.Size <- NA
                 scatterDets = strsplit(lA[[1]][2], ",")[[1]]
                 if (length(scatterDets) >= 1) {
-                    if (tolower(trimws(scatterDets[1])) == "match") { fig$Scatter.Color <- "MATCH" }
-                    else if (tolower(trimws(scatterDets[1])) == "unique") { fig$Scatter.Color <- "UNIQUE" }
-                    else if (trimws(scatterDets[1]) == "") {  fig$Scatter.Color <- NA }
+                    if (tolower(trimws(scatterDets[1])) == "match") { fig$Scatter.Color.Source <- "MATCH" }
+                    else if ((tolower(trimws(scatterDets[1])) == "unique") || (trimws(scatterDets[1]) == "")) {  fig$Scatter.Color.Source <- "UNIQUE" }
                     else { fig$Scatter.Color <- scatterDets[1] }
                 }
                 if (length(scatterDets) >= 2) { fig$Scatter.Shape <- as.numeric(scatterDets[2]) }

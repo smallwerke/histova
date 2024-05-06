@@ -46,7 +46,7 @@ build_histo <- function(){
             #guides(size = 'none') +
             #guides(color = 'none') +
             ggplot2::scale_fill_manual(
-                values=fig$Colors,
+                values=fig$Color.List,
                 name=fig$Legend.Title)
         ##########################################
         # Basic Whiskerplot
@@ -70,7 +70,7 @@ build_histo <- function(){
                     alpha = fig$Colors.Alpha)
         }
         gplot = gplot + ggplot2::scale_fill_manual(
-            values=fig$Colors,
+            values=fig$Color.List,
             name=fig$Legend.Title)
         ##########################################
         # 'Standard' Figure
@@ -83,16 +83,14 @@ build_histo <- function(){
             gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(.data$Group1, .data$mean, label = .data$Group1, fill = .data$statGroups))
         }
         gplot = gplot + ggplot2::geom_bar(
-            alpha= fig$Colors.Alpha,
+            alpha= fig$Color.Alpha.List,
             color= fig$Bar.Border.Color,
             linewidth = fig$Bar.Border.Width,
             width= fig$Bar.Width,
             position=ggplot2::position_dodge(),
             stat='identity') +
 
-            ggplot2::scale_fill_manual(
-                values=fig$Colors,
-                name=fig$Legend.Title)
+            ggplot2::scale_fill_manual(values=fig$Color.List, name=fig$Legend.Title)
     }
     ##########################################
     # Common Settings
@@ -180,35 +178,34 @@ build_histo <- function(){
     if (fig$Scatter.Disp) {
         if (stats$Transform == "TimeCourse") {
             gplot = gplot + ggplot2::geom_point(
-                data=raw$base, ggplot2::aes(x = .data$Group1, y = .data$Value, group = .data$statGroups, color = .data$Group2, shape = .data$Group2, size = .data$Group2),
+                data=raw$base, ggplot2::aes(x = .data$Group1, y = .data$Value, group = .data$statGroups, color = .data$Group2, shape = .data$Group2, size = .data$Group2, stroke = .data$Group2, alpha = .data$Group2),
                 position = ggplot2::position_dodge2(width=0.85,padding=0.35),
                 stat='identity',
-                alpha=fig$Scatter.Alpha,
-                stroke=fig$Scatter.Stroke,
+                #alpha=fig$Scatter.Alpha,
+                #stroke=fig$Scatter.Stroke,
                 show.legend = FALSE
             )
             # makes the scatter points placed in the legend match the group color
             #guides(fill = guide_legend(override.aes = list(shape = NA)))
         } else if (fig$Legend.Color.Source == "Group1") {
             gplot = gplot + ggplot2::geom_point(
-                data=raw$base, ggplot2::aes(x = as.numeric(.data$Group1) + 0.0, y = .data$Value, color = .data$Group1, shape = .data$Group1, size = .data$Group1),
+                data=raw$base, ggplot2::aes(x = as.numeric(.data$Group1) + 0.0, y = .data$Value, color = .data$Group1, shape = .data$Group1, size = .data$Group1, stroke = .data$Group1, alpha = .data$Group1),
                 position=ggplot2::position_dodge2(width=0.7,padding=0.1),
-                alpha=fig$Scatter.Alpha,
-                stroke=fig$Scatter.Stroke,
                 show.legend = FALSE
             )
         } else {
             gplot = gplot + ggplot2::geom_point(
-                data=raw$base, ggplot2::aes(x = as.numeric(.data$Group1) + 0.0, y = .data$Value, color = .data$statGroups, shape = .data$statGroups, size = .data$statGroups),
+                data=raw$base, ggplot2::aes(x = as.numeric(.data$Group1) + 0.0, y = .data$Value, color = .data$statGroups, shape = .data$statGroups, size = .data$statGroups, stroke = .data$statGroups, alpha = .data$statGroups),
                 position=ggplot2::position_dodge2(width=0.7,padding=0.1),
-                alpha=fig$Scatter.Alpha,
-                stroke=fig$Scatter.Stroke,
                 show.legend = FALSE
             )
         }
         gplot = gplot + ggplot2::scale_color_manual(values=fig$Scatter.Color.List) +
             ggplot2::scale_shape_manual(values=fig$Scatter.Shape.List) +
-            ggplot2::scale_size_manual(values=fig$Scatter.Size.List)
+            ggplot2::scale_size_manual(values=fig$Scatter.Size.List) +
+            ggplot2::scale_discrete_manual("stroke", values=fig$Scatter.Stroke.List) +
+            ggplot2::scale_alpha_manual(values=fig$Scatter.Alpha.List)
+
     }
     #########################################################
     # add error bars to the figure

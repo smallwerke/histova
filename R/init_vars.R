@@ -44,16 +44,17 @@ init_vars <- function() {
 
         ################ Colors and Display Individual Points (OPT) ################
         fig$Colors <- c()
-        colors.unique = data.frame(matrix(ncol = 4, nrow = 0))
-        colnames(colors.unique) = c("color", "scatterColor", "scatterShape", "scatterSize")
+        colors.unique = data.frame(matrix(ncol = 8, nrow = 0))
+        colnames(colors.unique) = c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha")
         fig$Colors.Unique <- colors.unique
         fig$Colors.Alpha <- 1
         fig$Scatter.Disp <- TRUE
         fig$Scatter.Alpha <- 1
-        fig$Scatter.Color <- NA
-        fig$Scatter.Shape <- NA
-        fig$Scatter.Size <- NA
-        fig$Scatter.Stroke <- NA
+        fig$Scatter.Color.Source <- "DEF" # INTERNAL SETTING
+        fig$Scatter.Color <- "#FFD700"
+        fig$Scatter.Shape <- 4
+        fig$Scatter.Size <- 1.8
+        fig$Scatter.Stroke <- 2
         fig$Plot.Whisker <- "FALSE"
 
         ################ Line Design Options (OPT) ################

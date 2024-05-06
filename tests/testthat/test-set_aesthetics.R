@@ -71,7 +71,7 @@ test_that("testing the ability to set aesthetic values", {
     histova_msg("Build Histogram", type="head")
     set_aesthetics()
 
-    expect_equal(sprintf("%s", fig$Colors[[2]]), "#606060")
+    expect_equal(sprintf("%s", fig$Color.List[[2]]), "#606060")
     expect_equal(sprintf("%s", fig$Scatter.Color.List[[1]]), "#FFD700")
     expect_equal(sprintf("%s", names(fig$Scatter.Size.List)[[6]]), "G6")
     expect_equal(fig$Scatter.Size.List[[3]], 1.6)

@@ -40,13 +40,30 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     #       *** have changed the subset calls in build_histo to use R's base & more traditional subset method, should work but... ***
     # - include nice / well designed versions of the current test designs in the readme.rmd page
     # - have the color assignments have an actual group1/group2 name to them to assign them based on name not simply order
-    # - add ability to not have all G1 in each G2... should be able to have distinct G1 per G2...
-    #       this is an issue in ggplot2 on build_histo lines 244 & 258... easy enough to drop unused G1 with scales=free_x but this breaks coord_fixed...
-    #       currently have the ability to only display the active G2 & G1 combinations BUT have turned off the coord_fixed option
-    #       active in init_vars(), load_file_head() & build_hist()
+    #       this is largely being handled in set_aesthetics
+    #       1: potentially allow a user to specify the order of the display in the config (run this before setting Colors) BUT probably best
+    #           to not have a order check running as default since with facet off and unique G1 names they might want to intermix them?
+    #       2: go through all of the test files and make sure they are still functioning with the new COLORS UNIQUE setting
+    # - after getting the colors fixed build:
+    #       - review how the raw data is being stored and then calculated / analyzed... look into making sure a copy of the raw data remain stored somewhere
+    #           - check through all the options in histova and map out the best way to have a data summary / overview for the figure generation
+    #               - eg final group names even when displayed as G1 for both G2s (currenlty using raw$summary)
+    #       - function to display statistical settings in environment
+    #       - function to display aesthetic settings in environment
+    #           - check to make sure that after running through standard 'generate_figure' that all of the original variables are STILL in the env (eg you can generate the SAME figure stats, transformations & all just from the env)
+    #               - document all calls to init_vars...
+    #       - function to build figure from variables loaded into environment
+    #       - function to run stats on data based on environment settings (always go back to raw loaded data)
+    #       - functions to edit stats & aesthetic settings in the environment
+    #       - function to write config&data file from environment variables
+    # - potentially have a config option to order the display of groups? currently having G2 data in G1 causes issues...
     # - add a function for generating the config file header section (have R run through a series of prompts and spit out a file header!)
     #       include option to generate a batch version where you can load the generated config file and all you would be editing are
     #       the Labels, Groups (opt?), Stats tests run and it would all be reusing the 'batch' file's style settings (similar to override)
+    # - DONE: add ability to not have all G1 in each G2... should be able to have distinct G1 per G2...
+    #       this is an issue in ggplot2 on build_histo lines 244 & 258... easy enough to drop unused G1 with scales=free_x but this breaks coord_fixed...
+    #       currently have the ability to only display the active G2 & G1 combinations BUT have turned off the coord_fixed option
+    #       active in init_vars(), load_file_head() & build_hist()
     # - Having a y-break active the plot fills the width of the set area better, switching to ymin or nothing set and the plot suddenly becomes square -
     #       could this be an issue with coord_ratio? ** this appears to be fixed when running with the latest code **
 
@@ -81,7 +98,6 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     histova_msg("file found and environments loaded successfully", tabs=2)
 
     # prep & load config info / data
-    init_vars()
     load_file_head()
     load_data()
 

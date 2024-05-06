@@ -70,3 +70,7 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f, FALSE, FALSE)
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
+
+## Config
+
+{r test, child="inst/extdata/header_config.txt", eval=TRUE}

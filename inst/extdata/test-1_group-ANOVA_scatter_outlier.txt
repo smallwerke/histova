@@ -3,7 +3,7 @@
 ## !! OVERRIDE MUST BE AT THE TOP OF THE DATA FILE !!
 ## Ability to save the optional (OPT) headed data for subsequent data files - makes consistent style formatting easier when making multiple figures
 ## Override -> (TRUE: store the OPT values from this file until another TRUE is encountered; FALSE: turn override off and clear out the stored values)
-## DEF "Override:''" 
+## DEF "Override:''"
 ################ Label Size and Appearance (OPT) ################
 ## Set the size of the labels, the distance between the axis labels and the values & the axis value size
 ## Text Convert -> scan the title & axis for html codes and convert to unicode; Text Font -> select a font
@@ -19,21 +19,29 @@
 ## Bar Border Width -> how thick should the bar border be (number) ~ (TimeCourse def: 1)
 ## DEF: "X Value Angle:45"; "X Value Display:TRUE"; "X Tick Display:TRUE"; "Coord Fixed Ratio:SQUARE"; "Bar Width:0.8"; "Bar Border Color:white"; "Bar Border Width:0.2"
 ################ Colors and General Display Settings (OPT) ################
-## Colors -> list of colors in html format, can handle "," and " " when splitting **Legend Color Source can simplify the color list for multi group figures**
-## Colors Unique -> one row per set color for the group and then the scatter point details (HTML, HTML, SHAPE, SIZE) -> OVERRIDES the Colors setting
-## Colors Alpha -> level of transparency for the given colors (0 to 1)
-## Scatter Display -> display individual data points as gold stars (TRUE / FALSE) gold: #FFD700, shape: 4
-## Scatter Alpha -> set transparency of the scatter points
-## Scatter ColorShapeSize -> set ONE color OR MATCH the group colors OR UNIQUE from group list (MATCH / UNIQUE/ HTML color) followed by NUMERIC Shape & Size for setting ALL
-## Scatter Stroke -> border stroke (a number eg 2) 
-## Whisker Plot -> display as a bar & whisker plot instead of standard histogram *NOT recommended WITH ScatterDisplay:TRUE; NOT compatible with TimeCourse* (Box / Violin / FALSE)
+## Colors -> list of colors in html/R format, can handle "," and " " when splitting **Legend Color Source can simplify the color list for multi group figures**
+## Colors -> this data is loaded after Colors Unique and can be overriden with the 'Colors Specific' setting
+## Colors Unique -> one row per set color applied as a set before the Colors data and can be overriden with the Colors Specific setting (for backwards compatibility)
+## Colors Unique -> one row per set color and then the scatter point details (COLOR, ALPHA, COLOR, SHAPE, SIZE, STROKE, ALPHA)
+## OVERRIDES the Colors Unique & Colors setting as follows:
+## Colors Specific -> G1_G2, COLOR             -> use defaults for all other values, scatter color can be set to match
+## Colors Specific -> G1_G2, COLOR, COLOR      -> all other values optional AND must be numeric
+## Colors Specific -> G1_G2, COLOR, , SHAPE    -> this will set 1st ALPHA and 2nd COLOR to defaults along with SIZE, STROKE, 2nd ALPHA
+## Colors Specific OVERIDES ALL other settings; if a setting is not speficied defaults to program defaults (scatter color, size, etc) and a random color for the group...
+## Colors Alpha -> level of transparency for the given colors (0 to 1, def: 1)
+## Scatter Display -> display individual data points as default of gold stars (TRUE / FALSE) (DEF: gold: #FFD700, shape: 4)
+## Scatter Alpha -> set default transparency of the scatter points (0 to 1, def: 1)
+## Scatter ColorShapeSize -> set ONE color OR MATCH the group colors OR UNIQUE from the unique/specific setting list (MATCH, UNIQUE, or COLOR) 
+## Scatter ColorShapeSize -> followed by NUMERIC Shape & Size for setting ALL / DEFAULT for missing
+## Scatter Stroke -> border stroke (a number, def: 2) 
+## Whisker Plot -> display as a bar & whisker plot instead of standard histogram *NOT compatible with TimeCourse* (Box / Violin / FALSE)
 ## DEF: "Colors:''"; "Colors Alpha:1"; "Scatter Display:TRUE"; "Scatter Alpha:1"; "Scatter ColorShapeSize:#FFD700,4,1.8"; "Scatter Stroke:2"; "Whisker Plot:FALSE"
-#Colors Unique	#000000, #FFD700, 4, 1.8
-#Colors Unique	#606060, #FFD700, 2, 3.8
-#Colors Unique	#00c000, #000000, 1, 1.6
-#Colors Unique	#f71480, #606060, 5, 1.6
-#Colors Unique	#0000ff, #606060, 6, 2.6
-#Colors Unique	#ff0000, #606060, 7, 5.6
+#Colors Specific	G1, #000000, #FFD700, 4, 1.8
+#Colors Specific	G2, #606060, #FFD700, 2, 3.8
+#Colors Specific	G3, #00c000, #000000, 1, 1.6
+#Colors Specific	G4, #f71480, #606060, 5, 1.6
+#Colors Specific	G5, #0000ff, #606060, 6, 2.6
+#Colors Specific	G6, #ff0000, #606060, 7, 5.6
 #Colors Alpha	0.6
 #Scatter Alpha	0.8
 #Scatter ColorShapeSize	UNIQUE
@@ -88,10 +96,10 @@
 #Stats Test	ANOVA
 ################ Stats Transformation or Outlier (REQ) ################
 ## "Stats Transform:FALSE" -> no transformation
-## "Stats Transform:TreatmentControl:Group1:Group2" -> define control group: Group1 required, Group2 required if using 2 groups 
+## "Stats Transform:TreatmentControl:Group1:Group2" -> define control group: Group1 required, Group2 required if using 2 groups
 ## 	control group will be used to normalize all other groups and will be removed from the figure, a line will be automatically added at '1' for this group
 ## 	ANOVA (if requested) will be run post transform & group removal; in order to remove a group (treatment) "Stats Anova Group2" MUST be set to FALSE!
-## "Stats Transform:TimeCourse" -> group1 defines the time points; group 2 the control & treatment/s 
+## "Stats Transform:TimeCourse" -> group1 defines the time points; group 2 the control & treatment/s
 ## Stats Outlier -> Outlier detection (FALSE, ONE, TWO) FALSE: no detection; ONE: one tailed; TWO: two tailed (careful when using paired t-tests)
 ## DEF: "Stats Transform:FALSE"; "Stats Outlier:TWO"
 #Stats Outlier	TWO
