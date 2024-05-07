@@ -73,7 +73,13 @@ knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 
 ## Config
 
-{r test, child="inst/extdata/header_config.txt", eval=TRUE}
+```{r echo=FALSE}
+# provide a download link for the config file
+xfun::embed_file('inst/extdata/header_config.txt')
 
-```{include} inst/extdata/header_config.txt
+```
+
+```{r configPrint}
+# print out the full contents of the header sample file
+paste(readLines('inst/extdata/header_config.txt')) 
 ```
