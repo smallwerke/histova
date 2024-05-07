@@ -71,15 +71,14 @@ histova::generate_figure(d,f, FALSE, FALSE)
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
 
-## Config
+## Config File
 
-```{r echo=FALSE}
-# provide a download link for the config file
-xfun::embed_file('inst/extdata/header_config.txt')
-
-```
+Following is a header file config file detailing all the various settings.
 
 ```{r configPrint}
 # print out the full contents of the header sample file
+# this is availabe in inst/extdata on gitub above
+#
+#
 paste(readLines('inst/extdata/header_config.txt')) 
 ```
