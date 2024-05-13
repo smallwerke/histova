@@ -189,13 +189,13 @@ build_histo <- function(){
             #guides(fill = guide_legend(override.aes = list(shape = NA)))
         } else if (fig$Legend.Color.Source == "Group1") {
             gplot = gplot + ggplot2::geom_point(
-                data=raw$base, ggplot2::aes(x = as.numeric(.data$Group1) + 0.0, y = .data$Value, color = .data$Group1, shape = .data$Group1, size = .data$Group1, stroke = .data$Group1, alpha = .data$Group1),
+                data=raw$base, ggplot2::aes(x = .data$Group1, y = .data$Value, color = .data$Group1, shape = .data$Group1, size = .data$Group1, stroke = .data$Group1, alpha = .data$Group1),
                 position=ggplot2::position_dodge2(width=0.7,padding=0.1),
                 show.legend = FALSE
             )
         } else {
             gplot = gplot + ggplot2::geom_point(
-                data=raw$base, ggplot2::aes(x = as.numeric(.data$Group1) + 0.0, y = .data$Value, color = .data$statGroups, shape = .data$statGroups, size = .data$statGroups, stroke = .data$statGroups, alpha = .data$statGroups),
+                data=raw$base, ggplot2::aes(x = .data$Group1, y = .data$Value, color = .data$statGroups, shape = .data$statGroups, size = .data$statGroups, stroke = .data$statGroups, alpha = .data$statGroups),
                 position=ggplot2::position_dodge2(width=0.7,padding=0.1),
                 show.legend = FALSE
             )
