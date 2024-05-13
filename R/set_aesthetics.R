@@ -29,21 +29,52 @@ set_aesthetics <- function() {
     ##############################
     # SETUP THE LENGTHS AND NAMES
     #
-    # get the length needed
+    # get the length needed for the fill colors and then for the scatter colors
+    # following the logic used in the build_histo.R function where the colors are
+    # assigned and then the scatter aesthetics are assigned
+    #
+    # for the fill information the color data is based on the type of figure (timecourse, box/violin, or bar)
+    # with timecourse being based off of raw$summary$Group2
+    # box/violine based off of raw$base$ Group1 or statGroups
+    # everything else based off of raw$summary$ Group1 or statGroups
     if (stats$Transform == "TimeCourse") {
-        colorLength = length(unique(raw$base$Group2))
-        colorNames = unique(raw$base$Group2)
-    } else if (fig$Legend.Color.Source == "Group1") {
-        # since this is for the aesthetic data make sure settings exist for each so draw from summary
-        #colorLength = length(unique(raw$base$Group1))
-        #colorNames = unique(raw$base$Group1)
-        colorLength = length(raw$summary$Group1)
-        colorNames = raw$summary$Group1
+        colorLength = length(raw$summary$Group2)
+        colorNames = raw$summary$Group2
+    } else if (fig$Plot.Whisker %in% c("BOX", "VIOLIN")) {
+        if (fig$Legend.Color.Source == "Group1") {
+            colorLength = length(raw$base$Group1)
+            colorNames = raw$base$Group1
+        } else {
+            colorLength = length(raw$base$statGroups)
+            colorNames = raw$base$statGroups
+        }
     } else {
-        colorLength = length(unique(raw$base$statGroups))
-        colorNames = unique(raw$base$statGroups)
+        if (fig$Legend.Color.Source == "Group1") {
+            colorLength = length(raw$summary$Group1)
+            colorNames = raw$summary$Group1
+        } else {
+            colorLength = length(raw$summary$statGroups)
+            colorNames = raw$summary$statGroups
+        }
     }
-    histova_msg(sprintf("assigning settings for %s groups (%s)", colorLength, paste(colorNames, collapse=" ")), tabs=2)
+
+    # figure out the scatter details
+    if (stats$Transform == "TimeCourse") {
+        scatterLength = length(raw$base$Group2)
+        scatterNames = raw$base$Group2
+    } else if (fig$Legend.Color.Source == "Group1") {
+        scatterLength = length(raw$base$Group1)
+        scatterNames = raw$base$Group1
+    } else {
+        scatterLength = length(raw$base$statGroups)
+        scatterNames = raw$base$statGroups
+    }
+
+    # reference data
+    colorNamesUnique = unique(colorNames)
+    colorLengthUnique = length(colorNamesUnique)
+
+    histova_msg(sprintf("assigning settings for %s groups (%s)", colorLengthUnique, paste(colorNamesUnique, collapse=" ")), tabs=2)
 
     # setup the variables that will be used to build the histogram
     fig$Color.List = rep(NA, colorLength)
@@ -51,16 +82,16 @@ set_aesthetics <- function() {
     fig$Color.Alpha.List = rep(NA, colorLength)
     names(fig$Color.Alpha.List) = colorNames
 
-    fig$Scatter.Color.List = rep(NA, colorLength)
-    names(fig$Scatter.Color.List) = colorNames
-    fig$Scatter.Shape.List = rep(NA, colorLength)
-    names(fig$Scatter.Shape.List) = colorNames
-    fig$Scatter.Size.List = rep(NA, colorLength)
-    names(fig$Scatter.Size.List) = colorNames
-    fig$Scatter.Stroke.List = rep(NA, colorLength)
-    names(fig$Scatter.Stroke.List) = colorNames
-    fig$Scatter.Alpha.List = rep(NA, colorLength)
-    names(fig$Scatter.Alpha.List) = colorNames
+    fig$Scatter.Color.List = rep(NA, scatterLength)
+    names(fig$Scatter.Color.List) = scatterNames
+    fig$Scatter.Shape.List = rep(NA, scatterLength)
+    names(fig$Scatter.Shape.List) = scatterNames
+    fig$Scatter.Size.List = rep(NA, scatterLength)
+    names(fig$Scatter.Size.List) = scatterNames
+    fig$Scatter.Stroke.List = rep(NA, scatterLength)
+    names(fig$Scatter.Stroke.List) = scatterNames
+    fig$Scatter.Alpha.List = rep(NA, scatterLength)
+    names(fig$Scatter.Alpha.List) = scatterNames
 
     ##############################
     # HISTOGRAM COLOR
@@ -69,19 +100,29 @@ set_aesthetics <- function() {
     # since any non specific values are always set to NA go ahead and load all rows where a group is set to NA
     uniqueLength = length(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$color)
     if (uniqueLength > 0) {
-        fig$Color.List[1:uniqueLength] =  fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$color
-        fig$Color.Alpha.List[1:uniqueLength] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$colorAlpha)
-        fig$Scatter.Color.List[1:uniqueLength] =  fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterColor
-        fig$Scatter.Shape.List[1:uniqueLength] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterShape)
-        fig$Scatter.Size.List[1:uniqueLength] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterSize)
-        fig$Scatter.Stroke.List[1:uniqueLength] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterStroke)
-        fig$Scatter.Alpha.List[1:uniqueLength] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterAlpha)
+        # since this should all be based on G1_G2 names NOT simply length and some settings require a value PER sample
+        # scan through and set it based on NAME not simply list location...
+        for (i in 1:uniqueLength) {
+            #histova_msg(sprintf("AT %s in names = %s",i, colorNamesUnique[i]))
+            fig$Color.List[names(fig$Color.List) == colorNamesUnique[i]] =  fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$color[i]
+            fig$Color.Alpha.List[names(fig$Color.Alpha.List) == colorNamesUnique[i]] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$colorAlpha[i])
+            fig$Scatter.Color.List[names(fig$Scatter.Color.List) == colorNamesUnique[i]] =  fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterColor[i]
+            fig$Scatter.Shape.List[names(fig$Scatter.Shape.List) == colorNamesUnique[i]] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterShape[i])
+            fig$Scatter.Size.List[names(fig$Scatter.Size.List) == colorNamesUnique[i]] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterSize[i])
+            fig$Scatter.Stroke.List[names(fig$Scatter.Stroke.List) == colorNamesUnique[i]] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterStroke[i])
+            fig$Scatter.Alpha.List[names(fig$Scatter.Alpha.List) == colorNamesUnique[i]] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterAlpha[i])
+        }
+        # old simple setting for X entries in the list...
+        #fig$Color.List[1:uniqueLength] =  fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$color
     }
 
     # start by simply assigning any entries in the fig$Colors list to the beginning of the
     # fig$Color.List list any unique entries will override any values and then the list will be padded as needed...
     if (length(fig$Colors) > 0) {
-        fig$Color.List[(uniqueLength+1):(uniqueLength + length(fig$Colors))] = fig$Colors
+        for (i in (uniqueLength+1):(uniqueLength+length(fig$Colors)) ) {
+            #histova_msg(sprintf("Colors %s in names = %s",i, colorNamesUnique[i]))
+            fig$Color.List[names(fig$Color.List) == colorNamesUnique[i]] = fig$Colors[i - uniqueLength]
+        }
     }
     #
     # Fig.Colors.Unique is always initiated as an empty list in init_vars if it has data assume we're to use it...
@@ -110,22 +151,22 @@ set_aesthetics <- function() {
                 # set the scatter color list if the unique value isn't NA
                 # after scrolling through the unique list all remaining NA's get set to default
                 if (!is.na(specificColors$colorAlpha[i])) {
-                    fig$Color.Alpha.List[[nameCheck]] <- as.numeric(specificColors$colorAlpha[i])
+                    fig$Color.Alpha.List[names(fig$Color.Alpha.List) == nameCheck] <- as.numeric(specificColors$colorAlpha[i])
                 }
                 if (!is.na(specificColors$scatterColor[i])) {
-                    fig$Scatter.Color.List[[nameCheck]] <- specificColors$scatterColor[i]
+                    fig$Scatter.Color.List[names(fig$Scatter.Color.List) == nameCheck] <- specificColors$scatterColor[i]
                 }
                 if (!is.na(specificColors$scatterShape[i])) {
-                    fig$Scatter.Shape.List[[nameCheck]] <- as.numeric(specificColors$scatterShape[i])
+                    fig$Scatter.Shape.List[names(fig$Scatter.Shape.List) == nameCheck] <- as.numeric(specificColors$scatterShape[i])
                 }
                 if (!is.na(specificColors$scatterSize[i])) {
-                    fig$Scatter.Size.List[[nameCheck]] <- as.numeric(specificColors$scatterSize[i])
+                    fig$Scatter.Size.List[names(fig$Scatter.Size.List) == nameCheck] <- as.numeric(specificColors$scatterSize[i])
                 }
                 if (!is.na(specificColors$scatterStroke[i])) {
-                    fig$Scatter.Stroke.List[[nameCheck]] <- as.numeric(specificColors$scatterStroke[i])
+                    fig$Scatter.Stroke.List[names(fig$Scatter.Stroke.List) == nameCheck] <- as.numeric(specificColors$scatterStroke[i])
                 }
                 if (!is.na(specificColors$scatterAlpha[i])) {
-                    fig$Scatter.Alpha.List[[nameCheck]] <- as.numeric(specificColors$scatterAlpha[i])
+                    fig$Scatter.Alpha.List[names(fig$Scatter.Alpha.List) == nameCheck] <- as.numeric(specificColors$scatterAlpha[i])
                 }
             } else {
                 histova_msg(sprintf("Colors Specific: unable to find the group name %s, SKIPPING entry", nameCheck), tabs=2, type="warn")
@@ -136,10 +177,15 @@ set_aesthetics <- function() {
 
     # set the remaining colors that are still 'NA' to draw from scales::hue_pal()
     # color alpha level get set to default
-    if (length(fig$Color.List[is.na(fig$Color.List)]) > 0) {
-        histova_msg(sprintf("Only %s colors supplied when %s are needed, ADDING EXTRAS", length(fig$Color.List[!is.na(fig$Color.List)]), colorLength), tabs=2, type="warn")
+    if (length(unique(names(fig$Color.List[is.na(fig$Color.List)]))) > 0) {
+        histova_msg(sprintf("Only %s colors supplied when %s are needed, ADDING EXTRAS", length(unique(names(fig$Color.List[!is.na(fig$Color.List)]))), colorLengthUnique), tabs=2, type="warn")
         # replace any NA values with a color from scales::hue_pal
-        fig$Color.List[is.na(fig$Color.List)] = scales::hue_pal()(length(fig$Color.List[is.na(fig$Color.List)]))
+        unsetNames =  unique(names(fig$Color.List[is.na(fig$Color.List)]))
+        generatedColors = scales::hue_pal()(length(unsetNames))
+        for (i in 1:length(unsetNames)) {
+            fig$Color.List[names(fig$Color.List) == unsetNames[i]] <- generatedColors[i]
+        }
+        #histova_msg(sprintf("added %s colors for groups %s ", generatedColors, unsetNames), tabs=2, type="warn")
     }
     fig$Color.Alpha.List[is.na(fig$Color.Alpha.List)] = fig$Colors.Alpha
 
@@ -161,9 +207,9 @@ set_aesthetics <- function() {
     fig$Color.List <- fig$Color.List[1:colorLength]
     fig$Color.Alpha.List <- fig$Color.Alpha.List[1:colorLength]
 
-    fig$Scatter.Color.List <- fig$Scatter.Color.List[1:colorLength]
-    fig$Scatter.Shape.List <- fig$Scatter.Shape.List[1:colorLength]
-    fig$Scatter.Size.List <- fig$Scatter.Size.List[1:colorLength]
-    fig$Scatter.Stroke.List <- fig$Scatter.Stroke.List[1:colorLength]
-    fig$Scatter.Alpha.List <- fig$Scatter.Alpha.List[1:colorLength]
+    fig$Scatter.Color.List <- fig$Scatter.Color.List[1:scatterLength]
+    fig$Scatter.Shape.List <- fig$Scatter.Shape.List[1:scatterLength]
+    fig$Scatter.Size.List <- fig$Scatter.Size.List[1:scatterLength]
+    fig$Scatter.Stroke.List <- fig$Scatter.Stroke.List[1:scatterLength]
+    fig$Scatter.Alpha.List <- fig$Scatter.Alpha.List[1:scatterLength]
 }

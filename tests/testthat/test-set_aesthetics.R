@@ -73,7 +73,7 @@ test_that("testing the ability to set aesthetic values", {
 
     expect_equal(sprintf("%s", fig$Color.List[[2]]), "#606060")
     expect_equal(sprintf("%s", fig$Scatter.Color.List[[1]]), "#FFD700")
-    expect_equal(sprintf("%s", names(fig$Scatter.Size.List)[[6]]), "G6")
-    expect_equal(fig$Scatter.Size.List[[3]], 1.6)
-    expect_equal(fig$Scatter.Shape.List[[5]], 6)
+    expect_equal(sprintf("%s", names(fig$Scatter.Size.List)[[32]]), "G6")
+    expect_equal(fig$Scatter.Size.List[["G3"]], 1.6)
+    expect_equal(fig$Scatter.Shape.List[["G5"]], 6)
 })

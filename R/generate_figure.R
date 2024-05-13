@@ -45,6 +45,7 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     #           to not have a order check running as default since with facet off and unique G1 names they might want to intermix them?
     #       2: go through all of the test files and make sure they are still functioning with the new COLORS UNIQUE setting
     # - after getting the colors fixed build:
+    #       - for violin/box plots unclear how the number of data points is being decided BUT currently the 'default' Colors Alpha is used for all groups regardless of Unique or Specific setting
     #       - review how the raw data is being stored and then calculated / analyzed... look into making sure a copy of the raw data remain stored somewhere
     #           - check through all the options in histova and map out the best way to have a data summary / overview for the figure generation
     #               - eg final group names even when displayed as G1 for both G2s (currenlty using raw$summary)
