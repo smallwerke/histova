@@ -73,7 +73,7 @@ knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 
 ## Config File
 
-Following is a header file config file detailing all the various settings.
+Following is a header file config file detailing all the various settings and outlining the defaults.
 
 ```{r configPrint}
 # print out the full contents of the header sample file

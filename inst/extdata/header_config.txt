@@ -31,13 +31,13 @@
 ## Colors Specific -> G1_G2, COLOR, COLOR      -> all other values optional AND must be numeric
 ## Colors Specific -> G1_G2, COLOR, , SHAPE    -> this will set 1st ALPHA and 2nd COLOR to defaults along with SIZE, STROKE, 2nd ALPHA
 ## Colors Specific OVERIDES ALL other settings; if a setting is not speficied defaults to program defaults (scatter color, size, etc) and a random color for the group...
-## Colors Alpha -> level of transparency for the given colors (0 to 1) *Box / Violin uses default for all groups*
+## Colors Alpha -> level of transparency for the given colors (0 to 1, def: 1)
 ## Scatter Display -> display individual data points as default of gold stars (TRUE / FALSE) (DEF: gold: #FFD700, shape: 4)
 ## Scatter Alpha -> set default transparency of the scatter points (0 to 1, def: 1)
 ## Scatter ColorShapeSize -> set ONE color OR MATCH the group colors OR UNIQUE from the unique/specific setting list (MATCH, UNIQUE, or COLOR) 
 ## Scatter ColorShapeSize -> followed by NUMERIC Shape & Size for setting ALL / DEFAULT for missing
 ## Scatter Stroke -> border stroke (a number, def: 2) 
-## Whisker Plot -> display as a bar & whisker plot instead of standard histogram *NOT compatible with TimeCourse* (Box / Violin / FALSE)
+## Whisker Plot -> display as a bar & whisker plot instead of standard histogram *NOT compatible with TimeCourse, ALWAYS uses Colors Alpha over individual settings* (Box / Violin / FALSE)
 ## DEF: "Colors:''"; "Colors Alpha:1"; "Scatter Display:TRUE"; "Scatter Alpha:1"; "Scatter ColorShapeSize:#FFD700,4,1.8"; "Scatter Stroke:2"; "Whisker Plot:FALSE"
 #
 ################ Chart Line Designs (OPT) ################

@@ -91,7 +91,7 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
 #> ------------------------------- histova 3.5.0.1 --------------------------------
-#> ----------------------- run on Mon May  6 19:11:01 2024 ------------------------
+#> ----------------------- run on Mon May 13 15:46:04 2024 ------------------------
 #> --------------------------------------------------------------------------------
 #> -------- Prep & Load config settings and data --------
 #>         file found and environments loaded successfully
@@ -117,7 +117,7 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Mon May  6 19:11:02 2024 ---------------------
+#> --------------------- finihsed on Mon May 13 15:46:04 2024 ---------------------
 #> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
@@ -127,7 +127,7 @@ knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ## Config File
 
 Following is a header file config file detailing all the various
-settings.
+settings and outlining the defaults.
 
 ``` r
 # print out the full contents of the header sample file
@@ -168,13 +168,13 @@ paste(readLines('inst/extdata/header_config.txt'))
 #>  [31] "## Colors Specific -> G1_G2, COLOR, COLOR      -> all other values optional AND must be numeric"                                                                                                         
 #>  [32] "## Colors Specific -> G1_G2, COLOR, , SHAPE    -> this will set 1st ALPHA and 2nd COLOR to defaults along with SIZE, STROKE, 2nd ALPHA"                                                                  
 #>  [33] "## Colors Specific OVERIDES ALL other settings; if a setting is not speficied defaults to program defaults (scatter color, size, etc) and a random color for the group..."                               
-#>  [34] "## Colors Alpha -> level of transparency for the given colors (0 to 1) *Box / Violin uses default for all groups*"                                                                                       
+#>  [34] "## Colors Alpha -> level of transparency for the given colors (0 to 1, def: 1)"                                                                                                                          
 #>  [35] "## Scatter Display -> display individual data points as default of gold stars (TRUE / FALSE) (DEF: gold: #FFD700, shape: 4)"                                                                             
 #>  [36] "## Scatter Alpha -> set default transparency of the scatter points (0 to 1, def: 1)"                                                                                                                     
 #>  [37] "## Scatter ColorShapeSize -> set ONE color OR MATCH the group colors OR UNIQUE from the unique/specific setting list (MATCH, UNIQUE, or COLOR) "                                                         
 #>  [38] "## Scatter ColorShapeSize -> followed by NUMERIC Shape & Size for setting ALL / DEFAULT for missing"                                                                                                     
 #>  [39] "## Scatter Stroke -> border stroke (a number, def: 2) "                                                                                                                                                  
-#>  [40] "## Whisker Plot -> display as a bar & whisker plot instead of standard histogram *NOT compatible with TimeCourse* (Box / Violin / FALSE)"                                                                
+#>  [40] "## Whisker Plot -> display as a bar & whisker plot instead of standard histogram *NOT compatible with TimeCourse, ALWAYS uses Colors Alpha over individual settings* (Box / Violin / FALSE)"             
 #>  [41] "## DEF: \"Colors:''\"; \"Colors Alpha:1\"; \"Scatter Display:TRUE\"; \"Scatter Alpha:1\"; \"Scatter ColorShapeSize:#FFD700,4,1.8\"; \"Scatter Stroke:2\"; \"Whisker Plot:FALSE\""                        
 #>  [42] "#"                                                                                                                                                                                                       
 #>  [43] "################ Chart Line Designs (OPT) ################"                                                                                                                                              

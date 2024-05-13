@@ -23,6 +23,11 @@
 generate_figure <- function(location.dir, location.file, printPlot = FALSE, savePlot = TRUE) {
 
     ##########################################
+    # using following pages as guides:
+    # https://cran.r-project.org/web/packages/rcompendium/vignettes/developing_a_package.html
+    # https://r-pkgs.org/whole-game.html#use_readme_rmd
+    # working on:
+    # https://r-pkgs.org/testing-design.html
     # Plans for the next steps of this package
     # - setup tests using the saved *.rda files within the package strucutre
     #       appears to work loading test scripts into int/extdata and then calling the location with:
