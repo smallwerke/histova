@@ -29,6 +29,18 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # working on:
     # https://r-pkgs.org/testing-design.html
     # Plans for the next steps of this package
+    # - PACKAGE FUTURE:
+    # - breakout generate_figure process into three main steps
+    #       - Load File: load the header & data into the environment (don't do any stats or modifications to it - goal is to always have a 'raw' copy of data)
+    #       - Process Data: run stats and process data according to settings (keep a 'raw' copy)
+    #       - Generate Figure: create the actual figure and display/save it...
+    #       - ** transition generate_figure to simply call these three functions in order making generate_figure even more of a basic wrapper **
+    # - this will allow the addition of some useful commands / features
+    #       - print settings: print out all of the display / stats / etc. settings from the header file
+    #       - print data & groups: output information about the loaded groups
+    #       - modify settings: change setting information (colors, titles, size, etc etc) with the option to rerun stats and/or generate figure
+    #       - write settings: once the settings produce the desired figure the ability to write the settings & raw data BACK OUT as a file...
+    # - TESTING DEV:
     # - setup tests using the saved *.rda files within the package strucutre
     #       appears to work loading test scripts into int/extdata and then calling the location with:
     #       generate_figure(str_remove(histova_example("test.txt"), "/test.txt"), "test.txt")
@@ -73,6 +85,9 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # - Having a y-break active the plot fills the width of the set area better, switching to ymin or nothing set and the plot suddenly becomes square -
     #       could this be an issue with coord_ratio? ** this appears to be fixed when running with the latest code **
 
+    ##########################################
+    # LOAD FILE
+    #
     # check for existence of file before moving on
     if (!file.exists(paste0(location.dir, "/", location.file)) ) {
         message("FAIL - file could not be found")
@@ -105,8 +120,12 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
 
     # prep & load config info / data
     load_file_head()
+    # !! EDIT: load_data is also immediately modifying the values it is reading in, break this into
+    # a separate step where the data is copied to a new holder with raw$base ALWAYS having the raw file values (in large part to enable writing out and recalc)
     load_data()
 
+    ##########################################
+    # RUN STATS
     histova_msg("Statistical Analysis", type = "head")
 
     # move onto stats analysis
@@ -198,6 +217,8 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     histova_msg(sprintf("%s", paste("", levels(raw$base$statGroups), collapse="")), tabs=3)
 
 
+    ##########################################
+    # BUILD FIGURE
     histova_msg("Build Histogram", type="head")
     set_aesthetics()
     build_histo()
