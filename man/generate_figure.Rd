@@ -29,6 +29,13 @@ file is located.
 The configuration file must end in .txt and follow a specific format. The resulting plot and log
 files both take the same name as the config file and simply changes the file extension. The plot
 type is specified in the config file (default is .jpg) and the log file is set as .histova.
+
+This function is a basic wrapper function for the following three main functions:
+load_file()
+run_data()
+build_figure()
+These can be run individually to the same effect. Functions are in development to allow editing and
+setting of settings for use in developing what the finished figure will look like (e.g. color and fonts).
 }
 \examples{
 generate_figure("/Users/Shared/HISTOVA_DATA", "test.txt", savePlot = FALSE)

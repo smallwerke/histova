@@ -10,6 +10,13 @@
 #' files both take the same name as the config file and simply changes the file extension. The plot
 #' type is specified in the config file (default is .jpg) and the log file is set as .histova.
 #'
+#' This function is a basic wrapper function for the following three main functions:
+#' load_file()
+#' run_data()
+#' build_figure()
+#' These can be run individually to the same effect. Functions are in development to allow editing and
+#' setting of settings for use in developing what the finished figure will look like (e.g. color and fonts).
+#'
 #' @param location.dir The directory the data file is contained in
 #' @param location.file The file containing the data
 #' @param printPlot Should the finished plot be printed
@@ -85,173 +92,19 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
     # - Having a y-break active the plot fills the width of the set area better, switching to ymin or nothing set and the plot suddenly becomes square -
     #       could this be an issue with coord_ratio? ** this appears to be fixed when running with the latest code **
 
+
     ##########################################
     # LOAD FILE
-    #
-    # check for existence of file before moving on
-    if (!file.exists(paste0(location.dir, "/", location.file)) ) {
-        message("FAIL - file could not be found")
-        stop()
-    }
-    # check for the existence of the environments
-    if ((!exists('the', mode='environment')) || (!exists('fig', mode='environment')) ||
-        (!exists('notes', mode='environment')) || (!exists('raw', mode='environment')) ||
-        (!exists('stats', mode='environment')) ) {
+    load_file(location.dir, location.file, savePlot)
 
-        message("FAIL - environments not available")
-        stop()
-    }
-
-    # file & environments exist! let's get started
-    the$Location.File = location.file
-    the$Location.Dir = location.dir
-    the$savePlot = savePlot
-
-    # setup the connection needed for the logfile (if in use)
-    if (savePlot) {
-        the$Location.Log = paste0(the$Location.Dir, "/", sub("txt", "histova", the$Location.File))
-        the$LOG = file(the$Location.Log, open = "w")
-    }
-
-    histova_msg(sprintf("histova %s", utils::packageVersion("histova")), type="title", breaker = "above")
-    histova_msg(sprintf("run on %s", date()), type="title", breaker = "below")
-    histova_msg("Prep & Load config settings and data", type = "head")
-    histova_msg("file found and environments loaded successfully", tabs=2)
-
-    # prep & load config info / data
-    load_file_head()
-    # !! EDIT: load_data is also immediately modifying the values it is reading in, break this into
-    # a separate step where the data is copied to a new holder with raw$base ALWAYS having the raw file values (in large part to enable writing out and recalc)
-    load_data()
 
     ##########################################
     # RUN STATS
-    histova_msg("Statistical Analysis", type = "head")
-
-    # move onto stats analysis
-    if (stats$Outlier != FALSE) { run_outlier() }
-    run_stats_prep()
-
-    histova_msg(sprintf("%s final Group1_Group2 (statGroups - should be unique!) ids:", length(levels(raw$base$statGroups)) ), tabs=2)
-    histova_msg(sprintf("%s", paste("", levels(raw$base$statGroups), collapse="")), tabs=3)
-
-    # run actual tests
-    if ("ANOVA" %in% stats$Test) { run_anova() }
-    if ("STTest" %in% stats$Test) { run_sttest() }
-    #if ("PTTest" %in% Stats.Test) { run_ttest(TRUE) } # NOT YET IMPLEMENTED!
-
-    # if a transformation is being conducted (eg treatment over control)
-    # ** After a group is removed the ANOVA stats (if requested) are run again for ToverC **
-    if (stats$Transform == "ToverC") {
-        run_transform()
-        # run the stats prep again to set the summary tables to the new values
-        run_stats_prep()
-
-        # remove the treatment group (it will be indicated by a line at 1)
-        stats$Group1.Mute = stats$Transform.Treatment[1]
-        fig$Plot.HLine = data.frame(y=c(1),size=c(1),color=c("black"))
-    }
-
-    # if the Y-values were adjusted (eg all divided by 1,000 - in run_stats_prep()) this will append the modification
-    # to the end of your y-axis label - you can select one or two lines...
-    if (is.numeric(fig$Y.Rig)) {
-        if (fig$Y.Rig.Newline) {
-            # Two Lines
-            #Fig.Y = bquote(bold(atop(.(Fig.Y), "(" * .(Fig.Y.Supp[[1]]) * ")")))
-            fig$Y = bquote(atop(.(fig$Y), "(" * .(fig$Y.Supp[[1]]) * ")"))
-        } else {
-            # Single Line
-            fig$Y = bquote(.(fig$Y)~"("*.(fig$Y.Supp[[1]])*")")
-        }
-        # general math expression:
-        #Fig.Y = bquote(.(Fig.Y)~"He"~r[xy]==~B^2)
-
-        # following will successfully store the expression...
-        #r = do.call(substitute, as.list(str2expression("r[xy]")))
-        # error prone BUT it will parse a expression stored in a string...
-        #Fig.Y = bquote(.(parse(text=Fig.Y)))
-        # FULL list of current html4
-        #"&Alpha;~&Beta;~&Gamma;~&Delta;~&Epsilon;~&Pi;~&Sigma;~&Tau;~&Phi;~&Omega;~&alpha;~&beta;~&gamma;~&delta;~&epsilon;~&pi;~&sigma;~&tau;~&phi;~&omega;~&bull;~&isin;~&notin;~&radic;~&infin;~&asymp;~&micro;"
-
-        #assign("Fig.Y", Fig.Y, envir = .GlobalEnv) ### CHANGED - no longer needed ###
-    }
-
-    # this may not be 100% necessary if the
-    # the t-tests should be run on the remaining groups POST transformation
-    # but BEFORE removal of the control group
-    if (stats$Transform == "ToverC") {
-        if ("STTest" %in% stats$Test) { run_sttest() }
-        #if ("PTTest" %in% Stats.Test) { run_ttest(TRUE) }
-    }
-
-    # remove a group from being displayed (eg for treatment / control figures)
-    if ((stats$Group1.Mute != FALSE) && (stats$Anova.Group2 == FALSE)) {
-
-        histova_msg(sprintf("group1Mute is set to %s, attempting to remove this group! (file: %s)", stats$Group1.Mute, the$Location.File), type="warn", tabs=2)
-
-
-        # convenient function but causes notes in packages...
-        #raw$base = subset(raw$base, Group1!=stats$Group1.Mute) ### CHANGED - to address Group1 not being in NAMESPACE ###
-        # traditional and 'more reliable'
-        raw$base = raw$base[raw$base$Group1 != stats$Group1.Mute, ]
-        raw$base[] = lapply(raw$base, function(x) if(is.factor(x)) factor(x) else x)
-        #assign("raw", raw, envir = .GlobalEnv) ### CHANGED - no longer needed ###
-
-        #raw$summary = subset(raw$summary, Group1!=stats$Group1.Mute)
-        raw$summary = raw$summary[raw$summary$Group1 != stats$Group1.Mute, ]
-        raw$summary[] = lapply(raw$summary, function(x) if(is.factor(x)) factor(x) else x)
-        #assign("raw.summary", raw.summary, envir = .GlobalEnv) ### CHANGED - no longer needed ###
-
-        #raw$summary.multi = subset(raw$summary.multi, Group1!=stats$Group1.Mute)
-        raw$summary.multi = raw$summary.multi[raw$summary.multi$Group1 != stats$Group1.Mute, ]
-        raw$summary.multi[] = lapply(raw$summary.multi, function(x) if(is.factor(x)) factor(x) else x)
-        #assign("raw.summary.multi", raw.summary.multi, envir = .GlobalEnv) ### CHANGED - no longer needed ###
-    }
-
-    # the ANOVA test should be run on the remaining groups POST transformation
-    if (stats$Transform == "ToverC") {
-        if ("ANOVA" %in% stats$Test) { run_anova() }
-        # following vars are set in run_anova() (raw.anova.multi, raw.aov.multi, raw.aov.tukey.multi)
-    }
-    histova_msg(sprintf("%s final Group1_Group2 (statGroups - should be unique!) ids:", length(levels(raw$base$statGroups)) ), tabs=2)
-    histova_msg(sprintf("%s", paste("", levels(raw$base$statGroups), collapse="")), tabs=3)
+    run_data()
 
 
     ##########################################
     # BUILD FIGURE
-    histova_msg("Build Histogram", type="head")
-    set_aesthetics()
-    build_histo()
+    build_figure(printPlot, savePlot)
 
-    # add a line to the figure...
-    if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
-        for (HL in 1:nrow(fig$Plot.HLine)) {
-            histova_msg(sprintf("adding a horizontal line to the figure at: \'%s\'", fig$Plot.HLine$y[HL]))
-            the$gplot = the$gplot + ggplot2::geom_hline(yintercept=fig$Plot.HLine$y[HL], linetype="solid", color=fig$Plot.HLine$color[HL], linewidth=fig$Plot.HLine$size[HL])
-        }
-    }
-
-    # print out the plot for viewing in RStudio - probably good idea to make this an optional setting...
-    if (printPlot) { print(the$gplot) }
-
-    # save the image to the working directory using the modified txt filename - this WILL
-    # overwrite an existing image...
-    if (savePlot) {
-        the$Location.Image = paste0(the$Location.Dir, "/", sub("txt", fig$Save.Type, the$Location.File))
-        histova_msg("SAVE Histogram", type="head")
-        histova_msg(sprintf("saving your new figure to: \'%s\'", the$Location.Image), tabs=1)
-
-        # implement cairo package to better embed fonts into the output
-        if (fig$Save.Type %in% c("tex", "svg")) {
-            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, limitsize = FALSE)
-        } else if (fig$Save.Type == "pdf") {
-            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = grDevices::cairo_pdf, limitsize = FALSE)
-        } else if (fig$Save.Type %in% c("jpg", "jpeg", "png", "tiff")) {
-            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, limitsize = FALSE)
-        } else {
-            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, type="cairo", limitsize = FALSE)
-        }
-    }
-    histova_msg(sprintf("finihsed on %s", date()), type="title", breaker = "both")
-    if (savePlot) { close(the$LOG) }
 }
