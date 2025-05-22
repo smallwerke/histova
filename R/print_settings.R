@@ -2,15 +2,21 @@
 #'
 #' This function simply prints out overview information about the loaded settings and data.
 #' This includes data variable names AND group names for data. The data is printed out in a
-#' tree / hierarchical format to demonstrate the organization of the settings
+#' tree / hierarchical format to demonstrate the organization of the settings.
 #'
-#' @param envPrint the environment/s to print, send all to print everything
+#' There are three ways to use this function. Sending in the string "all" will print out all
+#' environments and their variable names. "sum" will only print the environment names and a list
+#' of the variables for each environment. Can also send a name or vector of names for the environments
+#' that you want to print out. If an environment isn't found a warning will be sent.
+#'
+#' @param envPrint the environment/s to print, send all to print everything, sum to print env overview
+#' @param includeData T/F if the beginning of the data should be included
 #'
 #' @export
 #'
 #' @examples
 #' print_settings("all")
-print_settings <- function(envPrint = "all") {
+print_settings <- function(envPrint = "all", includeData = TRUE) {
 
     histova_msg(sprintf("Variables per Environment"), type="title", LOG=FALSE)
 
@@ -20,8 +26,20 @@ print_settings <- function(envPrint = "all") {
     envList = c()
     # if 'all' is submitted then pull from the manually generated list of environments (from aaa.R)
     if ((length(envPrint) == 1) && (envPrint == "all")) {
-        envList = the$envList
+        envList <- the$envList
         histova_msg("Printing all environments used to save settings & data. Actual data isn't displayed in this, only the variable names", tabs=1, LOG=FALSE)
+    } else if ((length(envPrint) == 1) && (envPrint == "sum")) {
+        envList <- NULL
+
+        for (envName in the$envList) {
+            # the root environment will be printed out as the base name
+            histova_msg(sprintf("ENV: %s", envName), type="title", LOG=FALSE)
+            # get the envrionment to summarize
+            rootEnv <- get(envName)
+
+            # dumps the content / names of the environment being examined...
+            histova_msg(sprintf("CONTENTS OF ENV: %s", toString(names(rootEnv))), LOG=FALSE)
+        }
     # if a custom environment name/s are submitted then check each one to make sure it exists
     # before adding it to the list of environments, otherwise throw a warning and keep on moving
     } else {
@@ -40,7 +58,14 @@ print_settings <- function(envPrint = "all") {
             }
         }
     }
-    histova_msg(sprintf("print out the following environments: '%s'", toString(envList)), tabs=1, LOG=FALSE)
+    if (!is.null(envList)) {
+        histova_msg(sprintf("print out the following environments: '%s'", toString(envList)), tabs=1, LOG=FALSE)
+        if (includeData) {
+            histova_msg("Data summary (first 40 characters) will be printed for each listed variable.", tabs=1, LOG=FALSE)
+        } else {
+            histova_msg("SKIPPING DATA SUMMARY", tabs=1, LOG=FALSE)
+        }
+    }
 
 
     # create an environment to use for dynamically traversing the data...
@@ -102,15 +127,14 @@ print_settings <- function(envPrint = "all") {
 
         # the root environment will be printed out as the base name
         histova_msg(sprintf("ENV: %s", envName), type="title", LOG=FALSE)
-        #l = 1
+
         # get the envrionment being worked on
         current <- get(envName, envir=env_dict)
+        rootEnv <- get(envName)
 
         #keys <- ls(current, all.names = TRUE)
         # this function will recursively scan through the entire environment 'dict'
         # and print out a nice little hierarchical tree...
-        print_env_dict(current, envName, -1)
+        print_env_dict(current, envName, rootEnv, -1, includeData)
     }
-
-    keys <- ls(env_dict, all.names = TRUE)
 }

@@ -4,15 +4,23 @@
 \alias{print_settings}
 \title{Print Settings}
 \usage{
-print_settings(envPrint = "all")
+print_settings(envPrint = "all", includeData = TRUE)
 }
 \arguments{
-\item{envPrint}{the environment/s to print, send all to print everything}
+\item{envPrint}{the environment/s to print, send all to print everything, sum to print env overview}
+
+\item{includeData}{T/F if the beginning of the data should be included}
 }
 \description{
 This function simply prints out overview information about the loaded settings and data.
 This includes data variable names AND group names for data. The data is printed out in a
-tree / hierarchical format to demonstrate the organization of the settings
+tree / hierarchical format to demonstrate the organization of the settings.
+}
+\details{
+There are three ways to use this function. Sending in the string "all" will print out all
+environments and their variable names. "sum" will only print the environment names and a list
+of the variables for each environment. Can also send a name or vector of names for the environments
+that you want to print out. If an environment isn't found a warning will be sent.
 }
 \examples{
 print_settings("all")

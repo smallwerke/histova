@@ -7,12 +7,14 @@
 #'
 #' @param env the environment object to traverse
 #' @param name name of the environment object for human printing
+#' @param rootEnv the environment that actually contains the data
 #' @param depth in num of tabs for printing out dictionary tree
+#' @param includeData T/F should data be printed out alongside name
 #'
 #' @returns depth of print in tabs
 #' @export
 #'
-print_env_dict <- function(env, name, depth = 0) {
+print_env_dict <- function(env, name, rootEnv, depth = 0, includeData = TRUE) {
     # assume this will only ever be called on an environment go ahead and print it as such...
     # BUT only if the depth is at 0 or greater... -1 is used for indicating the base environment
     # to start from and not bother printing that environment name...
@@ -21,11 +23,19 @@ print_env_dict <- function(env, name, depth = 0) {
         # this environment entry contains the full name of the variable for printing & reference
         # IF this is found at this environment level get the stored value and print out both
         if ((exists(paste0(name,"-root_val"), envir=env)) && (!is.environment(get(paste0(name, "-root_val"), envir = env)))) {
+            # grab the loaded variable name
             value <- get(paste0(name, "-root_val"), envir = env)
+
+            if (includeData) {
+                # grab the variable data from the actual environment
+                value_data <- get(value, envir=rootEnv)
+            } else {
+                value_data <- ""
+            }
 
             # determine the depth to print out this msg with the assumption that the current max depth is FIVE
             # and the lower the level the greater the padding is required for the variable name
-            histova_msg(sprintf("%-*s(%s)", (((5-depth) * 4) + 12), name, value), tabs=depth, type="msg", LOG=FALSE)
+            histova_msg(sprintf("%-*s%-25s%s", (((5-depth) * 4) + 12), name, value, substr(toString(value_data), 1, 40)), tabs=depth, type="msg", LOG=FALSE)
         } else {
             # when no "-root_val" name exists go ahead and print out the name where no data is stored at the appropriate depth
             histova_msg(sprintf("%s", name), tabs=depth, type="msg", LOG=FALSE)
@@ -44,7 +54,7 @@ print_env_dict <- function(env, name, depth = 0) {
         # given R's propensity to modify parent variables return from the function called depth - 1
         # which essentially resets the home depth to where it should be..
         if (is.environment(value)) {
-            depth = print_env_dict(value, key, depth+1)
+            depth = print_env_dict(value, key, rootEnv, depth+1, includeData)
         }
     }
 

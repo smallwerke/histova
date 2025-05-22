@@ -4,14 +4,18 @@
 \alias{print_env_dict}
 \title{Print Environment Dictionary}
 \usage{
-print_env_dict(env, name, depth = 0)
+print_env_dict(env, name, rootEnv, depth = 0, includeData = TRUE)
 }
 \arguments{
 \item{env}{the environment object to traverse}
 
 \item{name}{name of the environment object for human printing}
 
+\item{rootEnv}{the environment that actually contains the data}
+
 \item{depth}{in num of tabs for printing out dictionary tree}
+
+\item{includeData}{T/F should data be printed out alongside name}
 }
 \value{
 depth of print in tabs
