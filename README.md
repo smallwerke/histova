@@ -92,7 +92,7 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
 #> ------------------------------- histova 3.5.0.2 --------------------------------
-#> ----------------------- run on Thu May 22 14:53:25 2025 ------------------------
+#> ----------------------- run on Thu May 22 15:04:13 2025 ------------------------
 #> --------------------------------------------------------------------------------
 #> -------- Prep & Load config settings and data --------
 #>         file found and environments loaded successfully
@@ -118,7 +118,7 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Thu May 22 14:53:26 2025 ---------------------
+#> --------------------- finihsed on Thu May 22 15:04:14 2025 ---------------------
 #> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
@@ -131,7 +131,7 @@ Print out the main aesthetic settings used for this plot (contained in
 the *figure* environment).
 
 ``` r
-opt_print("fig")
+histova::opt_print("fig")
 #> -------------------------- Variables per Environment ---------------------------
 #>     select environments submitted, checking to make sure each is valid...
 #>     print out the following environments: 'fig'
@@ -241,9 +241,42 @@ opt_print("fig")
 Edit an aesthetic value.
 
 ``` r
-opt_set("fig", "X.Angle", 90)
+histova::opt_set("fig", "X.Angle", 90)
 #> ---------------------------------- Set Option ----------------------------------
 #> [1] "PASS"
+histova::opt_set("the", "Location.File", "test-1_group-ANOVA_scatter_outlier-90.txt")
+#> ---------------------------------- Set Option ----------------------------------
+#> [1] "PASS"
+```
+
+### Check Option
+
+Print out the main aesthetic settings used for this plot (contained in
+the *figure* environment).
+
+``` r
+histova::opt_print("fig", "X.Angle")
+#> -------------------------- Variables per Environment ---------------------------
+#> -------- Env: fig --------
+#> -------- Var: X.Angle --------
+#> -------- Data: --------
+#> 90
+histova::opt_print("the", "Loc.File")
+#> -------------------------- Variables per Environment ---------------------------
+#> Either the variable (Loc.File) or the environment (the) you supplied DO NOT EXIST
+#>  switching to: 'opt_print("sum")' for an overview of existing environments & variables!
+#> Warning: FROM histova::opt_print("the", "Loc.File"): Either the variable (Loc.File) or the environment (the) you supplied DO NOT EXIST
+#>  switching to: 'opt_print("sum")' for an overview of existing environments & variables!
+#> ----------------------------------- ENV: the -----------------------------------
+#> CONTENTS OF ENV: Location.Dir, Location.File, envList, gplot, Override, savePlot
+#> ----------------------------------- ENV: fig -----------------------------------
+#> CONTENTS OF ENV: Scatter.Stroke.List, Plot.ErrorBar.Size, Axis.Y.Tick.Length, Save.Height, Axis.ValueSize, Scatter.Shape, X.tmp, Scatter.Shape.List, X, Y, X.Angle, Bar.Border.Color, Y.Min, Font, Y.Interval, Axis.Y.Tick.Size, Save.Type, Colors.Alpha, X.Tick.Display, Scatter.Stroke, Axis.X.Tick.Color, Legend.Title.tmp, Save.Width, Convert, Title, Scatter.Alpha.List, Axis.X.Tick.Size, Axis.X.Tick.Length, Color.Alpha.List, Axis.LabelSize, Legend.Position, Coord.Fixed, Scatter.Size.List, Y.tmp, Axis.TitleSize, Axis.X.Main.Size, Title.Size, Axis.Y.Tick.Color, Plot.ErrorBar.Color, Title.tmp, Scatter.Color.List, Scatter.Alpha, Scatter.Disp, Colors.Unique, Legend.Title, Colors, Save.Units, Y.Max, Y.Supp, Bar.Border.Width, Axis.Y.Main.Size, Y.Break.df, Coord.Fixed.Ratio, Legend.LabelSize, Axis.X.Main.Color, Color.List, X.Value.Display, Scatter.Color.Source, Plot.Labels, Y.Break, Axis.LabelSep, Scatter.Size, Y.Rig.Newline, Legend.Key.Size, Plot.HLine, Scatter.Color, Plot.Whisker, Y.Rig, Facet.Split, Bar.Width, Plot.ErrorBar.EndWidth, Legend.Display, Legend.Color.Source, Save.DPI, Axis.Y.Main.Color
+#> ---------------------------------- ENV: notes ----------------------------------
+#> CONTENTS OF ENV: Stats.Method, Stats.Outlier
+#> ----------------------------------- ENV: raw -----------------------------------
+#> CONTENTS OF ENV: aov.multi, outlier, multi, summary, summary.multi, aov.tukey.multi, anova.multi, base
+#> ---------------------------------- ENV: stats ----------------------------------
+#> CONTENTS OF ENV: Outlier, Letters.Size, Caption.Display, Tukey.Labels, Test, Letters.Offset, STTest.Pairs, Group1.Mute, PTTest.Pairs, Caption.Size, Transform.Treatment, Tukey.Levels, Transform, Anova.Group2
 ```
 
 ### Review Figure
@@ -251,19 +284,19 @@ opt_set("fig", "X.Angle", 90)
 See what changed.
 
 ``` r
-build_figure(TRUE, FALSE)
+histova::build_figure(FALSE, FALSE)
 #> -------- Build Histogram --------
 #> ---- Setting Aesthetics
 #>         assigning settings for 6 groups (G1 G2 G3 G4 G5 G6)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
+#> --------------------------------------------------------------------------------
+#> --------------------- finihsed on Thu May 22 15:04:14 2025 ---------------------
+#> --------------------------------------------------------------------------------
+knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier-90.jpg")
 ```
 
-<img src="man/figures/README-option_review_figure-1.png" width="100%" />
-
-    #> --------------------------------------------------------------------------------
-    #> --------------------- finihsed on Thu May 22 14:53:27 2025 ---------------------
-    #> --------------------------------------------------------------------------------
+<img src="inst/extdata/test-1_group-ANOVA_scatter_outlier-90.jpg" width="100%" />
 
 ## Config File
 
