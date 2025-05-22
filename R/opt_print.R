@@ -45,7 +45,7 @@ opt_print <- function(envPrint = "all", varDump = NULL, includeData = TRUE) {
             envList <- NULL
 
         } else {
-            histova_msg(sprintf("Either the variable (%s) or the environment (%s) you supplied DO NOT EXIST\n\tswitching to: \'print_settings(\"sum\")\' to provide an overview of existing environments & variables!",
+            histova_msg(sprintf("Either the variable (%s) or the environment (%s) you supplied DO NOT EXIST\n\tswitching to: \'opt_print(\"sum\")\' for an overview of existing environments & variables!",
                                 varDump, envPrint), type="warn", LOG=FALSE)
 
             envPrint <- "sum"

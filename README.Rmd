@@ -53,7 +53,7 @@ All of the example config files are included in the extdata directory.
 
 ```{r exampleLoad}
 library(histova)
-library(stringr) # for the str_remove call
+library(stringr) # for the str_remove call needed in the readme file...
 ```
 
 ***The following examples are loading the final jpg figure that is produced. It is possible to have the package output a figure to RStudio for immediate examination though the font configuration is often incomplete.***
@@ -69,6 +69,30 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 # saves in a temporary location
 histova::generate_figure(d,f, FALSE, FALSE)
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
+```
+
+### Review Options
+
+Print out the main aesthetic settings used for this plot (contained in the *figure* environment).
+
+```{r option_print_out}
+opt_print("fig")
+```
+
+### Edit Option
+
+Edit an aesthetic value.
+
+```{r option_set}
+opt_set("fig", "X.Angle", 90)
+```
+
+### Review Figure
+
+See what changed.
+
+```{r option_review_figure}
+build_figure(TRUE, FALSE)
 ```
 
 ## Config File

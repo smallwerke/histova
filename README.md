@@ -70,7 +70,7 @@ All of the example config files are included in the extdata directory.
 
 ``` r
 library(histova)
-library(stringr) # for the str_remove call
+library(stringr) # for the str_remove call needed in the readme file...
 ```
 
 ***The following examples are loading the final jpg figure that is
@@ -92,7 +92,7 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
 #> ------------------------------- histova 3.5.0.2 --------------------------------
-#> ----------------------- run on Thu May 22 14:16:42 2025 ------------------------
+#> ----------------------- run on Thu May 22 14:53:25 2025 ------------------------
 #> --------------------------------------------------------------------------------
 #> -------- Prep & Load config settings and data --------
 #>         file found and environments loaded successfully
@@ -118,12 +118,152 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Thu May 22 14:16:42 2025 ---------------------
+#> --------------------- finihsed on Thu May 22 14:53:26 2025 ---------------------
 #> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
 
 <img src="inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg" width="100%" />
+
+### Review Options
+
+Print out the main aesthetic settings used for this plot (contained in
+the *figure* environment).
+
+``` r
+opt_print("fig")
+#> -------------------------- Variables per Environment ---------------------------
+#>     select environments submitted, checking to make sure each is valid...
+#>     print out the following environments: 'fig'
+#>     Data summary (first 40 characters) will be printed for each listed variable.
+#> ----------------------------------- ENV: fig -----------------------------------
+#> Axis
+#>     LabelSep                    Axis.LabelSep            20
+#>     LabelSize                   Axis.LabelSize           26
+#>     TitleSize                   Axis.TitleSize           26
+#>     ValueSize                   Axis.ValueSize           26
+#>     X
+#>         Main
+#>             Color               Axis.X.Main.Color        black
+#>             Size                Axis.X.Main.Size         0.8
+#>         Tick
+#>             Color               Axis.X.Tick.Color        black
+#>             Length              Axis.X.Tick.Length       0.1
+#>             Size                Axis.X.Tick.Size         0.6
+#>     Y
+#>         Main
+#>             Color               Axis.Y.Main.Color        black
+#>             Size                Axis.Y.Main.Size         0.8
+#>         Tick
+#>             Color               Axis.Y.Tick.Color        black
+#>             Length              Axis.Y.Tick.Length       0.1
+#>             Size                Axis.Y.Tick.Size         0.6
+#> Bar
+#>     Border
+#>         Color                   Bar.Border.Color         white
+#>         Width                   Bar.Border.Width         0.2
+#>     Width                       Bar.Width                0.8
+#> Color
+#>     Alpha
+#>         List                    Color.Alpha.List         0.6, 0.6, 0.6, 0.6, 0.6, 0.6
+#>     List                        Color.List               #000000, #606060, #00c000, #f71480, #000
+#> Colors                          Colors
+#>     Alpha                       Colors.Alpha             0.6
+#>     Unique                      Colors.Unique            c("G1", "G2", "G3", "G4", "G5", "G6"), c
+#> Convert                         Convert                  TRUE
+#> Coord
+#>     Fixed                       Coord.Fixed              TRUE
+#>         Ratio                   Coord.Fixed.Ratio        SQUARE
+#> Facet
+#>     Split                       Facet.Split              FALSE
+#> Font                            Font                     sans
+#> Legend
+#>     Color
+#>         Source                  Legend.Color.Source      All
+#>     Display                     Legend.Display           FALSE
+#>     Key
+#>         Size                    Legend.Key.Size          0.25
+#>     LabelSize                   Legend.LabelSize         26
+#>     Position                    Legend.Position          bottom
+#>     Title                       Legend.Title
+#>         tmp                     Legend.Title.tmp
+#> Plot
+#>     ErrorBar
+#>         Color                   Plot.ErrorBar.Color      black
+#>         EndWidth                Plot.ErrorBar.EndWidth   0.4
+#>         Size                    Plot.ErrorBar.Size       0.8
+#>     HLine                       Plot.HLine               NA, 0,
+#>     Labels                      Plot.Labels              G5, G4, G3, G6, G2, G1
+#>     Whisker                     Plot.Whisker             FALSE
+#> Save
+#>     DPI                         Save.DPI                 320
+#>     Height                      Save.Height              8.5
+#>     Type                        Save.Type                jpg
+#>     Units                       Save.Units               in
+#>     Width                       Save.Width               8
+#> Scatter
+#>     Alpha                       Scatter.Alpha            0.8
+#>         List                    Scatter.Alpha.List       0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8,
+#>     Color                       Scatter.Color            #FFD700
+#>         List                    Scatter.Color.List       #FFD700, #FFD700, #FFD700, #FFD700, #FFD
+#>         Source                  Scatter.Color.Source     UNIQUE
+#>     Disp                        Scatter.Disp             TRUE
+#>     Shape                       Scatter.Shape            4
+#>         List                    Scatter.Shape.List       4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 1, 1, 1
+#>     Size                        Scatter.Size             1.8
+#>         List                    Scatter.Size.List        1.8, 1.8, 1.8, 1.8, 1.8, 3.8, 3.8, 3.8,
+#>     Stroke                      Scatter.Stroke           1
+#>         List                    Scatter.Stroke.List      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+#> Title                           Title                    1 Group Test
+#>     Size                        Title.Size               32
+#>     tmp                         Title.tmp                1 Group Test
+#> X                               X                        Basic Figure<br>*differing scatter shape
+#>     Angle                       X.Angle                  45
+#>     Tick
+#>         Display                 X.Tick.Display           TRUE
+#>     tmp                         X.tmp                    Basic Figure<br>*differing scatter shape
+#>     Value
+#>         Display                 X.Value.Display          TRUE
+#> Y                               Y                        µ values
+#>     Break                       Y.Break                  FALSE
+#>         df                      Y.Break.df               logical(0), logical(0), logical(0)
+#>     Interval                    Y.Interval               5
+#>     Max                         Y.Max                    20
+#>     Min                         Y.Min                    0
+#>     Rig                         Y.Rig                    FALSE
+#>         Newline                 Y.Rig.Newline            FALSE
+#>     Supp                        Y.Supp
+#>     tmp                         Y.tmp                    µ values
+```
+
+### Edit Option
+
+Edit an aesthetic value.
+
+``` r
+opt_set("fig", "X.Angle", 90)
+#> ---------------------------------- Set Option ----------------------------------
+#> [1] "PASS"
+```
+
+### Review Figure
+
+See what changed.
+
+``` r
+build_figure(TRUE, FALSE)
+#> -------- Build Histogram --------
+#> ---- Setting Aesthetics
+#>         assigning settings for 6 groups (G1 G2 G3 G4 G5 G6)
+#> ---- Building Histogram
+#> ---- Generate Figure Labels
+```
+
+<img src="man/figures/README-option_review_figure-1.png" width="100%" />
+
+    #> --------------------------------------------------------------------------------
+    #> --------------------- finihsed on Thu May 22 14:53:27 2025 ---------------------
+    #> --------------------------------------------------------------------------------
 
 ## Config File
 
