@@ -101,7 +101,7 @@ print_settings <- function(envPrint = "all") {
     for (envName in envList) {
 
         # the root environment will be printed out as the base name
-        histova_msg(sprintf("ENV: %s", envName), type="head", LOG=FALSE)
+        histova_msg(sprintf("ENV: %s", envName), type="title", LOG=FALSE)
         #l = 1
         # get the envrionment being worked on
         current <- get(envName, envir=env_dict)
