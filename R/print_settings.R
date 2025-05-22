@@ -9,21 +9,53 @@
 #' of the variables for each environment. Can also send a name or vector of names for the environments
 #' that you want to print out. If an environment isn't found a warning will be sent.
 #'
+#' If you want the complete data contained within a variable specify the environment name 'envPrint'
+#' followed by variable 'varDump' you want the entire data for.
+#'
 #' @param envPrint the environment/s to print, send all to print everything, sum to print env overview
+#' @param varDump the full name of the variable if you want a complete printout of the data
 #' @param includeData T/F if the beginning of the data should be included
 #'
 #' @export
 #'
 #' @examples
 #' print_settings("all")
-print_settings <- function(envPrint = "all", includeData = TRUE) {
+print_settings <- function(envPrint = "all", varDump = NULL, includeData = TRUE) {
 
     histova_msg(sprintf("Variables per Environment"), type="title", LOG=FALSE)
 
+    # build a vector to store the environments to print
+    envList <- c()
+
+    # IF a variable is specified to do a comprehensive dump from set the envList & envPrint
+    # to NULL to skip the rest of the function...
+    if (!is.null(varDump)) {
+
+        if ((exists(envPrint)) && (exists(varDump, envir=get(envPrint)))) {
+            histova_msg(sprintf("Env: %s", envPrint), type="head", LOG=FALSE)
+            histova_msg(sprintf("Var: %s", varDump), type="head", LOG=FALSE)
+            histova_msg(sprintf("Data:"), type="head", LOG=FALSE)
+
+            # pull the data:
+            varDumpData = get(varDump, envir=get(envPrint))
+            histova_msg(sprintf("%s", toString(varDumpData)), type="msg", LOG=FALSE)
+
+            # setting the following to null will skip over the rest fo the function...
+            envPrint <- NULL
+            envList <- NULL
+
+        } else {
+            histova_msg(sprintf("Either the variable (%s) or the environment (%s) you supplied DO NOT EXIST\n\tswitching to: \'print_settings(\"sum\")\' to provide an overview of existing environments & variables!",
+                                varDump, envPrint), type="warn", LOG=FALSE)
+
+            envPrint <- "sum"
+            varDump <- NULL
+        }
+
+    }
+
     # this will simply print a list of each recorded environment for this package AND
     # all of its variables in the nested format
-    # build a vector to store the environments to print
-    envList = c()
     # if 'all' is submitted then pull from the manually generated list of environments (from aaa.R)
     if ((length(envPrint) == 1) && (envPrint == "all")) {
         envList <- the$envList
@@ -42,7 +74,7 @@ print_settings <- function(envPrint = "all", includeData = TRUE) {
         }
     # if a custom environment name/s are submitted then check each one to make sure it exists
     # before adding it to the list of environments, otherwise throw a warning and keep on moving
-    } else {
+    } else if (!is.null(envPrint)) {
         histova_msg("select environments submitted, checking to make sure each is valid...", tabs=1, LOG=FALSE)
 
         # if a single environment is submitted:

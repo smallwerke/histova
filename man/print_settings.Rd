@@ -4,10 +4,12 @@
 \alias{print_settings}
 \title{Print Settings}
 \usage{
-print_settings(envPrint = "all", includeData = TRUE)
+print_settings(envPrint = "all", varDump = NULL, includeData = TRUE)
 }
 \arguments{
 \item{envPrint}{the environment/s to print, send all to print everything, sum to print env overview}
+
+\item{varDump}{the full name of the variable if you want a complete printout of the data}
 
 \item{includeData}{T/F if the beginning of the data should be included}
 }
@@ -21,6 +23,9 @@ There are three ways to use this function. Sending in the string "all" will prin
 environments and their variable names. "sum" will only print the environment names and a list
 of the variables for each environment. Can also send a name or vector of names for the environments
 that you want to print out. If an environment isn't found a warning will be sent.
+
+If you want the complete data contained within a variable specify the environment name 'envPrint'
+followed by variable 'varDump' you want the entire data for.
 }
 \examples{
 print_settings("all")
