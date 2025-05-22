@@ -1,6 +1,6 @@
 Package: histova
 Title: Histogram ANOVA
-Version: 3.5.0.0001
+Version: 3.5.0.0002
 Authors@R: 
     person("Niels", , , "6153030+smallwerke@users.noreply.github.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0481-5464"))
@@ -8,7 +8,7 @@ Description: This package pulls in data and display settings from a text file an
 License: AGPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

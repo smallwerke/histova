@@ -2,7 +2,7 @@
 % Please edit documentation in R/histova_msg.R
 \name{histova_msg}
 \alias{histova_msg}
-\title{histova message}
+\title{Histova Message}
 \usage{
 histova_msg(
   msg,
@@ -27,5 +27,5 @@ histova_msg(
 \item{LOG}{T/F Write to .histova log file}
 }
 \description{
-histova message
+Histova Message
 }

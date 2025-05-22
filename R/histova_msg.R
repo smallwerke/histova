@@ -1,4 +1,4 @@
-#' histova message
+#' Histova Message
 #'
 #' @param msg Simple text string to print out / write to file
 #' @param type title/head/subhead/msg/warn For what type of print call to use (title, head & subhead include formatting)
