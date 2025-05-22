@@ -2,13 +2,22 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 **NOTE: This is still a work in progress *but* the package is
-functioning and was able to recreate my previous set of test figures
-without error. I am still going through and doing some code cleanup &
-documentation before beginning to add more features. A few ggplot2
-related warning messages still print during figure generation but the
-code is functional. I will be uploading additional example configuration
-files in the near future and adding documentation. The config header
-file DOES explain all of the existing options.**
+functioning! I have begun to add new functions to make the package more
+interactive.** Immediate goals are to make the figure options (aesthetic
+& data) editable within R and then have the ability to write the figure
+data from session out to file. Functions now exist to view & edit figure
+options. Next step is to write the config file and then make the import
+of data from other sources possible. This will help integrate this
+package with things like
+[RQdeltaCT](https://github.com/Donadelnal/RQdeltaCT) (which enables
+generation of relative expression data from CT information) into a
+streamlined path to running QC and generating relative expression
+figures from RT-qPCR data. I have an R Markdown script that will be
+uploaded which walks through the use of both scripts…
+
+**All Images in this readme are loaded from file since the plot output
+from generate_figure() or build_figure() have skewed dimensions from
+what is specified in the options and written to file.**
 
 # histova
 
@@ -92,7 +101,7 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
 #> ------------------------------- histova 3.5.0.2 --------------------------------
-#> ----------------------- run on Thu May 22 15:04:13 2025 ------------------------
+#> ----------------------- run on Thu May 22 15:22:23 2025 ------------------------
 #> --------------------------------------------------------------------------------
 #> -------- Prep & Load config settings and data --------
 #>         file found and environments loaded successfully
@@ -118,7 +127,7 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Thu May 22 15:04:14 2025 ---------------------
+#> --------------------- finihsed on Thu May 22 15:22:24 2025 ---------------------
 #> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
@@ -261,22 +270,12 @@ histova::opt_print("fig", "X.Angle")
 #> -------- Var: X.Angle --------
 #> -------- Data: --------
 #> 90
-histova::opt_print("the", "Loc.File")
+histova::opt_print("the", "Location.File")
 #> -------------------------- Variables per Environment ---------------------------
-#> Either the variable (Loc.File) or the environment (the) you supplied DO NOT EXIST
-#>  switching to: 'opt_print("sum")' for an overview of existing environments & variables!
-#> Warning: FROM histova::opt_print("the", "Loc.File"): Either the variable (Loc.File) or the environment (the) you supplied DO NOT EXIST
-#>  switching to: 'opt_print("sum")' for an overview of existing environments & variables!
-#> ----------------------------------- ENV: the -----------------------------------
-#> CONTENTS OF ENV: Location.Dir, Location.File, envList, gplot, Override, savePlot
-#> ----------------------------------- ENV: fig -----------------------------------
-#> CONTENTS OF ENV: Scatter.Stroke.List, Plot.ErrorBar.Size, Axis.Y.Tick.Length, Save.Height, Axis.ValueSize, Scatter.Shape, X.tmp, Scatter.Shape.List, X, Y, X.Angle, Bar.Border.Color, Y.Min, Font, Y.Interval, Axis.Y.Tick.Size, Save.Type, Colors.Alpha, X.Tick.Display, Scatter.Stroke, Axis.X.Tick.Color, Legend.Title.tmp, Save.Width, Convert, Title, Scatter.Alpha.List, Axis.X.Tick.Size, Axis.X.Tick.Length, Color.Alpha.List, Axis.LabelSize, Legend.Position, Coord.Fixed, Scatter.Size.List, Y.tmp, Axis.TitleSize, Axis.X.Main.Size, Title.Size, Axis.Y.Tick.Color, Plot.ErrorBar.Color, Title.tmp, Scatter.Color.List, Scatter.Alpha, Scatter.Disp, Colors.Unique, Legend.Title, Colors, Save.Units, Y.Max, Y.Supp, Bar.Border.Width, Axis.Y.Main.Size, Y.Break.df, Coord.Fixed.Ratio, Legend.LabelSize, Axis.X.Main.Color, Color.List, X.Value.Display, Scatter.Color.Source, Plot.Labels, Y.Break, Axis.LabelSep, Scatter.Size, Y.Rig.Newline, Legend.Key.Size, Plot.HLine, Scatter.Color, Plot.Whisker, Y.Rig, Facet.Split, Bar.Width, Plot.ErrorBar.EndWidth, Legend.Display, Legend.Color.Source, Save.DPI, Axis.Y.Main.Color
-#> ---------------------------------- ENV: notes ----------------------------------
-#> CONTENTS OF ENV: Stats.Method, Stats.Outlier
-#> ----------------------------------- ENV: raw -----------------------------------
-#> CONTENTS OF ENV: aov.multi, outlier, multi, summary, summary.multi, aov.tukey.multi, anova.multi, base
-#> ---------------------------------- ENV: stats ----------------------------------
-#> CONTENTS OF ENV: Outlier, Letters.Size, Caption.Display, Tukey.Labels, Test, Letters.Offset, STTest.Pairs, Group1.Mute, PTTest.Pairs, Caption.Size, Transform.Treatment, Tukey.Levels, Transform, Anova.Group2
+#> -------- Env: the --------
+#> -------- Var: Location.File --------
+#> -------- Data: --------
+#> test-1_group-ANOVA_scatter_outlier-90.txt
 ```
 
 ### Review Figure
@@ -291,7 +290,7 @@ histova::build_figure(FALSE, FALSE)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Thu May 22 15:04:14 2025 ---------------------
+#> --------------------- finihsed on Thu May 22 15:22:24 2025 ---------------------
 #> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier-90.jpg")
 ```

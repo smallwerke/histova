@@ -13,7 +13,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-**NOTE: This is still a work in progress *but* the package is functioning and was able to recreate my previous set of test figures without error. I am still going through and doing some code cleanup & documentation before beginning to add more features. A few ggplot2 related warning messages still print during figure generation but the code is functional. I will be uploading additional example configuration files in the near future and adding documentation. The config header file DOES explain all of the existing options.** 
+**NOTE: This is still a work in progress *but* the package is functioning! I have begun to add new functions to make the package more interactive.** Immediate goals are to make the figure options (aesthetic & data) editable within R and then have the ability to write the figure data from session out to file. Functions now exist to view & edit figure options. Next step is to write the config file and then make the import of data from other sources possible. This will help integrate this package with things like [RQdeltaCT](https://github.com/Donadelnal/RQdeltaCT) (which enables generation of relative expression data from CT information) into a streamlined path to running QC and generating relative expression figures from RT-qPCR data. I have an R Markdown script that will be uploaded which walks through the use of both scripts...
+
+**All Images in this readme are loaded from file since the plot output from generate_figure() or build_figure() have skewed dimensions from what is specified in the options and written to file.**
 
 # histova
 
@@ -94,7 +96,7 @@ Print out the main aesthetic settings used for this plot (contained in the *figu
 
 ```{r option_print_out_check}
 histova::opt_print("fig", "X.Angle")
-histova::opt_print("the", "Loc.File")
+histova::opt_print("the", "Location.File")
 ```
 
 ### Review Figure
