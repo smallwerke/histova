@@ -101,7 +101,7 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
 #> ------------------------------- histova 3.5.0.2 --------------------------------
-#> ----------------------- run on Thu May 22 15:22:23 2025 ------------------------
+#> ----------------------- run on Thu May 22 15:46:54 2025 ------------------------
 #> --------------------------------------------------------------------------------
 #> -------- Prep & Load config settings and data --------
 #>         file found and environments loaded successfully
@@ -127,7 +127,7 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Thu May 22 15:22:24 2025 ---------------------
+#> --------------------- finihsed on Thu May 22 15:46:54 2025 ---------------------
 #> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
@@ -290,7 +290,7 @@ histova::build_figure(FALSE, FALSE)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Thu May 22 15:22:24 2025 ---------------------
+#> --------------------- finihsed on Thu May 22 15:46:54 2025 ---------------------
 #> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier-90.jpg")
 ```

@@ -12,6 +12,13 @@
 #' @export
 #'
 build_figure <- function(printPlot = FALSE, savePlot = TRUE) {
+
+    # setup the connection needed for the logfile (if in use)
+    if (savePlot) {
+        the$Location.Log = paste0(the$Location.Dir, "/", sub("txt", "histova", the$Location.File))
+        the$LOG = file(the$Location.Log, open = "a")
+    }
+
     histova_msg("Build Histogram", type="head")
     set_aesthetics()
     build_histo()

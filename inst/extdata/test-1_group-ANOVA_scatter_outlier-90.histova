@@ -1,0 +1,15 @@
+-------- Build Histogram --------
+---- Setting Aesthetics
+        assigning settings for 6 groups (G1 G2 G3 G4 G5 G6)
+---- Building Histogram
+---- Generate Figure Labels
+---- Stat Notes:
+Statistical test:  one-way ANOVA (F(5,29) = 16.79, p = 8.551e-08) with Tukey's HSD post hoc test (alpha = 0.05)
+Statistical test:  one-way ANOVA (F(5,29) = 16.79, p = 8.551e-08) with Tukey's HSD post hoc test (alpha = 0.05)
+ Outlier Check (two tailed removal) G1 (19.000)
+----
+-------- SAVE Histogram --------
+    saving your new figure to: '/Users/M278784/Documents/Statistics/histova/inst/extdata/test-1_group-ANOVA_scatter_outlier-90.jpg'
+--------------------------------------------------------------------------------
+--------------------- finihsed on Thu May 22 15:42:20 2025 ---------------------
+--------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
-------------------------------- histova 3.5.0.1 --------------------------------
------------------------ run on Wed May 21 21:24:39 2025 ------------------------
+------------------------------- histova 3.5.0.2 --------------------------------
+----------------------- run on Thu May 22 15:42:04 2025 ------------------------
 --------------------------------------------------------------------------------
 -------- Prep & Load config settings and data --------
         file found and environments loaded successfully
@@ -28,7 +28,7 @@ Statistical test:  one-way ANOVA (F(5,29) = 16.79, p = 8.551e-08) with Tukey's H
  Outlier Check (two tailed removal) G1 (19.000)
 ----
 -------- SAVE Histogram --------
-    saving your new figure to: 'inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg'
+    saving your new figure to: '/Users/M278784/Documents/Statistics/histova/inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg'
 --------------------------------------------------------------------------------
---------------------- finihsed on Wed May 21 21:24:39 2025 ---------------------
+--------------------- finihsed on Thu May 22 15:42:05 2025 ---------------------
 --------------------------------------------------------------------------------
