@@ -1,0 +1,34 @@
+--------------------------------------------------------------------------------
+------------------------------- histova 3.5.0.1 --------------------------------
+----------------------- run on Wed May 21 21:24:39 2025 ------------------------
+--------------------------------------------------------------------------------
+-------- Prep & Load config settings and data --------
+        file found and environments loaded successfully
+---- Initialize envrionment variables
+---- Load config (file: test-1_group-ANOVA_scatter_outlier.txt)
+---- Load data (file: test-1_group-ANOVA_scatter_outlier.txt)
+        6 final Group1_Group2 (statGroups - should be unique!) ids:
+             G1 G2 G3 G4 G5 G6
+-------- Statistical Analysis --------
+---- Outlier checking
+        TWO TAILED REMOVAL on group G1 (value 19, p.val: 2.34e-03)
+---- Run stats prep (basic summaries)
+        6 final Group1_Group2 (statGroups - should be unique!) ids:
+             G1 G2 G3 G4 G5 G6
+---- ANOVA w/ Tukeys Post Hoc
+        6 final Group1_Group2 (statGroups - should be unique!) ids:
+             G1 G2 G3 G4 G5 G6
+-------- Build Histogram --------
+---- Setting Aesthetics
+        assigning settings for 6 groups (G1 G2 G3 G4 G5 G6)
+---- Building Histogram
+---- Generate Figure Labels
+---- Stat Notes:
+Statistical test:  one-way ANOVA (F(5,29) = 16.79, p = 8.551e-08) with Tukey's HSD post hoc test (alpha = 0.05)
+ Outlier Check (two tailed removal) G1 (19.000)
+----
+-------- SAVE Histogram --------
+    saving your new figure to: 'inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg'
+--------------------------------------------------------------------------------
+--------------------- finihsed on Wed May 21 21:24:39 2025 ---------------------
+--------------------------------------------------------------------------------

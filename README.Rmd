@@ -82,3 +82,4 @@ Following is a header file config file detailing all the various settings and ou
 #
 paste(readLines('inst/extdata/header_config.txt')) 
 ```
+

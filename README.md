@@ -13,6 +13,7 @@ file DOES explain all of the existing options.**
 # histova
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 The goal of histova is to package a script that I am using to display a
@@ -90,8 +91,8 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 # saves in a temporary location
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
-#> ------------------------------- histova 3.5.0.1 --------------------------------
-#> ----------------------- run on Mon May 13 15:46:04 2024 ------------------------
+#> ------------------------------- histova 3.5.0.2 --------------------------------
+#> ----------------------- run on Thu May 22 14:16:42 2025 ------------------------
 #> --------------------------------------------------------------------------------
 #> -------- Prep & Load config settings and data --------
 #>         file found and environments loaded successfully
@@ -117,7 +118,7 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Mon May 13 15:46:04 2024 ---------------------
+#> --------------------- finihsed on Thu May 22 14:16:42 2025 ---------------------
 #> --------------------------------------------------------------------------------
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```

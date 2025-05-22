@@ -1,4 +1,4 @@
-#' Print Settings
+#' Print Options & Settings
 #'
 #' This function simply prints out overview information about the loaded settings and data.
 #' This includes data variable names AND group names for data. The data is printed out in a
@@ -19,8 +19,8 @@
 #' @export
 #'
 #' @examples
-#' print_settings("all")
-print_settings <- function(envPrint = "all", varDump = NULL, includeData = TRUE) {
+#' opt_print("all")
+opt_print <- function(envPrint = "all", varDump = NULL, includeData = TRUE) {
 
     histova_msg(sprintf("Variables per Environment"), type="title", LOG=FALSE)
 
@@ -167,6 +167,6 @@ print_settings <- function(envPrint = "all", varDump = NULL, includeData = TRUE)
         #keys <- ls(current, all.names = TRUE)
         # this function will recursively scan through the entire environment 'dict'
         # and print out a nice little hierarchical tree...
-        print_env_dict(current, envName, rootEnv, -1, includeData)
+        opt_print_env_dict(current, envName, rootEnv, -1, includeData)
     }
 }

@@ -1,4 +1,4 @@
-#' Print Environment Dictionary
+#' Print Environment Dictionary of Options / Settings
 #'
 #' Simple and largely internal function that traverses a pseudo dictionary composed of environment variables
 #' to dynamically print out variable information that this package depends on. Function is designed to be a
@@ -14,7 +14,7 @@
 #' @returns depth of print in tabs
 #' @export
 #'
-print_env_dict <- function(env, name, rootEnv, depth = 0, includeData = TRUE) {
+opt_print_env_dict <- function(env, name, rootEnv, depth = 0, includeData = TRUE) {
     # assume this will only ever be called on an environment go ahead and print it as such...
     # BUT only if the depth is at 0 or greater... -1 is used for indicating the base environment
     # to start from and not bother printing that environment name...
@@ -54,7 +54,7 @@ print_env_dict <- function(env, name, rootEnv, depth = 0, includeData = TRUE) {
         # given R's propensity to modify parent variables return from the function called depth - 1
         # which essentially resets the home depth to where it should be..
         if (is.environment(value)) {
-            depth = print_env_dict(value, key, rootEnv, depth+1, includeData)
+            depth = opt_print_env_dict(value, key, rootEnv, depth+1, includeData)
         }
     }
 
