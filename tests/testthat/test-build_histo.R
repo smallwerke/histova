@@ -8,6 +8,7 @@ test_that("testing the ability to build a histogram", {
     # populate the environment variables
     load_file_head()
     load_data()
+    run_data()
     if (stats$Outlier != FALSE) { run_outlier() }
     run_stats_prep()
 

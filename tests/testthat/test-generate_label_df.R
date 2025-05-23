@@ -8,6 +8,7 @@ test_that("testing the ability to build a labels from the general flow", {
     # populate the environment variables
     load_file_head()
     load_data()
+    run_data()
     if (stats$Outlier != FALSE) { run_outlier() }
     run_stats_prep()
 
@@ -85,6 +86,7 @@ test_that("testing the ability to build a labels from a direct call to generate_
     # populate the environment variables
     load_file_head()
     load_data()
+    run_data()
     if (stats$Outlier != FALSE) { run_outlier() }
     run_stats_prep()
 

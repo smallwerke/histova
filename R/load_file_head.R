@@ -48,20 +48,20 @@ load_file_head = function() {
         ################ OVERRIDE? ################
         if (lA[[1]][1] == "Override") {
             if (lA[[1]][2] %in% c("TRUE", "True", "true", "1")) {
-                if (isTRUE(the$Override)) { histova_msg("turning override ON AND overwriting previous override!!") }
-                else { histova_msg("turning override ON!!") }
+                if (isTRUE(the$Override)) { histova_msg("turning override ON AND overwriting previous override!!", tabs=1) }
+                else { histova_msg("turning override ON!!", tabs=1) }
 
                 # set override to true from here on out
                 Override.tmp <- TRUE
                 # turn off override protection if it was set
                 the$Override <- FALSE
                 # set all variables back to their default before moving on
-                histova_msg("resetting variables to defaults BEFORE loading config")
+                histova_msg("resetting variables to defaults BEFORE loading config", tabs=1)
                 init_vars()
             } else if (lA[[1]][2] %in% c("FALSE", "False", "false", "0")) {
                 histova_msg("turning override OFF!")
                 the$Override <- FALSE
-                histova_msg("resetting variables to defaults BEFORE loading config")
+                histova_msg("resetting variables to defaults BEFORE loading config", tabs=1)
                 init_vars()
             }
         }
@@ -93,7 +93,7 @@ load_file_head = function() {
             }
             # THIS SETTING CURRENTLY DISABLED AND NOT IMPLEMENTED IN build_histo FUNCTION
             else if (lA[[1]][1] == "Coord Fixed Ratio") {
-                histova_msg(sprintf("Coord Fixed Ratio is currently disabled! Setting of \"Coord Fixed Ratio %s\" is being ignored.", lA[[1]][2]), type="warn")
+                histova_msg(sprintf("Coord Fixed Ratio is currently disabled! Setting of \"Coord Fixed Ratio %s\" is being ignored.", lA[[1]][2]), type="warn", tabs=1)
                 if (lA[[1]][2] %in% c("FALSE", "False", "false")) {
                     fig$Coord.Fixed <- FALSE
                     fig$Coord.Fixed.Ratio <- ""
@@ -139,7 +139,7 @@ load_file_head = function() {
                 if (lA[[1]][1] == "Colors Unique") { colorDets = append(colorDets, NA, 0) }
 
                 if (length(colorDets) < 2) {
-                    histova_msg(sprintf("Colors Specific entry (%s) NOT VALID, at minimum \"G1_G2\", \"HTML\" is required", lA[[1]][2]), type="warn")
+                    histova_msg(sprintf("Colors Specific entry (%s) NOT VALID, at minimum \"G1_G2\", \"HTML\" is required", lA[[1]][2]), type="warn", tabs=1)
                 } else {
                     #Colors Unique	G1_G2, #000000, 0.6, #FFD700, 0.8, 4, 1, 1.8
                     #Colors Unique	G1_G2, HTML, ALPHA, HTML, SHAPE, SIZE, STROKE, ALPHA
@@ -350,17 +350,17 @@ load_file_head = function() {
                 # check to see if the pairing is being defined AND if it
                 if (length(lA[[1]]) > 7) {
                     if (tolower(lA[[1]][8]) %in% c("paired", "unpaired")) { STTest.paired <- tolower(lA[[1]][8]) }
-                    else { histova_msg(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][8], STTest.paired), type="warn") }
+                    else { histova_msg(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][8], STTest.paired), type="warn", tabs=1) }
                 }
                 # check to see if the variance is being defined AND if it
                 if (length(lA[[1]]) > 6) {
                     if (tolower(lA[[1]][7]) %in% c("equal", "unequal")) { STTest.variance <- tolower(lA[[1]][7]) }
-                    else { histova_msg(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][7], STTest.variance), type="warn") }
+                    else { histova_msg(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][7], STTest.variance), type="warn", tabs=1) }
                 }
                 # check to see if a test is request AND if it is workable...
                 if (length(lA[[1]]) > 5) {
                     if (tolower(lA[[1]][6]) %in% c("two.sided", "greater", "less")) { STTest.tails <- tolower(lA[[1]][6]) }
-                    else { histova_msg(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][6], STTest.tails), type="warn") }
+                    else { histova_msg(sprintf("---- Argument in STTest (%s) NOT VALID, using default (%s) instead", lA[[1]][6], STTest.tails), type="warn", tabs=1) }
                 }
                 # retain backwards compatability when the config file had sep lines for test & parings...
                 if (length(lA[[1]]) > 2) {
@@ -377,12 +377,12 @@ load_file_head = function() {
                 # check to see if the variance is being defined AND if it
                 if (length(lA[[1]]) > 6) {
                     if (tolower(lA[[1]][7]) %in% c("equal", "unequal")) { PTTest.variance <- tolower(lA[[1]][7]) }
-                    else { histova_msg(sprintf("---- Argument in PTTest (%s) NOT VALID, using default (%s) instead", lA[[1]][7], PTTest.variance), type="warn") }
+                    else { histova_msg(sprintf("---- Argument in PTTest (%s) NOT VALID, using default (%s) instead", lA[[1]][7], PTTest.variance), type="warn", tabs=1) }
                 }
                 # check to see if a test is request AND if it is workable...
                 if (length(lA[[1]]) > 5) {
                     if (lA[[1]][6] %in% c("two.sided", "greater", "less")) { PTTest.tails <- lA[[1]][6] }
-                    else { histova_msg(sprintf("---- Argument in PTTest (%s) NOT VALID, using default (%s) instead", lA[[1]][6], PTTest.tails), type="warn") }
+                    else { histova_msg(sprintf("---- Argument in PTTest (%s) NOT VALID, using default (%s) instead", lA[[1]][6], PTTest.tails), type="warn", tabs=1) }
                 }
                 # retain backwards compatability when the config file had sep lines for test & parings...
                 if (length(lA[[1]]) > 2) {

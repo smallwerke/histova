@@ -8,6 +8,7 @@ test_that("testing the determination of outliers", {
     # populate the environment variables
     load_file_head()
     load_data()
+    run_data()
     expect_equal(sum(raw$base['Group1'] == "G1"), 6)
     if (stats$Outlier != FALSE) { run_outlier() }
     expect_equal(sum(raw$base['Group1'] == "G1"), 5)

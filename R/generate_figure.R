@@ -29,15 +29,19 @@
 #'
 generate_figure <- function(location.dir, location.file, printPlot = FALSE, savePlot = TRUE) {
 
-    ##########################################
-    # LOAD FILE
+    ############################################
+    # LOAD FILE (OPTIONS & DATA) - NOTHING MORE
     load_file(location.dir, location.file, savePlot)
 
-    ##########################################
-    # RUN STATS
+    ############################################
+    # PREP DATA ADJUSTMENTS
     run_data()
 
-    ##########################################
+    ############################################
+    # RUN STATS
+    run_stats()
+
+    ############################################
     # BUILD FIGURE
     build_figure(printPlot, savePlot)
 }

@@ -1,23 +1,27 @@
-# turn off ALL printing from histova_msg for the test process
-the$MUTE = TRUE
-test_that("testing the ability to set aesthetic values", {
-    the$Location.File <- "test-1_group-ANOVA_scatter_outlier.txt"
-    the$Location.Dir <- system.file("extdata", the$Location.File, package="histova")
-    the$Location.Dir <- substring(the$Location.Dir, 1, nchar(the$Location.Dir) - nchar(the$Location.File) -1 )
+#' Run requested stats
+#'
+#' Wrapper that kicks off any statistical analysis that have been requested in the file.
+#'
+#' @export
+#'
+run_stats <- function() {
+    histova_msg("Statistical Analysis", type = "head")
 
-    # populate the environment variables
-    load_file_head()
-    load_data()
-    run_data()
+    # move onto stats analysis
     if (stats$Outlier != FALSE) { run_outlier() }
     run_stats_prep()
+
+    histova_msg(sprintf("%s final Group1_Group2 (statGroups - should be unique!) ids:", length(levels(raw$base$statGroups)) ), tabs=2)
+    histova_msg(sprintf("%s", paste("", levels(raw$base$statGroups), collapse="")), tabs=3)
 
     # run actual tests
     if ("ANOVA" %in% stats$Test) { run_anova() }
     if ("STTest" %in% stats$Test) { run_sttest() }
+    #if ("PTTest" %in% Stats.Test) { run_ttest(TRUE) } # NOT YET IMPLEMENTED!
 
+    # if a transformation is being conducted (eg treatment over control)
+    # ** After a group is removed the ANOVA stats (if requested) are run again for ToverC **
     if (stats$Transform == "ToverC") {
-
         run_transform()
         # run the stats prep again to set the summary tables to the new values
         run_stats_prep()
@@ -38,6 +42,17 @@ test_that("testing the ability to set aesthetic values", {
             # Single Line
             fig$Y = bquote(.(fig$Y)~"("*.(fig$Y.Supp[[1]])*")")
         }
+        # general math expression:
+        #Fig.Y = bquote(.(Fig.Y)~"He"~r[xy]==~B^2)
+
+        # following will successfully store the expression...
+        #r = do.call(substitute, as.list(str2expression("r[xy]")))
+        # error prone BUT it will parse a expression stored in a string...
+        #Fig.Y = bquote(.(parse(text=Fig.Y)))
+        # FULL list of current html4
+        #"&Alpha;~&Beta;~&Gamma;~&Delta;~&Epsilon;~&Pi;~&Sigma;~&Tau;~&Phi;~&Omega;~&alpha;~&beta;~&gamma;~&delta;~&epsilon;~&pi;~&sigma;~&tau;~&phi;~&omega;~&bull;~&isin;~&notin;~&radic;~&infin;~&asymp;~&micro;"
+
+        #assign("Fig.Y", Fig.Y, envir = .GlobalEnv) ### CHANGED - no longer needed ###
     }
 
     # this may not be 100% necessary if the
@@ -45,6 +60,7 @@ test_that("testing the ability to set aesthetic values", {
     # but BEFORE removal of the control group
     if (stats$Transform == "ToverC") {
         if ("STTest" %in% stats$Test) { run_sttest() }
+        #if ("PTTest" %in% Stats.Test) { run_ttest(TRUE) }
     }
 
     # remove a group from being displayed (eg for treatment / control figures)
@@ -52,15 +68,23 @@ test_that("testing the ability to set aesthetic values", {
 
         histova_msg(sprintf("group1Mute is set to %s, attempting to remove this group! (file: %s)", stats$Group1.Mute, the$Location.File), type="warn", tabs=2)
 
+
         # convenient function but causes notes in packages...
+        #raw$base = subset(raw$base, Group1!=stats$Group1.Mute) ### CHANGED - to address Group1 not being in NAMESPACE ###
+        # traditional and 'more reliable'
         raw$base = raw$base[raw$base$Group1 != stats$Group1.Mute, ]
         raw$base[] = lapply(raw$base, function(x) if(is.factor(x)) factor(x) else x)
+        #assign("raw", raw, envir = .GlobalEnv) ### CHANGED - no longer needed ###
 
+        #raw$summary = subset(raw$summary, Group1!=stats$Group1.Mute)
         raw$summary = raw$summary[raw$summary$Group1 != stats$Group1.Mute, ]
         raw$summary[] = lapply(raw$summary, function(x) if(is.factor(x)) factor(x) else x)
+        #assign("raw.summary", raw.summary, envir = .GlobalEnv) ### CHANGED - no longer needed ###
 
+        #raw$summary.multi = subset(raw$summary.multi, Group1!=stats$Group1.Mute)
         raw$summary.multi = raw$summary.multi[raw$summary.multi$Group1 != stats$Group1.Mute, ]
         raw$summary.multi[] = lapply(raw$summary.multi, function(x) if(is.factor(x)) factor(x) else x)
+        #assign("raw.summary.multi", raw.summary.multi, envir = .GlobalEnv) ### CHANGED - no longer needed ###
     }
 
     # the ANOVA test should be run on the remaining groups POST transformation
@@ -68,13 +92,7 @@ test_that("testing the ability to set aesthetic values", {
         if ("ANOVA" %in% stats$Test) { run_anova() }
         # following vars are set in run_anova() (raw.anova.multi, raw.aov.multi, raw.aov.tukey.multi)
     }
+    histova_msg(sprintf("%s final Group1_Group2 (statGroups - should be unique!) ids:", length(levels(raw$base$statGroups)) ), tabs=2)
+    histova_msg(sprintf("%s", paste("", levels(raw$base$statGroups), collapse="")), tabs=3)
 
-    histova_msg("Build Histogram", type="head")
-    set_aesthetics()
-
-    expect_equal(sprintf("%s", fig$Color.List[[2]]), "#606060")
-    expect_equal(sprintf("%s", fig$Scatter.Color.List[[1]]), "#FFD700")
-    expect_equal(sprintf("%s", names(fig$Scatter.Size.List)[[32]]), "G6")
-    expect_equal(fig$Scatter.Size.List[["G3"]], 1.6)
-    expect_equal(fig$Scatter.Shape.List[["G5"]], 6)
-})
+}

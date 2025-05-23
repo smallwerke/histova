@@ -10,93 +10,59 @@
 #' @export
 #'
 run_data <- function() {
-    histova_msg("Statistical Analysis", type = "head")
 
-    # move onto stats analysis
-    if (stats$Outlier != FALSE) { run_outlier() }
-    run_stats_prep()
+    histova_msg("Data Manipulation", type = "head")
 
-    histova_msg(sprintf("%s final Group1_Group2 (statGroups - should be unique!) ids:", length(levels(raw$base$statGroups)) ), tabs=2)
-    histova_msg(sprintf("%s", paste("", levels(raw$base$statGroups), collapse="")), tabs=3)
+    histova_msg("run_data() carries out any requested manipulations (e.g. apply standard division for %)")
 
-    # run actual tests
-    if ("ANOVA" %in% stats$Test) { run_anova() }
-    if ("STTest" %in% stats$Test) { run_sttest() }
-    #if ("PTTest" %in% Stats.Test) { run_ttest(TRUE) } # NOT YET IMPLEMENTED!
+    # use raw$IN as the source for all data - this data should NOT be edited...
+    # raw$base is the location for all active work towards figure generation
+    # raw$IN is reserved for a dump of the input data immediately after it was read from the file and should NEVER be modified
+    # this is also the source for when a new file is written
+    #raw$base <- rlang::duplicate(raw$IN, shallow=FALSE)
+    raw$base <- unserialize(serialize(raw$IN, NULL))
 
-    # if a transformation is being conducted (eg treatment over control)
-    # ** After a group is removed the ANOVA stats (if requested) are run again for ToverC **
-    if (stats$Transform == "ToverC") {
-        run_transform()
-        # run the stats prep again to set the summary tables to the new values
-        run_stats_prep()
-
-        # remove the treatment group (it will be indicated by a line at 1)
-        stats$Group1.Mute = stats$Transform.Treatment[1]
-        fig$Plot.HLine = data.frame(y=c(1),size=c(1),color=c("black"))
-    }
-
-    # if the Y-values were adjusted (eg all divided by 1,000 - in run_stats_prep()) this will append the modification
-    # to the end of your y-axis label - you can select one or two lines...
+    # address any value manipulations - this can apply a standard division to ALL data values (eg divide by 1,000)
+    # prepare the Y axis label supplement that contains details on what was done to the data
     if (is.numeric(fig$Y.Rig)) {
-        if (fig$Y.Rig.Newline) {
-            # Two Lines
-            #Fig.Y = bquote(bold(atop(.(Fig.Y), "(" * .(Fig.Y.Supp[[1]]) * ")")))
-            fig$Y = bquote(atop(.(fig$Y), "(" * .(fig$Y.Supp[[1]]) * ")"))
-        } else {
-            # Single Line
-            fig$Y = bquote(.(fig$Y)~"("*.(fig$Y.Supp[[1]])*")")
+        histova_msg(sprintf("MODIFYING VALUES: DIVIDING ALL BY %s (file: %s)", fig$Y.Rig, the$Location.File), type="warn")
+        raw$base['Value'] = raw$base['Value']/fig$Y.Rig
+        fig$Y.Min <- fig$Y.Min/fig$Y.Rig
+        fig$Y.Max <- fig$Y.Max/fig$Y.Rig
+        fig$Y.Interval <- fig$Y.Interval/fig$Y.Rig
+
+        # update the y-break values
+        if (fig$Y.Break == TRUE) {
+            fig$Y.Break.df$start <- fig$Y.Break.df$start / fig$Y.Rig
+            fig$Y.Break.df$stop <- fig$Y.Break.df$stop / fig$Y.Rig
         }
-        # general math expression:
-        #Fig.Y = bquote(.(Fig.Y)~"He"~r[xy]==~B^2)
-
-        # following will successfully store the expression...
-        #r = do.call(substitute, as.list(str2expression("r[xy]")))
-        # error prone BUT it will parse a expression stored in a string...
-        #Fig.Y = bquote(.(parse(text=Fig.Y)))
-        # FULL list of current html4
-        #"&Alpha;~&Beta;~&Gamma;~&Delta;~&Epsilon;~&Pi;~&Sigma;~&Tau;~&Phi;~&Omega;~&alpha;~&beta;~&gamma;~&delta;~&epsilon;~&pi;~&sigma;~&tau;~&phi;~&omega;~&bull;~&isin;~&notin;~&radic;~&infin;~&asymp;~&micro;"
-
-        #assign("Fig.Y", Fig.Y, envir = .GlobalEnv) ### CHANGED - no longer needed ###
+        # update the HLine values
+        fig$Plot.HLine$y = sapply(fig$Plot.HLine$y, function(x) x/fig$Y.Rig)
+        #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - no longer needed ###
+        if (fig$Y.Rig > 100) {
+            fig$Y.Supp <- sfsmisc::pretty10exp(fig$Y.Rig, drop.1=TRUE)
+        } else {
+            fig$Y.Supp <- paste("x ", fig$Y.Rig, sep="")
+        }
+        #assign("Fig.Y.Supp", Fig.Y.Supp, envir = .GlobalEnv) ### CHANGED - no longer needed ###
     }
 
-    # this may not be 100% necessary if the
-    # the t-tests should be run on the remaining groups POST transformation
-    # but BEFORE removal of the control group
-    if (stats$Transform == "ToverC") {
-        if ("STTest" %in% stats$Test) { run_sttest() }
-        #if ("PTTest" %in% Stats.Test) { run_ttest(TRUE) }
+    # set the levels to be in the same order as the file...
+    # this also controls the order in which they display in the final figure...
+    raw$base$Group1 <- factor(convert_text(raw$base$Group1), levels = unique(convert_text(raw$base$Group1)))
+    if (!methods::is(raw$base$Group2, "NULL")) {
+        raw$base$Group2 <- factor(convert_text(raw$base$Group2), levels = unique(convert_text(raw$base$Group2)))
     }
 
-    # remove a group from being displayed (eg for treatment / control figures)
-    if ((stats$Group1.Mute != FALSE) && (stats$Anova.Group2 == FALSE)) {
-
-        histova_msg(sprintf("group1Mute is set to %s, attempting to remove this group! (file: %s)", stats$Group1.Mute, the$Location.File), type="warn", tabs=2)
-
-
-        # convenient function but causes notes in packages...
-        #raw$base = subset(raw$base, Group1!=stats$Group1.Mute) ### CHANGED - to address Group1 not being in NAMESPACE ###
-        # traditional and 'more reliable'
-        raw$base = raw$base[raw$base$Group1 != stats$Group1.Mute, ]
-        raw$base[] = lapply(raw$base, function(x) if(is.factor(x)) factor(x) else x)
-        #assign("raw", raw, envir = .GlobalEnv) ### CHANGED - no longer needed ###
-
-        #raw$summary = subset(raw$summary, Group1!=stats$Group1.Mute)
-        raw$summary = raw$summary[raw$summary$Group1 != stats$Group1.Mute, ]
-        raw$summary[] = lapply(raw$summary, function(x) if(is.factor(x)) factor(x) else x)
-        #assign("raw.summary", raw.summary, envir = .GlobalEnv) ### CHANGED - no longer needed ###
-
-        #raw$summary.multi = subset(raw$summary.multi, Group1!=stats$Group1.Mute)
-        raw$summary.multi = raw$summary.multi[raw$summary.multi$Group1 != stats$Group1.Mute, ]
-        raw$summary.multi[] = lapply(raw$summary.multi, function(x) if(is.factor(x)) factor(x) else x)
-        #assign("raw.summary.multi", raw.summary.multi, envir = .GlobalEnv) ### CHANGED - no longer needed ###
-    }
-
-    # the ANOVA test should be run on the remaining groups POST transformation
-    if (stats$Transform == "ToverC") {
-        if ("ANOVA" %in% stats$Test) { run_anova() }
-        # following vars are set in run_anova() (raw.anova.multi, raw.aov.multi, raw.aov.tukey.multi)
+    # create a list  of group IDs for use in the analysis - either a combination of 1 & 2 or simply 1
+    if (!methods::is(raw$base$Group2, "NULL")) {
+        raw$base$statGroups <- factor(with(raw$base, paste(Group1, Group2, sep="_")))
+        raw$base$statGroups <- factor(raw$base$statGroups, levels = unique(raw$base$statGroups))
+    } else {
+        raw$base$statGroups <- factor(raw$base$Group1, levels = unique(raw$base$Group1))
     }
     histova_msg(sprintf("%s final Group1_Group2 (statGroups - should be unique!) ids:", length(levels(raw$base$statGroups)) ), tabs=2)
     histova_msg(sprintf("%s", paste("", levels(raw$base$statGroups), collapse="")), tabs=3)
+
+
 }

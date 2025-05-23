@@ -8,6 +8,7 @@ test_that("testing the ability to transform the dataset", {
     # populate the environment variables
     load_file_head()
     load_data()
+    run_data()
     if (stats$Outlier != FALSE) { run_outlier() }
     run_stats_prep()
 
