@@ -8,7 +8,8 @@ generate_figure(
   location.dir,
   location.file,
   printPlot = FALSE,
-  savePlot = TRUE
+  savePlot = TRUE,
+  saveLog = TRUE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ generate_figure(
 \item{printPlot}{Should the finished plot be printed}
 
 \item{savePlot}{Should the finished plot & log be saved to disk}
+
+\item{saveLog}{T/f Should a log file be generated for this session}
 }
 \description{
 This is the main function that builds a plot based on the specified configuration file. Pass in

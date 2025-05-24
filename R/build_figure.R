@@ -6,18 +6,15 @@
 #' only inputs are optional defining if the plot should be printed and / or if
 #' it should be saved to disk.
 #'
-#' @param printPlot Should the finished plot be printed
-#' @param savePlot Should the finished plot & log be saved to disk
+#' @param printPlot T/F Should the finished plot be printed (def F)
+#' @param savePlot T/F Should the finished plot & log be saved to disk (def T)
+#' @param printEnvMsg T/F Passed on to set_env to determine if resume message printed (def T)
 #'
 #' @export
 #'
-build_figure <- function(printPlot = FALSE, savePlot = TRUE) {
+build_figure <- function(printPlot = FALSE, savePlot = TRUE, printEnvMsg = TRUE) {
 
-    # setup the connection needed for the logfile (if in use)
-    if (savePlot) {
-        the$Location.Log = paste0(the$Location.Dir, "/", sub("txt", "histova", the$Location.File))
-        the$LOG = file(the$Location.Log, open = "a")
-    }
+    set_env(the$Location.Dir, the$Location.File, the$Log.Save, env.new=FALSE, printEnvMsg)
 
     histova_msg("Build Histogram", type="head")
     set_aesthetics()
@@ -53,5 +50,11 @@ build_figure <- function(printPlot = FALSE, savePlot = TRUE) {
         }
     }
     histova_msg(sprintf("finihsed on %s", date()), type="title", breaker = "both")
-    if (savePlot) { close(the$LOG) }
+
+    if (is_con_open(the$LOG)) {
+        close(the$LOG)
+    }
 }
+
+
+

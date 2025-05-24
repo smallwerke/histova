@@ -13,6 +13,3 @@ the desired figure as well as what kind of statistical tests to carry out. These
 are all loaded into a few environments within the histova package and stored there
 to be accessible between functions. The Override option is controlled in this function.
 }
-\examples{
-load_file_head()
-}

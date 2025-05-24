@@ -4,12 +4,14 @@
 \alias{build_figure}
 \title{Build Figure}
 \usage{
-build_figure(printPlot = FALSE, savePlot = TRUE)
+build_figure(printPlot = FALSE, savePlot = TRUE, printEnvMsg = TRUE)
 }
 \arguments{
-\item{printPlot}{Should the finished plot be printed}
+\item{printPlot}{T/F Should the finished plot be printed (def F)}
 
-\item{savePlot}{Should the finished plot & log be saved to disk}
+\item{savePlot}{T/F Should the finished plot & log be saved to disk (def T)}
+
+\item{printEnvMsg}{T/F Passed on to set_env to determine if resume message printed (def T)}
 }
 \description{
 This function uses the aesthetic settings as defined in the environment and the

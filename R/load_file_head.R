@@ -9,8 +9,6 @@
 #'
 #' @export
 #'
-#' @examples
-#' load_file_head()
 load_file_head = function() {
 
     # forced reset

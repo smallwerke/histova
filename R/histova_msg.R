@@ -18,42 +18,42 @@ histova_msg <- function(msg, type="msg", breaker=FALSE, tabs=0, PRINT=TRUE, LOG=
     # IF it is a warning message save a copy so that any indents or alterations aren't sent through to warning()
     if (type == "warn") { warnMsg = paste0("FROM ", deparse(sys.calls()[[sys.nframe()-1]]), ": ", msg)  }
 
-    if ((exists("MUTE", where=the)) && (the$MUTE)) { PRINT = FALSE }
+    if ((exists("MUTE", where=the)) && (the$MUTE)) { PRINT <- FALSE }
 
     # header code
-    breakLength = 80
-    headPad = 8
-    subHeadPad = 4
+    breakLength <- 80
+    headPad <- 8
+    subHeadPad <- 4
 
     # build the msg up
     if (type == "title") {
         pad = trunc((breakLength - nchar(msg))/2) - 1
         if (pad > 0) {
-            msg = paste(gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", pad, "s"), as.numeric("0"))),
+            msg <- paste(gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", pad, "s"), as.numeric("0"))),
                         msg,
                         gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", pad, "s"), as.numeric("0"))))
             if (nchar(msg) < breakLength) { msg = paste0(msg, "-") }
         }
     } else if (type == "head") {
-        msg = paste(gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", headPad, "s"), as.numeric("0"))),
+        msg <- paste(gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", headPad, "s"), as.numeric("0"))),
             msg,
             gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", headPad, "s"), as.numeric("0"))) )
     } else if (type == "subhead") {
-        msg = paste(gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", subHeadPad, "s"), as.numeric("0"))),
+        msg <- paste(gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", subHeadPad, "s"), as.numeric("0"))),
             msg)
     } else if ((type == "msg") || (type == "warn")) {
         if ((tabs > 0) && (tabs < 16)) {
-            indent = tabs * 4
-            msg = paste0(gsub(pattern = "0", replacement = " ", x = sprintf(paste0("%0", indent, "s"), as.numeric("0"))), msg)
+            indent <- tabs * 4
+            msg <- paste0(gsub(pattern = "0", replacement = " ", x = sprintf(paste0("%0", indent, "s"), as.numeric("0"))), msg)
         }
     }
 
     if (breaker == "above") {
         msg = paste0(gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", breakLength, "s"), as.numeric("0"))), "\n", msg)
     } else if (breaker == "below") {
-        msg = paste0(msg, "\n", gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", breakLength, "s"), as.numeric("0"))))
+        msg <- paste0(msg, "\n", gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", breakLength, "s"), as.numeric("0"))))
     } else if (breaker == "both") {
-        msg = paste0(gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", breakLength, "s"), as.numeric("0"))),
+        msg <- paste0(gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", breakLength, "s"), as.numeric("0"))),
                     "\n", msg, "\n",
                     gsub(pattern = "0", replacement = "-", x = sprintf(paste0("%0", breakLength, "s"), as.numeric("0"))))
     }
@@ -63,7 +63,13 @@ histova_msg <- function(msg, type="msg", breaker=FALSE, tabs=0, PRINT=TRUE, LOG=
         if (type == "warn") { warning(warnMsg, call. = FALSE) }
     }
 
-    if (exists("savePlot", where=the) && (LOG) && (the$savePlot)) {
-        writeLines(msg, the$LOG)
+    if (exists("Log.Save", where=the) && (LOG) && (the$Log.Save)) {
+        # check for the connection, if not open give it another try...
+        #if (!is_con_open(the$LOG)) {
+            #set_env(the$Location.Dir, the$Location.File, the$Log.Save, env.new = FALSE, printMsg = TRUE)
+        #}
+        if (is_con_open(the$LOG)) {
+            writeLines(msg, the$LOG)
+        }
     }
 }

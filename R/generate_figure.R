@@ -21,17 +21,24 @@
 #' @param location.file The file containing the data
 #' @param printPlot Should the finished plot be printed
 #' @param savePlot Should the finished plot & log be saved to disk
+#' @param saveLog T/f Should a log file be generated for this session
 #'
 #' @export
 #'
 #' @examples
 #' generate_figure("/Users/Shared/HISTOVA_DATA", "test.txt", savePlot = FALSE)
 #'
-generate_figure <- function(location.dir, location.file, printPlot = FALSE, savePlot = TRUE) {
+generate_figure <- function(location.dir, location.file, printPlot = FALSE, savePlot = TRUE, saveLog = TRUE) {
 
     ############################################
     # LOAD FILE (OPTIONS & DATA) - NOTHING MORE
-    load_file(location.dir, location.file, savePlot)
+    set_env(location.dir, location.file, saveLog) # OPENS logfile connection
+
+    # prep & load config info / data
+    load_file_head()
+
+    # load the data from the file and store it under raw$IN with NO modifications
+    load_data()
 
     ############################################
     # PREP DATA ADJUSTMENTS
@@ -43,5 +50,5 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
 
     ############################################
     # BUILD FIGURE
-    build_figure(printPlot, savePlot)
+    build_figure(printPlot, savePlot, printEnvMsg = FALSE) # CLOSES logfile connection
 }
