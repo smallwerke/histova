@@ -110,7 +110,7 @@ build_histo <- function(){
         axis.title.x = ggtext::element_markdown(margin = ggplot2::margin(t = fig$Axis.LabelSep, r = 0, b = 0, l = 0)),
         axis.line.y = ggplot2::element_line(color=fig$Axis.Y.Main.Color, linewidth=fig$Axis.Y.Main.Size),
         axis.line.x = ggplot2::element_line(color=fig$Axis.X.Main.Color, linewidth=fig$Axis.X.Main.Size),
-        axis.text = ggplot2::element_text(color="black", size=fig$Axis.ValueSize),
+        axis.text = ggplot2::element_text(color="black", size=fig$Axis.ValueSize),                                                                  # defines the axis text for the ticks
         axis.ticks.y = ggplot2::element_line(color=fig$Axis.Y.Tick.Color, linewidth=fig$Axis.Y.Tick.Size),
         axis.ticks.length.y = ggplot2::unit(fig$Axis.Y.Tick.Length, "cm"),
         axis.ticks.x = ggplot2::element_line(color=fig$Axis.X.Tick.Color, linewidth=fig$Axis.X.Tick.Size),
@@ -147,7 +147,7 @@ build_histo <- function(){
     if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
         gplot = gplot + ggplot2::scale_y_continuous(
             labels = function(x) format(x, scientific = Y.Rig.SCI),
-            expand = c(0, 0),
+            expand = c(0, 0),                                          # make the bars touch the x-axis
             limits=c(fig$Y.Min,fig$Y.Max),
             breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
             sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = fig$Plot.HLine$y, labels = format(fig$Plot.HLine$y, scientific = Y.Rig.SCI) )
@@ -156,7 +156,7 @@ build_histo <- function(){
         # include a NULL secondary axis otherwise IF a y-axis break is included there will be a second y-axis added
         gplot = gplot + ggplot2::scale_y_continuous(
             labels = function(x) format(x, scientific = Y.Rig.SCI),
-            expand = c(0, 0),
+            expand = c(0, 0),                                          # make the bars touch the x-axis
             limits=c(fig$Y.Min,fig$Y.Max),
             breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval)
             #sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = NULL, labels = NULL)
@@ -165,7 +165,7 @@ build_histo <- function(){
         # if no y-breaks than don't bother with the secondary axis (it will throw an error if left in)
         gplot = gplot + ggplot2::scale_y_continuous(
             labels = function(x) format(x, scientific = Y.Rig.SCI),
-            expand = c(0, 0),
+            expand = c(0, 0),                                          # make the bars touch the x-axis
             limits=c(fig$Y.Min,fig$Y.Max),
             breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval)
         )
