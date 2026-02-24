@@ -39,6 +39,11 @@ load_file_head = function() {
             l <- readLines(CON, 1);
         }
 
+        ################ FILE NAME ################
+        if (lA[[1]][1] == "File Name") {
+            the$File.Name <- lA[[1]][2]
+        }
+
         # maintain backwards compatibility - simply move this to a new line for analysis...
         if (lA[[1]][1] == "Stats STTest Pairs") { lA[[1]] <- c("Stats Test", "STTest", lA[[1]][-1]) }
         else if (lA[[1]][1] == "Stats PTTest Pairs") { lA[[1]] <- c("Stats Test", "PTTest", lA[[1]][-1]) }
@@ -67,12 +72,12 @@ load_file_head = function() {
         # Override will be set to false in init_vars() (called earlier) IF it doesn't exist
         if (isFALSE(the$Override)) {
             ################ Label Size and Appearance (OPT) ################
-            if (lA[[1]][1] == "Title Size") { fig$Title.Size <- lA[[1]][2]
-            } else if (lA[[1]][1] == "Axis Title Size") { fig$Axis.TitleSize <- lA[[1]][2]
-            } else if (lA[[1]][1] == "Axis Label Size") { fig$Axis.LabelSize <- lA[[1]][2]
-            } else if (lA[[1]][1] == "Axis Label Sep") { fig$Axis.LabelSep <- lA[[1]][2]
-            } else if (lA[[1]][1] == "Axis Value Size") { fig$Axis.ValueSize <- lA[[1]][2]
-            } else if (lA[[1]][1] == "Legend Label Size") { fig$Legend.LabelSize <- lA[[1]][2]
+            if (lA[[1]][1] == "Title Size") { fig$Title.Size <- as.numeric(lA[[1]][2])
+            } else if (lA[[1]][1] == "Axis Title Size") { fig$Axis.TitleSize <- as.numeric(lA[[1]][2])
+            } else if (lA[[1]][1] == "Axis Label Size") { fig$Axis.LabelSize <- as.numeric(lA[[1]][2])
+            } else if (lA[[1]][1] == "Axis Label Sep") { fig$Axis.LabelSep <- as.numeric(lA[[1]][2])
+            } else if (lA[[1]][1] == "Axis Value Size") { fig$Axis.ValueSize <- as.numeric(lA[[1]][2])
+            } else if (lA[[1]][1] == "Legend Label Size") { fig$Legend.LabelSize <- as.numeric(lA[[1]][2])
             } else if (lA[[1]][1] == "Text Convert") {
                 if (lA[[1]][2] %in% c("TRUE", "True", "true", "1")) { fig$Convert <- TRUE
                 } else { fig$Convert <- FALSE }
