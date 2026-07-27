@@ -1,4 +1,109 @@
-## TEST DATA - file name & details
+#' Write settings file
+#'
+#' Writes the functions currently loaded into the environment out to a file. If location.dir
+#' or location.file are NULL it will attempt to pull them from the environment. If not present
+#' an error message will be thrown. Overwrite determines if the function renames any existing
+#' file at this location appending the current date&time (-YYYYMMDD_HHMMSS).
+#'
+#' @param location.dir directory to look for the file, NULL use environment
+#' @param location.file name of the file, NULL use environment
+#' @param overwrite T/F if there is an existing file rename, F simply overwrite
+#'
+#' @export
+#'
+#' @examples
+#' write_file('dir', 'file')
+write_file <- function(location.dir=NULL, location.file=NULL, overwrite=FALSE) {
+
+    ###########################################################
+    # INPUT & ERROR CHECKS
+    #
+    if (is.null(location.dir)) {
+        if (env_var_exists("the", "Location.Dir")) {
+            location.dir <- the$Location.Dir
+        }
+    }
+    if (is.null(location.file)) {
+        if (env_var_exists("the", "Location.File")) {
+            location.file <- the$Location.File
+        }
+    }
+
+    # check for existence of file and overwrite status
+    if ((!overwrite) && (file.exists(paste0(location.dir, "/", location.file)) ) ) {
+        time.stamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+
+        location.file.suffix <- get_suffix(location.file)
+
+        # deal with a filename with or without a suffix...
+        if (is.null(location.file.suffix)) {
+            location.file.name <- location.file
+            location.file.rename <- paste0(location.file.name, "-", time.stamp)
+        } else {
+            # replace the suffix, use gsub to drop the trailing character (assumed to be '.'), append timestamp and then return the suffix...
+            location.file.name <- gsub('.{1}$', '', sub(paste0(location.file.suffix,"$"), "", location.file))
+            location.file.rename <- paste0(location.file.name, "-", time.stamp, ".", location.file.suffix)
+        }
+
+        histova_msg(sprintf("file exists and overwrite set to false - moving file to %s", location.file.rename))
+        file.copy(paste0(location.dir, "/", location.file), paste0(location.dir, "/", location.file.rename))
+    }
+
+    location.file = paste0("test-NEW_TEST-", location.file) # FOR DEBUGGING!!!
+    histova_msg(sprintf("Write config file into dir: \'%s\' in file: \'%s\'", location.dir, location.file))
+
+    ###########################################################
+    # time to get to work wriring the actual file!
+    #
+    # part of this process is going to be working through each section
+    # and including defaults if anything is missing and thinking through
+    # the best way to go through this
+
+    # OPEN FILE CONNECTION
+    fileOUT <- file(paste0(location.dir, "/", location.file), open = "w")
+
+    # move through the file line by line for now...
+    if (env_var_exists("the", "File.Name", FALSE)) {
+        msg = paste0("#File Name", "\t", the$File.Name)
+    } else {
+        msg <- "#File Name\tfile name & details OPTIONAL..."
+    }
+    writeLines(msg, fileOUT)
+
+    ###########################################################
+    # OVERRIDE SECTION
+    #
+    msg <- paste0("################ OVERRIDE? ################\n",
+                  "## !! OVERRIDE MUST BE AT THE TOP OF THE DATA FILE !!\n",
+                  "## Ability to save the optional (OPT) headed data for subsequent data files - makes consistent style formatting easier when making multiple figures\n",
+                  "## Override -> (TRUE: store the OPT values from this file until another TRUE is encountered; FALSE: turn override off and clear out the stored values)\n",
+                  "## DEF \"Override:''\"")
+    writeLines(msg, fileOUT)
+    # IF override isn't set OR is set to FALSE simply move on (FALSE is the default)
+    if ( (env_var_exists("the", "Override", FALSE))  && (isTRUE(the$Override)) ) {
+        msg <- paste0("#Override", "\t", "TRUE")
+        writeLines(msg, fileOUT)
+    }
+
+    ###########################################################
+    # LABEL SIZE AND APPEARANCE
+    #
+    msg <- paste0("################ Label Size and Appearance (OPT) ################\n",
+                  "## Set the size of the labels, the distance between the axis labels and the values & the axis value size\n",
+                  "## Text Convert -> scan the title & axis for html codes and convert to unicode; Text Font -> select a font\n",
+                  "## Conversion: (&Alpha; &Sigma; &alpha; &beta; &epsilon; &pi; &sigma; &bull; &isin; &radic; &micro; \\n); Fonts: (mono, sans, serif)\n",
+                  "## DEF: \"Title Size:32\"; \"Axis Title Size:26\"; Axis Label Size:26\"; \"Axis Label Sep:20\"; \"Axis Value Size: 26\"; \"Legend Label Size:26\"; \"Text Convert:TRUE\"; \"Text Font:sans\"")
+    writeLines(msg, fileOUT)
+    #if ( (env_var_exists("the", "Override", FALSE))  && (isTRUE(the$Override)) ) {
+
+
+    # CLOSE FILE CONNECTION
+    close(fileOUT)
+}
+
+
+
+#File Name	file name & details OPTIONAL...
 ################ OVERRIDE? ################
 ## !! OVERRIDE MUST BE AT THE TOP OF THE DATA FILE !!
 ## Ability to save the optional (OPT) headed data for subsequent data files - makes consistent style formatting easier when making multiple figures
@@ -9,7 +114,6 @@
 ## Text Convert -> scan the title & axis for html codes and convert to unicode; Text Font -> select a font
 ## Conversion: (&Alpha; &Sigma; &alpha; &beta; &epsilon; &pi; &sigma; &bull; &isin; &radic; &micro; \n); Fonts: (mono, sans, serif)
 ## DEF: "Title Size:32"; "Axis Title Size:26"; Axis Label Size:26"; "Axis Label Sep:20"; "Axis Value Size: 26"; "Legend Label Size:26"; "Text Convert:TRUE"; "Text Font:sans"
-#Title Size	38
 ################ Display of the Axis & Plot (OPT) ################
 ## X Value Angle -> Set the angle for X axis values (0 = no rotation, number = degree rotation)
 ## X Value Display -> display or not the values on the x-axis (TRUE / FALSE)
@@ -32,9 +136,9 @@
 ## Colors Alpha -> level of transparency for the given colors (0 to 1, def: 1)
 ## Scatter Display -> display individual data points as default of gold stars (TRUE / FALSE) (DEF: gold: #FFD700, shape: 4)
 ## Scatter Alpha -> set default transparency of the scatter points (0 to 1, def: 1)
-## Scatter ColorShapeSize -> set ONE color OR MATCH the group colors OR UNIQUE from the unique/specific setting list (MATCH, UNIQUE, or COLOR) 
+## Scatter ColorShapeSize -> set ONE color OR MATCH the group colors OR UNIQUE from the unique/specific setting list (MATCH, UNIQUE, or COLOR)
 ## Scatter ColorShapeSize -> followed by NUMERIC Shape & Size for setting ALL / DEFAULT for missing
-## Scatter Stroke -> border stroke (a number, def: 2) 
+## Scatter Stroke -> border stroke (a number, def: 2)
 ## Whisker Plot -> display as a bar & whisker plot instead of standard histogram *NOT compatible with TimeCourse* (Box / Violin / FALSE)
 ## DEF: "Colors:''"; "Colors Alpha:1"; "Scatter Display:TRUE"; "Scatter Alpha:1"; "Scatter ColorShapeSize:#FFD700,4,1.8"; "Scatter Stroke:2"; "Whisker Plot:FALSE"
 #Colors Specific	G1, #000000, #FFD700, 4, 1.8
@@ -111,40 +215,6 @@
 #Facet Split	FALSE
 ################ DATA (REQ) ################
 ## Make sure that Group1 has adequate labels to distinguish any repeats in Group2...
-Value	Group1
-3.250392	G1
-3.963057143	G1
-19.0	G1
-6.212049587	G1
-3.430601563	G1
-4.859768116	G1
-4.622347222	G2
-4.237336207	G2
-4.606137097	G2
-4.852683333	G2
-4.656833333	G2
-5.687579832	G2
-5.182943262	G3
-6.63045	G3
-7.893489583	G3
-6.095218182	G3
-7.086967742	G3
-6.221772727	G3
-8.0994	G4
-11.09730178	G4
-11.58297826	G4
-7.769168367	G4
-6.579172249	G4
-8.615436842	G4
-12.85835664	G5
-15.21363566	G5
-11.25499306	G5
-9.204730496	G5
-9.082958904	G5
-8.672811189	G5
-7.313672131	G6
-5.625172414	G6
-4.287247312	G6
-4.742865979	G6
-4.504482759	G6
-5.472808511	G6
+#Value	Group1
+#3.250392	G1
+#3.963057143	G1

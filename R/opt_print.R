@@ -59,7 +59,8 @@ opt_print <- function(envPrint = "all", varDump = NULL, includeData = TRUE) {
     # if 'all' is submitted then pull from the manually generated list of environments (from aaa.R)
     if ((length(envPrint) == 1) && (envPrint == "all")) {
         envList <- the$envList
-        histova_msg("Printing all environments used to save settings & data. Actual data isn't displayed in this, only the variable names", tabs=1, LOG=FALSE)
+        histova_msg("Printing all environments used to save settings & data.", tabs=1, LOG=FALSE)
+        histova_msg("Actual data isn't displayed in this, only the variable names", tabs=1, LOG=FALSE)
     } else if ((length(envPrint) == 1) && (envPrint == "sum")) {
         envList <- NULL
 

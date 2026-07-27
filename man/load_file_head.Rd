@@ -4,7 +4,7 @@
 \alias{load_file_head}
 \title{Load File Head}
 \usage{
-load_file_head()
+load_file_head(hsa)
 }
 \description{
 Load the configuration from the head of the file specified in the$Location.file. Each

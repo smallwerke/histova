@@ -32,10 +32,10 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
 
     ############################################
     # LOAD FILE (OPTIONS & DATA) - NOTHING MORE
-    set_env(location.dir, location.file, saveLog) # OPENS logfile connection
+    hsa <- histova::set_env(location.dir, location.file, saveLog) # OPENS logfile connection
 
     # prep & load config info / data
-    load_file_head()
+    load_file_head(hsa)
 
     # load the data from the file and store it under raw$IN with NO modifications
     load_data()
@@ -50,5 +50,50 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
 
     ############################################
     # BUILD FIGURE
-    build_figure(printPlot, savePlot, printEnvMsg = FALSE) # CLOSES logfile connection
+    build_figure(hsa, printPlot, savePlot, printEnvMsg = FALSE) # CLOSES logfile connection
+
+    return(hsa)
 }
+
+
+#
+# other options to keep an eye on:
+# ggbetweenstats
+# example take from: https://stackoverflow.com/questions/77602454/how-to-use-ggbetweenstats-with-grouped-data-at-different-timepoints-in-r
+#
+# The 'base' ggplot2 code to make a similar plot to what ggbetweenstats outputs...
+#
+# Source - https://stackoverflow.com/a/77602621
+# Posted by Allan Cameron, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-04-17, License - CC BY-SA 4.0
+#
+# library(ggplot2)
+# library(ggrepel)
+# library(ggsignif)
+#
+# ggplot(df, aes(Timepoint, Value, group = interaction(Timepoint, Treatment))) +
+#     geom_point(aes(color = Treatment, fill = after_scale(alpha(colour, 0.5))),
+#                position = position_jitterdodge(dodge.width = 0.9, 0.1),
+#                size = 3, shape = 21) +
+#     geom_boxplot(fill = NA, color = "black", width = 0.2, linewidth = 0.4,
+#                  position = position_dodge(0.9)) +
+#     geom_violin(fill = NA, color = "black", width = 0.6, linewidth = 0.4,
+#                 position = position_dodge(0.9)) +
+#     geom_point(stat = "summary", size = 5, color = "#8a0f00",
+#                position = position_dodge(0.9), fun = mean) +
+#     geom_label_repel(stat = "summary", fun = mean, size = 3.5,
+#                      aes(label = paste0("hat(mu)*scriptstyle(mean)==",
+#                                         round(after_stat(y), 2))),
+#                      parse = TRUE, position = position_dodge(0.9)) +
+#     geom_signif(y_position = 85, xmin = 1:3 - 0.22, xmax = 1:3 + 0.22,
+#                 annotations = scales::pvalue(sapply(split(df, df$Timepoint),
+#                                                     \(x) wilcox.test(Value~Treatment, x)$p.value),
+#                                              add_p = TRUE)) +
+#     scale_y_continuous(sec.axis = sec_axis(~.,
+#                                            bquote(Pairwise~Test~paste(":")~bold(Wilcoxon~Test)))) +
+#     scale_color_brewer(palette = "Set2") +
+#     theme_minimal(base_size = 12) +
+#     theme(axis.title = element_text(face = 2),
+#           legend.position = "bottom",
+#           axis.text.y.right = element_blank())
+

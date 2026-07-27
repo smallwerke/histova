@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @importFrom rlang .data
-build_histo <- function(){
+build_histo <- function(hsa){
 
     histova_msg("Building Histogram", type="subhead")
     # using the .data feature from rlang as specified:
@@ -103,7 +103,8 @@ build_histo <- function(){
         x=fig$X)
     gplot = gplot + ggplot2::theme(
         text=ggplot2::element_text(family=fig$Font),
-        plot.title = ggtext::element_markdown(lineheight=0.8, size=fig$Title.Size, hjust=0.5, vjust=0, margin=ggplot2::margin(b=0, unit = "pt")),
+        plot.title = ggtext::element_markdown(lineheight=0.8, size=hsa$get("fig.title.size"), hjust=0.5, vjust=0, margin=ggplot2::margin(b=0, unit = "pt")),
+        #plot.title = ggtext::element_markdown(lineheight=0.8, size=fig$Title.Size, hjust=0.5, vjust=0, margin=ggplot2::margin(b=0, unit = "pt")),
         plot.caption = ggplot2::element_text(color="black", size=stats$Caption.Size, face="italic"),
         axis.title = ggplot2::element_text(color="black", size=fig$Axis.LabelSize ),
         axis.title.y = ggplot2::element_text(angle = 90, margin = ggplot2::margin(t = 0, r = fig$Axis.LabelSep, b = 0, l = 0)),
@@ -131,7 +132,7 @@ build_histo <- function(){
         legend.title = ggtext::element_markdown(colour="black", size=fig$Legend.LabelSize),
         legend.text = ggplot2::element_text(colour="black", size = fig$Legend.LabelSize),
         legend.key.size = ggplot2::unit(fig$Legend.Key.Size, fig$Save.Units),
-        strip.text.x = ggplot2::element_text(size = fig$Axis.TitleSize, colour = "black"), # defines the above figure sub titles
+        strip.text.x = ggplot2::element_text(size = hsa$get("fig.axis.title.size"), colour = "black"), # defines the above figure sub titles
         strip.background = ggplot2::element_rect(colour="white", fill="white", linewidth=1.5, linetype="solid")
     )
 

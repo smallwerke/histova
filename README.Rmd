@@ -104,7 +104,7 @@ histova::opt_print("the", "Location.File")
 See what changed.
 
 ```{r option_review_figure}
-histova::build_figure(FALSE, FALSE)
+#histova::build_figure(FALSE, FALSE)
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier-90.jpg")
 ```
 

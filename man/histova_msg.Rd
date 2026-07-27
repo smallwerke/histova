@@ -10,13 +10,14 @@ histova_msg(
   breaker = FALSE,
   tabs = 0,
   PRINT = TRUE,
-  LOG = TRUE
+  LOG = TRUE,
+  hsa = na
 )
 }
 \arguments{
 \item{msg}{Simple text string to print out / write to file}
 
-\item{type}{title/head/subhead/msg/warn For what type of print call to use (title, head & subhead include formatting)}
+\item{type}{title/head/subhead/msg/warn/verbose For what type of print call to use (title, head & subhead include formatting)}
 
 \item{breaker}{above/below/both Should the text string have border lines before and/or after it}
 

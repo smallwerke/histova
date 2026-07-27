@@ -4,7 +4,7 @@
 \alias{build_figure}
 \title{Build Figure}
 \usage{
-build_figure(printPlot = FALSE, savePlot = TRUE, printEnvMsg = TRUE)
+build_figure(hsa, printPlot = FALSE, savePlot = TRUE, printEnvMsg = TRUE)
 }
 \arguments{
 \item{printPlot}{T/F Should the finished plot be printed (def F)}

@@ -12,13 +12,13 @@
 #'
 #' @export
 #'
-build_figure <- function(printPlot = FALSE, savePlot = TRUE, printEnvMsg = TRUE) {
+build_figure <- function(hsa, printPlot = FALSE, savePlot = TRUE, printEnvMsg = TRUE) {
 
     set_env(the$Location.Dir, the$Location.File, the$Log.Save, env.new=FALSE, printEnvMsg)
 
     histova_msg("Build Histogram", type="head")
     set_aesthetics()
-    build_histo()
+    build_histo(hsa)
 
     # add a line to the figure...
     if (is.na(fig$Plot.HLine$y[1]) != TRUE) {

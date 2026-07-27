@@ -4,7 +4,7 @@
 \alias{init_vars}
 \title{Initialize variables to defaults}
 \usage{
-init_vars()
+init_vars(hsa)
 }
 \description{
 Reset the variables to the defaults used to load and generate another figure. These

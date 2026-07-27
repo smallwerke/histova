@@ -9,14 +9,14 @@
 #'
 #' @export
 #'
-load_file_head = function() {
+load_file_head = function(hsa) {
 
     # forced reset
-    init_vars()
+    init_vars(hsa)
 
-    histova_msg(sprintf("Load config (file: %s)", the$Location.File), type="subhead")
+    histova_msg(sprintf("Load config (file: %s)", the$Location.File), type="subhead", hsa=hsa)
 
-    fullPath <- paste0(the$Location.Dir, "/", the$Location.File)
+    fullPath <- paste0(hsa$get("file.location.dir"), "/", hsa$get("file.location.file"))
 
     # set the override placeholder to NULL
     Override.tmp <- NULL
@@ -72,8 +72,9 @@ load_file_head = function() {
         # Override will be set to false in init_vars() (called earlier) IF it doesn't exist
         if (isFALSE(the$Override)) {
             ################ Label Size and Appearance (OPT) ################
-            if (lA[[1]][1] == "Title Size") { fig$Title.Size <- as.numeric(lA[[1]][2])
-            } else if (lA[[1]][1] == "Axis Title Size") { fig$Axis.TitleSize <- as.numeric(lA[[1]][2])
+            #if (lA[[1]][1] == "Title Size") { fig$Title.Size <- as.numeric(lA[[1]][2])
+            if (lA[[1]][1] == "Title Size") { hsa$fig$title.size <- as.numeric(lA[[1]][2])
+            } else if (lA[[1]][1] == "Axis Title Size") { hsa$fig$axis.title.size <- as.numeric(lA[[1]][2])
             } else if (lA[[1]][1] == "Axis Label Size") { fig$Axis.LabelSize <- as.numeric(lA[[1]][2])
             } else if (lA[[1]][1] == "Axis Label Sep") { fig$Axis.LabelSep <- as.numeric(lA[[1]][2])
             } else if (lA[[1]][1] == "Axis Value Size") { fig$Axis.ValueSize <- as.numeric(lA[[1]][2])

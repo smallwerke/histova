@@ -100,14 +100,16 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 # saves in a temporary location
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
-#> ------------------------------- histova 3.5.0.2 --------------------------------
-#> ----------------------- run on Thu May 22 15:46:54 2025 ------------------------
+#> ------------------------------- histova 3.5.0.3 --------------------------------
+#> ----------------------- run on Mon Jul 27 18:48:03 2026 ------------------------
 #> --------------------------------------------------------------------------------
-#> -------- Prep & Load config settings and data --------
-#>         file found and environments loaded successfully
+#> -------- File exists & data environments ready --------
 #> ---- Initialize envrionment variables
 #> ---- Load config (file: test-1_group-ANOVA_scatter_outlier.txt)
 #> ---- Load data (file: test-1_group-ANOVA_scatter_outlier.txt)
+#>     Data loaded and stored in the raw$IN environment
+#> -------- Data Manipulation --------
+#> run_data() carries out any requested manipulations (e.g. apply standard division for %)
 #>         6 final Group1_Group2 (statGroups - should be unique!) ids:
 #>              G1 G2 G3 G4 G5 G6
 #> -------- Statistical Analysis --------
@@ -127,12 +129,27 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Thu May 22 15:46:54 2025 ---------------------
+#> --------------------- finihsed on Mon Jul 27 18:48:03 2026 ---------------------
 #> --------------------------------------------------------------------------------
+#> <HISTOVA>
+#>   Public:
+#>     behave: list
+#>     clone: function (deep = FALSE) 
+#>     fig: list
+#>     file: list
+#>     get: function (x, ref = NA) 
+#>     get_default: function (name.L, name.I) 
+#>     is_style: function (name.L, name.I) 
+#>     notes: list
+#>     raw: list
+#>     stats: list
+#>   Private:
+#>     default: list
+#>     styles: list
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
 
-<img src="inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg" width="100%" />
+<img src="inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg" alt="" width="100%" />
 
 ### Review Options
 
@@ -176,7 +193,7 @@ histova::opt_print("fig")
 #>     Alpha
 #>         List                    Color.Alpha.List         0.6, 0.6, 0.6, 0.6, 0.6, 0.6
 #>     List                        Color.List               #000000, #606060, #00c000, #f71480, #000
-#> Colors                          Colors
+#> Colors
 #>     Alpha                       Colors.Alpha             0.6
 #>     Unique                      Colors.Unique            c("G1", "G2", "G3", "G4", "G5", "G6"), c
 #> Convert                         Convert                  TRUE
@@ -252,9 +269,11 @@ Edit an aesthetic value.
 ``` r
 histova::opt_set("fig", "X.Angle", 90)
 #> ---------------------------------- Set Option ----------------------------------
+#> Updating fig$X.Angle from: 45 -> to -> 90
 #> [1] "PASS"
 histova::opt_set("the", "Location.File", "test-1_group-ANOVA_scatter_outlier-90.txt")
 #> ---------------------------------- Set Option ----------------------------------
+#> Updating the$Location.File from: test-1_group-ANOVA_scatter_outlier.txt -> to -> test-1_group-ANOVA_scatter_outlier-90.txt
 #> [1] "PASS"
 ```
 
@@ -283,19 +302,11 @@ histova::opt_print("the", "Location.File")
 See what changed.
 
 ``` r
-histova::build_figure(FALSE, FALSE)
-#> -------- Build Histogram --------
-#> ---- Setting Aesthetics
-#>         assigning settings for 6 groups (G1 G2 G3 G4 G5 G6)
-#> ---- Building Histogram
-#> ---- Generate Figure Labels
-#> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Thu May 22 15:46:54 2025 ---------------------
-#> --------------------------------------------------------------------------------
+#histova::build_figure(FALSE, FALSE)
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier-90.jpg")
 ```
 
-<img src="inst/extdata/test-1_group-ANOVA_scatter_outlier-90.jpg" width="100%" />
+<img src="inst/extdata/test-1_group-ANOVA_scatter_outlier-90.jpg" alt="" width="100%" />
 
 ## Config File
 

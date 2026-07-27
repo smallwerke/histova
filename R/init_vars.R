@@ -14,115 +14,112 @@
 #'
 #' @examples
 #' init_vars()
-init_vars <- function() {
+init_vars <- function(hsa) {
 
     histova_msg("Initialize envrionment variables", type="subhead")
     if (!exists("Override", envir=the)) { the$Override <- FALSE }
     if (isFALSE(the$Override)) {
         ################ Label Size and Appearance (OPT) ################
-        fig$Title.Size <- 32
-        fig$Axis.TitleSize <- 26
-        fig$Axis.LabelSize <- 26
-        fig$Axis.LabelSep <- 20
-        fig$Axis.ValueSize <- 26
-        fig$Legend.LabelSize <- 26
-        fig$Convert <- TRUE
-        fig$Font <- "sans"
+        fig$Title.Size <- histova::get_default("fig", "Title.Size")
+        fig$Axis.TitleSize <- histova::get_default("fig", "Axis.TitleSize")
+        fig$Axis.LabelSize <- histova::get_default("fig", "Axis.LabelSize")
+        fig$Axis.LabelSep <- histova::get_default("fig", "Axis.LabelSep")
+        fig$Axis.ValueSize <- histova::get_default("fig", "Axis.ValueSize")
+        fig$Legend.LabelSize <- histova::get_default("fig", "Legend.LabelSize")
+        fig$Convert <- histova::get_default("fig", "Convert")
+        fig$Font <- histova::get_default("fig", "Font")
 
         ################ Display of the Axis & Plot (OPT) ################
-        fig$X.Angle <- 45
-        fig$X.Value.Display <- TRUE
-        fig$X.Tick.Display <- TRUE
+        fig$X.Angle <- histova::get_default("fig", "X.Angle")
+        fig$X.Value.Display <- histova::get_default("fig", "X.Value.Display")
+        fig$X.Tick.Display <- histova::get_default("fig", "X.Tick.Display")
+
         # .Ratio for when a number is entered in config
         ### currently disabled ###
-        fig$Coord.Fixed <- TRUE
-        fig$Coord.Fixed.Ratio <- "SQUARE"
+        fig$Coord.Fixed <- histova::get_default("fig", "Coord.Fixed")
+        fig$Coord.Fixed.Ratio <- histova::get_default("fig", "Coord.Fixed.Ratio")
         ###
-        fig$Bar.Width <- 0.8
-        fig$Bar.Border.Color <- "white"
-        fig$Bar.Border.Width <- 0.2
+        fig$Bar.Width <- histova::get_default("fig", "Bar.Width")
+        fig$Bar.Border.Color <- histova::get_default("fig", "Bar.Border.Color")
+        fig$Bar.Border.Width <- histova::get_default("fig", "Bar.Border.Width")
 
         ################ Colors and Display Individual Points (OPT) ################
-        fig$Colors <- c()
-        colors.unique = data.frame(matrix(ncol = 8, nrow = 0))
-        colnames(colors.unique) = c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha")
-        fig$Colors.Unique <- colors.unique
-        fig$Colors.Alpha <- 1
-        fig$Scatter.Disp <- TRUE
-        fig$Scatter.Alpha <- 1
-        fig$Scatter.Color.Source <- "DEF" # INTERNAL SETTING
-        fig$Scatter.Color <- "#FFD700"
-        fig$Scatter.Shape <- 4
-        fig$Scatter.Size <- 1.8
-        fig$Scatter.Stroke <- 2
-        fig$Plot.Whisker <- "FALSE"
+        fig$Colors.Unique <- histova::get_default("fig", "Colors.Unique")
+        fig$Colors.Alpha <- histova::get_default("fig", "Colors.Alpha")
+        fig$Scatter.Disp <- histova::get_default("fig", "Scatter.Disp")
+        fig$Scatter.Alpha <- histova::get_default("fig", "Scatter.Alpha")
+        fig$Scatter.Color.Source <- histova::get_default("fig", "Scatter.Color.Source") # INTERNAL SETTING
+        fig$Scatter.Color <- histova::get_default("fig", "Scatter.Color")
+        fig$Scatter.Shape <- histova::get_default("fig", "Scatter.Shape")
+        fig$Scatter.Size <- histova::get_default("fig", "Scatter.Size")
+        fig$Scatter.Stroke <- histova::get_default("fig", "Scatter.Stroke")
+        fig$Plot.Whisker <- histova::get_default("fig", "Plot.Whisker")
 
         ################ Line Design Options (OPT) ################
-        fig$Axis.X.Main.Size <- 0.8
-        fig$Axis.X.Main.Color <- "black"
-        fig$Axis.Y.Main.Size <- 0.8
-        fig$Axis.Y.Main.Color <- "black"
-        fig$Axis.X.Tick.Size <- 0.6
-        fig$Axis.X.Tick.Color <- "black"
-        fig$Axis.X.Tick.Length <- 0.1
-        fig$Axis.Y.Tick.Size <- 0.6
-        fig$Axis.Y.Tick.Color <- "black"
-        fig$Axis.Y.Tick.Length <- 0.1
-        fig$Plot.ErrorBar.Size <- 0.8
-        fig$Plot.ErrorBar.EndWidth <- 0.4
-        fig$Plot.ErrorBar.Color <- "black"
-        fig$Plot.HLine.Def.Size <- 1
-        fig$Plot.HLine.Def.Color <- "black"
-        fig$Plot.HLine.OVRD.Size <- NA
-        fig$Plot.HLine.OVRD.Color <- NA
+        fig$Axis.X.Main.Size <- histova::get_default("fig", "Axis.X.Main.Size")
+        fig$Axis.X.Main.Color <- histova::get_default("fig", "Axis.X.Main.Color")
+        fig$Axis.Y.Main.Size <- histova::get_default("fig", "Axis.Y.Main.Size")
+        fig$Axis.Y.Main.Color <- histova::get_default("fig", "Axis.Y.Main.Color")
+        fig$Axis.X.Tick.Size <- histova::get_default("fig", "Axis.X.Tick.Size")
+        fig$Axis.X.Tick.Color <- histova::get_default("fig", "Axis.X.Tick.Color")
+        fig$Axis.X.Tick.Length <- histova::get_default("fig", "Axis.X.Tick.Length")
+        fig$Axis.Y.Tick.Size <- histova::get_default("fig", "Axis.Y.Tick.Size")
+        fig$Axis.Y.Tick.Color <- histova::get_default("fig", "Axis.Y.Tick.Color")
+        fig$Axis.Y.Tick.Length <- histova::get_default("fig", "Axis.Y.Tick.Length")
+        fig$Plot.ErrorBar.Size <- histova::get_default("fig", "Plot.ErrorBar.Size")
+        fig$Plot.ErrorBar.EndWidth <- histova::get_default("fig", "Plot.ErrorBar.EndWidth")
+        fig$Plot.ErrorBar.Color <- histova::get_default("fig", "Plot.ErrorBar.Color")
+        fig$Plot.HLine.Def.Size <- histova::get_default("fig", "Plot.HLine.Def.Size")
+        fig$Plot.HLine.Def.Color <- histova::get_default("fig", "Plot.HLine.Def.Color")
+        fig$Plot.HLine.OVRD.Size <- histova::get_default("fig", "Plot.HLine.OVRD.Size")
+        fig$Plot.HLine.OVRD.Color <- histova::get_default("fig", "Plot.HLine.OVRD.Color")
 
         ################ Legend Display Options (OPT) ################
-        fig$Legend.Display <- FALSE
-        fig$Legend.Color.Source <- "All"
-        fig$Legend.Title <- "Groups"
-        fig$Legend.Title.tmp <- ""
-        fig$Legend.Position <- "bottom"
-        fig$Legend.Key.Size <- 0.25
+        fig$Legend.Color.Source <- histova::get_default("fig", "Legend.Color.Source")
+        fig$Legend.Display <- histova::get_default("fig", "Legend.Display")
+        fig$Legend.Key.Size <- histova::get_default("fig", "Legend.Key.Size")
+        fig$Legend.Position <- histova::get_default("fig", "Legend.Position")
+        fig$Legend.Title <- histova::get_default("fig", "Legend.Title")
+        fig$Legend.Title.tmp <- histova::get_default("fig", "Legend.Title.tmp")
 
         ################ Stats Labels (OPT) ################
-        stats$Letters.Offset <- FALSE
-        stats$Letters.Size <- 18
-        stats$Caption.Display <- TRUE
-        stats$Caption.Size <- 6
+        stats$Letters.Offset <- histova::get_default("stats", "Letters.Offset")
+        stats$Letters.Size <- histova::get_default("stats", "Letters.Size")
+        stats$Caption.Display <- histova::get_default("stats", "Caption.Display")
+        stats$Caption.Size <- histova::get_default("stats", "Caption.Size")
 
         ################ Figure Save (OPT) ################
-        fig$Save.Width <- 8
-        fig$Save.Height <- 8.5
-        fig$Save.DPI <- 320
-        fig$Save.Units <- "in"
-        fig$Save.Type <- "jpg"
+        fig$Save.DPI <- histova::get_default("fig", "Save.DPI")
+        fig$Save.Height <- histova::get_default("fig", "Save.Height")
+        fig$Save.Type <- histova::get_default("fig", "Save.Type")
+        fig$Save.Units <- histova::get_default("fig", "Save.Units")
+        fig$Save.Width <- histova::get_default("fig", "Save.Width")
     }
 
     ################ Title & Axis Labels (REQ) ################
-    fig$Title <- ""
-    fig$Title.tmp <- ""
-    fig$X <- ""
-    fig$Y <- ""
+    fig$Title <- histova::get_default("fig", "Title")
+    fig$Title.tmp <- histova::get_default("fig", "Title.tmp")
+    fig$X <- histova::get_default("fig", "X")
+    fig$Y <- histova::get_default("fig", "Y")
 
     ################ Height of Y-axis and Horizontal Line/s (REQ) ################
-    fig$Y.Min <- 0
-    fig$Y.Max <- ""
-    fig$Y.Interval <- ""
-    fig$Y.Break <- FALSE
-    fig$Y.Break.df <- data.frame(matrix(ncol=3, nrow=0))
-    colnames(fig$Y.Break.df) <- c("start","stop", "scales")
-    fig$Plot.HLine <- data.frame(y=c(NA),size=c(0),color=c(""))
+    fig$Y.Break <- histova::get_default("fig", "Y.Break")
+    fig$Y.Break.df <- histova::get_default("fig", "Y.Break.df")
+    fig$Y.Interval <- histova::get_default("fig", "Y.Interval")
+    fig$Y.Max <- histova::get_default("fig", "Y.Max")
+    fig$Y.Min <- histova::get_default("fig", "Y.Min")
+    fig$Plot.HLine <- histova::get_default("fig", "Plot.HLine")
 
     ################ Alter the Axis (REQ) ################
-    fig$Y.Rig <- FALSE
-    fig$Y.Rig.Newline <- FALSE
+    fig$Y.Rig <- histova::get_default("fig", "Y.Rig")
+    fig$Y.Rig.Newline <- histova::get_default("fig", "Y.Rig.Newline")
     # if there is additional info from Y manipulation store here, not editable in CONFIG
-    fig$Y.Supp <- ""
+    fig$Y.Supp <- histova::get_default("fig", "Y.Supp")
 
     ################ Stats Labels (OPT) ################
     # set by the script - RESET per run:
-    notes$Stats.Method <- ""
-    notes$Stats.Outlier <- ""
+    notes$Stats.Method <- histova::get_default("notes", "Stats.Method")
+    notes$Stats.Outlier <- histova::get_default("notes", "Stats.Outlier")
 
     ################ Stats Tests (REQ) ################
     stats$Test <- c()

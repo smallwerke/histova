@@ -4,7 +4,7 @@
 \alias{build_histo}
 \title{Build Histogram}
 \usage{
-build_histo()
+build_histo(hsa)
 }
 \description{
 Build histogram using data and configuration settings saved in the package environment. This function
