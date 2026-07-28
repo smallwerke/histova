@@ -71,29 +71,23 @@ load_file_head = function(hsa) {
         ## OPTIONAL / OVERRIDEABLE SETTINGS ##
         # Override will be set to false in init_vars() (called earlier) IF it doesn't exist
         if (isFALSE(the$Override)) {
+
+            # MOVING TO SET FUNCTION!
+            if ( (lA[[1]][1] == "Title Size") || (lA[[1]][1] == "Axis Title Size") ||
+                 (lA[[1]][1] == "Axis Label Size") || (lA[[1]][1] == "Axis Value Size") ||
+                 (lA[[1]][1] == "Legend Label Size") || (lA[[1]][1] == "Axis Label Sep") ||
+                 (lA[[1]][1] == "Text Convert") || (lA[[1]][1] == "X Value Display") ||
+                 (lA[[1]][1] == "X Tick Display")
+            ) {
+                hsa$set(lA[[1]][1], lA[[1]][2], TRUE)
+            }
+
             ################ Label Size and Appearance (OPT) ################
-            #if (lA[[1]][1] == "Title Size") { fig$Title.Size <- as.numeric(lA[[1]][2])
-            if (lA[[1]][1] == "Title Size") { hsa$fig$title.size <- as.numeric(lA[[1]][2])
-            } else if (lA[[1]][1] == "Axis Title Size") { hsa$fig$axis.title.size <- as.numeric(lA[[1]][2])
-            } else if (lA[[1]][1] == "Axis Label Size") { fig$Axis.LabelSize <- as.numeric(lA[[1]][2])
-            } else if (lA[[1]][1] == "Axis Label Sep") { fig$Axis.LabelSep <- as.numeric(lA[[1]][2])
-            } else if (lA[[1]][1] == "Axis Value Size") { fig$Axis.ValueSize <- as.numeric(lA[[1]][2])
-            } else if (lA[[1]][1] == "Legend Label Size") { fig$Legend.LabelSize <- as.numeric(lA[[1]][2])
-            } else if (lA[[1]][1] == "Text Convert") {
-                if (lA[[1]][2] %in% c("TRUE", "True", "true", "1")) { fig$Convert <- TRUE
-                } else { fig$Convert <- FALSE }
-            } else if (lA[[1]][1] == "Text Font") {
+            if (lA[[1]][1] == "Text Font") {
                 if (lA[[1]][2] %in% c("serif", "sans", "mono")) { fig$Font <- lA[[1]][2] }
             }
             ################ Display of the Axis & Plot (OPT) ################
             else if (lA[[1]][1] == "X Value Angle") { fig$X.Angle <- as.numeric(lA[[1]][2])
-            } else if (lA[[1]][1] == "X Value Display") {
-                if (lA[[1]][2] %in% c("TRUE", "True", "true", 0)) { fig$X.Value.Display <- TRUE
-                } else { fig$X.Value.Display <- FALSE }
-            }
-            else if (lA[[1]][1] == "X Tick Display") {
-                if (lA[[1]][2] %in% c("TRUE", "True", "true", 0)) { fig$X.Tick.Display <- TRUE
-                } else { fig$X.Tick.Display <- FALSE }
             }
             # THIS SETTING CURRENTLY DISABLED AND NOT IMPLEMENTED IN build_histo FUNCTION
             else if (lA[[1]][1] == "Coord Fixed Ratio") {
@@ -446,7 +440,8 @@ load_file_head = function(hsa) {
         fig$Legend.Title.tmp <- fig$Legend.Title.Replace
         rm("Legend.Title.Replace", envir = fig)
     }
-    if (fig$Convert) {
+    #if (fig$Convert) {
+    if (hsa$get("fig.convert")) {
         fig$Title.tmp <- convert_text(fig$Title.tmp)
         fig$Y.tmp <- convert_text(fig$Y.tmp)
         fig$X.tmp <- convert_text(fig$X.tmp)

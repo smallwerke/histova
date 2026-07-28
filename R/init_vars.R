@@ -20,19 +20,19 @@ init_vars <- function(hsa) {
     if (!exists("Override", envir=the)) { the$Override <- FALSE }
     if (isFALSE(the$Override)) {
         ################ Label Size and Appearance (OPT) ################
-        fig$Title.Size <- histova::get_default("fig", "Title.Size")
-        fig$Axis.TitleSize <- histova::get_default("fig", "Axis.TitleSize")
-        fig$Axis.LabelSize <- histova::get_default("fig", "Axis.LabelSize")
-        fig$Axis.LabelSep <- histova::get_default("fig", "Axis.LabelSep")
-        fig$Axis.ValueSize <- histova::get_default("fig", "Axis.ValueSize")
-        fig$Legend.LabelSize <- histova::get_default("fig", "Legend.LabelSize")
-        fig$Convert <- histova::get_default("fig", "Convert")
+        #fig$Title.Size <- histova::get_default("fig", "Title.Size")
+        #fig$Axis.TitleSize <- histova::get_default("fig", "Axis.TitleSize")
+        #fig$Axis.LabelSize <- histova::get_default("fig", "Axis.LabelSize")
+        #fig$Axis.LabelSep <- histova::get_default("fig", "Axis.LabelSep")
+        #fig$Axis.ValueSize <- histova::get_default("fig", "Axis.ValueSize")
+        #fig$Legend.LabelSize <- histova::get_default("fig", "Legend.LabelSize")
+        #fig$Convert <- histova::get_default("fig", "Convert")
         fig$Font <- histova::get_default("fig", "Font")
 
         ################ Display of the Axis & Plot (OPT) ################
         fig$X.Angle <- histova::get_default("fig", "X.Angle")
-        fig$X.Value.Display <- histova::get_default("fig", "X.Value.Display")
-        fig$X.Tick.Display <- histova::get_default("fig", "X.Tick.Display")
+        #fig$X.Value.Display <- histova::get_default("fig", "X.Value.Display")
+        #fig$X.Tick.Display <- histova::get_default("fig", "X.Tick.Display")
 
         # .Ratio for when a number is entered in config
         ### currently disabled ###

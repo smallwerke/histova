@@ -10,6 +10,7 @@
 ## Conversion: (&Alpha; &Sigma; &alpha; &beta; &epsilon; &pi; &sigma; &bull; &isin; &radic; &micro; \n); Fonts: (mono, sans, serif)
 ## DEF: "Title Size:32"; "Axis Title Size:26"; Axis Label Size:26"; "Axis Label Sep:20"; "Axis Value Size: 26"; "Legend Label Size:26"; "Text Convert:TRUE"; "Text Font:sans"
 #Title Size	38
+#Text Convert	true
 ################ Display of the Axis & Plot (OPT) ################
 ## X Value Angle -> Set the angle for X axis values (0 = no rotation, number = degree rotation)
 ## X Value Display -> display or not the values on the x-axis (TRUE / FALSE)
@@ -19,6 +20,7 @@
 ## Bar Border Color -> color of the border (color code) ~ (TimeCourse def: black)
 ## Bar Border Width -> how thick should the bar border be (number) ~ (TimeCourse def: 1)
 ## DEF: "X Value Angle:45"; "X Value Display:TRUE"; "X Tick Display:TRUE"; "Coord Fixed Ratio:SQUARE"; "Bar Width:0.8"; "Bar Border Color:white"; "Bar Border Width:0.2"
+#X Value Display	true
 ################ Colors and General Display Settings (OPT) ################
 ## Colors -> list of colors in html/R format, can handle "," and " " when splitting **Legend Color Source can simplify the color list for multi group figures**
 ## Colors -> this data is loaded after Colors Unique and can be overriden with the 'Colors Specific' setting

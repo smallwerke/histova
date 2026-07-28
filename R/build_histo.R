@@ -104,33 +104,26 @@ build_histo <- function(hsa){
     gplot = gplot + ggplot2::theme(
         text=ggplot2::element_text(family=fig$Font),
         plot.title = ggtext::element_markdown(lineheight=0.8, size=hsa$get("fig.title.size"), hjust=0.5, vjust=0, margin=ggplot2::margin(b=0, unit = "pt")),
-        #plot.title = ggtext::element_markdown(lineheight=0.8, size=fig$Title.Size, hjust=0.5, vjust=0, margin=ggplot2::margin(b=0, unit = "pt")),
         plot.caption = ggplot2::element_text(color="black", size=stats$Caption.Size, face="italic"),
-        axis.title = ggplot2::element_text(color="black", size=fig$Axis.LabelSize ),
-        axis.title.y = ggplot2::element_text(angle = 90, margin = ggplot2::margin(t = 0, r = fig$Axis.LabelSep, b = 0, l = 0)),
-        axis.title.x = ggtext::element_markdown(margin = ggplot2::margin(t = fig$Axis.LabelSep, r = 0, b = 0, l = 0)),
+        axis.title = ggplot2::element_text(color="black", size=hsa$get("fig.axis.label.size") ),
+        axis.title.y = ggplot2::element_text(angle = 90, margin = ggplot2::margin(t = 0, r = hsa$get("fig.axis.label.sep"), b = 0, l = 0)),
+        axis.title.x = ggtext::element_markdown(margin = ggplot2::margin(t = hsa$get("fig.axis.label.sep"), r = 0, b = 0, l = 0)),
         axis.line.y = ggplot2::element_line(color=fig$Axis.Y.Main.Color, linewidth=fig$Axis.Y.Main.Size),
         axis.line.x = ggplot2::element_line(color=fig$Axis.X.Main.Color, linewidth=fig$Axis.X.Main.Size),
-        axis.text = ggplot2::element_text(color="black", size=fig$Axis.ValueSize),                                                                  # defines the axis text for the ticks
+        axis.text = ggplot2::element_text(color="black", size=hsa$get("fig.axis.value.size")),                                                                  # defines the axis text for the ticks
         axis.ticks.y = ggplot2::element_line(color=fig$Axis.Y.Tick.Color, linewidth=fig$Axis.Y.Tick.Size),
         axis.ticks.length.y = ggplot2::unit(fig$Axis.Y.Tick.Length, "cm"),
         axis.ticks.x = ggplot2::element_line(color=fig$Axis.X.Tick.Color, linewidth=fig$Axis.X.Tick.Size),
         axis.ticks.length.x = ggplot2::unit(fig$Axis.X.Tick.Length, "cm"),
         # CUSTOMIZE
-        #plot.title = element_text(lineheight=0.8, size=Fig.Title.Size, face="bold", hjust=0.5, vjust=0, margin=margin(b=5, unit = "pt")),
-        #plot.caption = element_text(color="black", size=Stats.Caption.Size, face="italic"),
-        #axis.title = element_text(color="black", size=Fig.Axis.LabelSize, face="bold"),
-        #axis.title.y = element_text(angle = 90, margin = margin(t = 0, r = Fig.Axis.LabelSep, b = 0, l = 0)),
-        #axis.title.x = element_text(margin = margin(t = Fig.Axis.LabelSep, r = 0, b = 0, l = 0)),
-        #axis.text.y = element_text(color="black", size=Fig.Axis.ValueSize, face="bold"),
+        #axis.text.y = element_text(color="black", size=hsa$get("fig.axis.value.size"), face="bold"),
         #axis.text.x = element_text(color="black", size=50, face="bold"),
-        #axis.text.x = element_text(angle=0, hjust=0),
         plot.background = ggplot2::element_rect(fill = 'white', colour = 'white'),
         panel.background = ggplot2::element_rect(fill = 'white', colour = 'white'),
         panel.grid.major = ggplot2::element_line(colour = "white", linewidth=0),
         panel.grid.minor.y = ggplot2::element_line(linewidth=3),
-        legend.title = ggtext::element_markdown(colour="black", size=fig$Legend.LabelSize),
-        legend.text = ggplot2::element_text(colour="black", size = fig$Legend.LabelSize),
+        legend.title = ggtext::element_markdown(colour="black", size=hsa$get("fig.legend.label.size")),
+        legend.text = ggplot2::element_text(colour="black", size = hsa$get("fig.legend.label.size")),
         legend.key.size = ggplot2::unit(fig$Legend.Key.Size, fig$Save.Units),
         strip.text.x = ggplot2::element_text(size = hsa$get("fig.axis.title.size"), colour = "black"), # defines the above figure sub titles
         strip.background = ggplot2::element_rect(colour="white", fill="white", linewidth=1.5, linetype="solid")
@@ -344,9 +337,15 @@ build_histo <- function(hsa){
     }
 
     # turn off the x-axis labels
-    if (fig$X.Value.Display == FALSE) { gplot = gplot + ggplot2::theme(axis.text.x=ggplot2::element_blank()) }
+    #if (fig$X.Value.Display == FALSE) {
+    if (hsa$get("fig.x.value.display") == FALSE) {
+        gplot = gplot + ggplot2::theme(axis.text.x=ggplot2::element_blank())
+    }
     # turn off the x-axis ticks
-    if (fig$X.Tick.Display == FALSE) { gplot = gplot + ggplot2::theme(axis.ticks.x=ggplot2::element_blank()) }
+    #if (fig$X.Tick.Display == FALSE) {
+    if (hsa$get("fig.x.tick.display") == FALSE) {
+        gplot = gplot + ggplot2::theme(axis.ticks.x=ggplot2::element_blank())
+    }
 
     # make the plot accessible...
     #assign("gplot", gplot, envir = .GlobalEnv) ### CHANGED - putting the plot into THE main environment 'the' ###

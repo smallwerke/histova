@@ -15,14 +15,6 @@ histova <- R6::R6Class(
         ),
         #' @field fig list for figure data
         fig = list(
-            "convert" = NULL,
-            "axis.title.size" = NULL,
-            "axis.label.size" = NULL,
-            "axis.label.sep" = NULL,
-            "axis.value.size" = NULL,
-            "legend.label.size" = NULL,
-            "font" = NULL,
-            "title.size" = NULL
         ),
         #' @field file list for histova including open file connections
         file = list(),
@@ -47,14 +39,10 @@ histova <- R6::R6Class(
                 debug = TRUE
             }
             if (debug) { message(paste0("D: HISTOVA$GET pulling data: ", x)) }
-            if (length(strsplit(x, ".", fixed=TRUE)[[1]]) < 2) {
-                if (debug) { message("    D: not enough depth (need at least a list.var) - try again!") }
-                return(NA)
-            } else {
-                name.L =  strsplit(x, ".", fixed=TRUE)[[1]][1]
-                name.I =  paste(unlist(strsplit(x, ".", fixed=TRUE)[[1]][-1]), collapse=".")
-                if (debug) { message(paste0("    D: pulling from list: \'", name.L, "\' var: \'", name.I, "\'")) }
-            }
+
+            key = self$split(x)
+            name.L = key[1]
+            name.I = key[2]
 
             # IF the requested variable is a style type reference AND the
             # submitted reference is not NA
@@ -91,7 +79,11 @@ histova <- R6::R6Class(
             }
             if ( (name.L %in% names(private$default)) && (name.I %in% names(private$default[[name.L]])) ) {
                 if (debug) { message("    D: send the default!") }
-                return(private$default[[name.L]][[name.I]])
+                if (is.list(private$default[[name.L]][[name.I]])) {
+                    return(private$default[[name.L]][[name.I]]$val)
+                } else {
+                    return(private$default[[name.L]][[name.I]])
+                }
             } else {
                 if (debug) { message("    D: send NULL!") }
                 return(NULL)
@@ -107,9 +99,74 @@ histova <- R6::R6Class(
             } else {
                 return(FALSE)
             }
+        },
+        #' @description
+        #' is this a style variable that can be overidden?
+        #' @param key the list name
+        #' @param val the info name / variable
+        #' @param convert the info name / variable
+        set = function(key, val, convert=FALSE) {
+            # if convert is set the key is in the file input format and needs
+            # converting to the internal format by pulling from a list
+            if (isTRUE(convert)) {
+                if (key %in% names(private$convert)) {
+                    key = private$convert[[key]]
+                } else {
+                    histova::histova_msg("KEY NOT FOUND")
+                    # ADD EXIT / ERROR MESSAGE FUNCTION HERE!!!!
+                }
+            }
+            key = self$split(key)
+            if (is.list(private$default[[key[1]]][[key[2]]])) {
+                message(paste0("in: ", key[1], " setting ", key[2], " as: ", val))
+                if (private$default[[key[1]]][[key[2]]]$type == "bool") {
+                    if (val %in% c("TRUE", "True", "true", "1")) {
+                        self[[key[1]]][[key[2]]] = TRUE
+                    } else {
+                        self[[key[1]]][[key[2]]] = FALSE
+                    }
+                } else if (private$default[[key[1]]][[key[2]]]$type == "num") {
+                    self[[key[1]]][[key[2]]] = as.numeric(val)
+                }
+            }
+        },
+        #' @description
+        #' is this a style variable that can be overidden?
+        #' @param key the val to split
+        split = function(key) {
+            # do a quick check IN CASE behave.verbose was deleted, default to TRUE in this instance
+            # as something fundamental is likely wrong...
+            if ( ("behave" %in% names(self)) && ("debug" %in% names(self$behave)) ) {
+                debug = self$behave$debug
+            } else {
+                debug = TRUE
+            }
+
+            name.L = ""
+            name.I = ""
+            if (length(strsplit(key, ".", fixed=TRUE)[[1]]) < 2) {
+                if (debug) { message("    D: not enough depth (need at least a list.var) - try again!") }
+                return(NA)
+            } else {
+                name.L =  strsplit(key, ".", fixed=TRUE)[[1]][1]
+                name.I =  paste(unlist(strsplit(key, ".", fixed=TRUE)[[1]][-1]), collapse=".")
+                if (debug) { message(paste0("    D: pulling from list: \'", name.L, "\' var: \'", name.I, "\'")) }
+            }
+            return (c(name.L, name.I))
         }
     ),
     private = list(
+        convert = list(
+            "Axis Label Sep" = "fig.axis.label.sep",
+            "Axis Label Size" = "fig.axis.label.size",
+            "Axis Title Size" = "fig.axis.title.size",
+            "Axis Value Size" = "fig.axis.value.size",
+            "Legend Label Size" = "fig.legend.label.size",
+            "Text Convert" = "fig.convert",
+            "Title Size" = "fig.title.size",
+            "X Tick Display" = "fig.x.tick.display",
+            "X Value Display" = "fig.x.value.display"
+        ),
         styles = list(
             fig = c(
                 "axis.title.size",
@@ -178,15 +235,17 @@ histova <- R6::R6Class(
                 "letters.size"
             )
         ),
+        # include ALL variables, if no default just return NULL
+        # have a list w/ default AND check type
         default = list(
             behave = list(),
             fig = list(
-                "axis.label.sep" = 20,
-                "axis.label.size" = 26,
-                "axis.title.size" = 26,
-                "axis.value.size" = 26,
+                "axis.label.sep" = list(val=20,type="num"),
+                "axis.label.size" = list(val=26,type="num"),
+                "axis.title.size" = list(val=26,type="num"),
+                "axis.value.size" = list(val=26,type="num"),
                 "axis.x.main.color" = "black",
-                "axis.x.main.size" = 0.8,
+                "axis.x.main.size" = list(val=0.8,type="num"),
                 "axis.x.tick.color" = "black",
                 "axis.x.tick.length" = 0.1,
                 "axis.x.tick.size" = 0.6,
@@ -202,11 +261,11 @@ histova <- R6::R6Class(
                 "color.list" = "",
                 "colors" = c(),
                 "colors.alpha" = 1,
-                "colors.unique" = data.frame(matrix(
+                "colors.unique" = list(val=data.frame(matrix(
                     ncol = 8, nrow = 0,
                     dimnames = list(NULL, c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha"))
-                )),
-                "convert" = TRUE,
+                )),type="df"),
+                "convert" = list(val=TRUE,type="bool"),
                 "coord.fixed" = TRUE,
                 "coord.fixed.ratio" = "SQUARE",
                 "facet.split" = TRUE,
@@ -214,7 +273,7 @@ histova <- R6::R6Class(
                 "legend.color.source" = "All",
                 "legend.display" = FALSE,
                 "legend.key.size" = 0.25,
-                "legend.label.size" = 26,
+                "legend.label.size" = list(val=26,type="num"),
                 "legend.position" = "bottom",
                 "legend.title" = "Groups",
                 "legend.title.tmp" = "",
@@ -244,13 +303,13 @@ histova <- R6::R6Class(
                 "size.list" = "",
                 "stroke.list" = "",
                 "title" = "",
-                "title.size" = 32,
+                "title.size" = list(val=32,type="num"),
                 "title.tmp" = "",
                 "x" = "",
                 "x.angle" = 45,
-                "x.tick.display" = TRUE,
+                "x.tick.display" = list(val=TRUE,type="bool"),
                 "x.tmp" = "",
-                "x.value.display" = TRUE,
+                "x.value.display" = list(val=TRUE,type="bool"),
                 "y" = "",
                 "y.break" = FALSE,
                 "y.break.df" = data.frame(matrix(
