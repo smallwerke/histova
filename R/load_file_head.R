@@ -7,6 +7,8 @@
 #' are all loaded into a few environments within the histova package and stored there
 #' to be accessible between functions. The Override option is controlled in this function.
 #'
+#' @param hsa R6 histova object being worked on
+#'
 #' @export
 #'
 load_file_head = function(hsa) {
@@ -77,48 +79,31 @@ load_file_head = function(hsa) {
                  (lA[[1]][1] == "Axis Label Size") || (lA[[1]][1] == "Axis Value Size") ||
                  (lA[[1]][1] == "Legend Label Size") || (lA[[1]][1] == "Axis Label Sep") ||
                  (lA[[1]][1] == "Text Convert") || (lA[[1]][1] == "X Value Display") ||
-                 (lA[[1]][1] == "X Tick Display")
+                 (lA[[1]][1] == "X Tick Display") || (lA[[1]][1] == "Text Font") ||
+                 (lA[[1]][1] == "X Angle") || (lA[[1]][1] == "X Value Angle") ||
+                 (lA[[1]][1] == "Bar Width") || (lA[[1]][1] == "Bar Border Color") ||
+                 (lA[[1]][1] == "Bar Border Width") || (lA[[1]][1] == "Scatter Display") ||
+                 (lA[[1]][1] == "Scatter Alpha") || (lA[[1]][1] == "Colors Alpha") ||
+                 (lA[[1]][1] == "Scatter Stroke") || (lA[[1]][1] == "Save Width") ||
+                 (lA[[1]][1] == "Save Height") || (lA[[1]][1] == "Save DPI") ||
+                 (lA[[1]][1] == "Save Units") || (lA[[1]][1] == "Save Type")
             ) {
                 hsa$set(lA[[1]][1], lA[[1]][2], TRUE)
             }
 
-            ################ Label Size and Appearance (OPT) ################
-            if (lA[[1]][1] == "Text Font") {
-                if (lA[[1]][2] %in% c("serif", "sans", "mono")) { fig$Font <- lA[[1]][2] }
-            }
+            ################ Figure Save (OPT) ################
+
+
             ################ Display of the Axis & Plot (OPT) ################
-            else if (lA[[1]][1] == "X Value Angle") { fig$X.Angle <- as.numeric(lA[[1]][2])
-            }
             # THIS SETTING CURRENTLY DISABLED AND NOT IMPLEMENTED IN build_histo FUNCTION
-            else if (lA[[1]][1] == "Coord Fixed Ratio") {
-                histova_msg(sprintf("Coord Fixed Ratio is currently disabled! Setting of \"Coord Fixed Ratio %s\" is being ignored.", lA[[1]][2]), type="warn", tabs=1)
-                if (lA[[1]][2] %in% c("FALSE", "False", "false")) {
-                    fig$Coord.Fixed <- FALSE
-                    fig$Coord.Fixed.Ratio <- ""
-                } else if (lA[[1]][2] %in% c("SQUARE", "Square", "square")) {
-                    fig$Coord.Fixed <- TRUE
-                    fig$Coord.Fixed.Ratio <- "SQUARE"
-                } else {
-                    fig$Coord.Fixed <- TRUE
-                    if (grepl("/", lA[[1]][2], fixed=TRUE)) {
-                        fig$Coord.Fixed.Ratio <- sapply(strsplit(lA[[1]][2], "/"), function(x) { x <- as.numeric(x); x[1] / x[2]})
-                    } else {
-                        fig$Coord.Fixed.Ratio <- as.numeric(lA[[1]][2])
-                    }
-                }
-            }
-            else if (lA[[1]][1] == "Bar Width") {
-                fig$Bar.Width <- as.numeric(lA[[1]][2])
-            }
-            else if (lA[[1]][1] == "Bar Border Color") {
-                fig$Bar.Border.Color <- lA[[1]][2]
-            }
-            else if (lA[[1]][1] == "Bar Border Width") {
-                fig$Bar.Border.Width <- as.numeric(lA[[1]][2])
-            }
+            # DROPPING THIS FROM HISTOVA:
+            # (lA[[1]][1] == "Coord Fixed Ratio")
+                    #fig$Coord.Fixed <- FALSE
+                    #fig$Coord.Fixed.Ratio <- ""
+
             ################ Colors and Display Individual Points (OPT) ################
             # can handle "," and " " for splitting ([, ]+ looks for "," or " " multiple times for splitting)
-            else if (lA[[1]][1] == "Colors") { fig$Colors <- strsplit(lA[[1]][2], "[, ]+")[[1]]
+            if (lA[[1]][1] == "Colors") { fig$Colors <- strsplit(lA[[1]][2], "[, ]+")[[1]]
             } else if ((lA[[1]][1] == "Colors Unique") || (lA[[1]][1] == "Colors Specific")) {
                 #Colors Unique	#000000, #FFD700, 4, 1.8
                 #Colors Unique	COLOR, ALPHA, COLOR, SHAPE, SIZE, STROKE, ALPHA
@@ -170,22 +155,7 @@ load_file_head = function(hsa) {
                     # handle all formatting in set_aesthetics now
                     fig$Colors.Unique[nrow(fig$Colors.Unique)+1,] <- colorDets
                 }
-            } else if (lA[[1]][1] == "Colors Alpha") {
-                if ((as.numeric(lA[[1]][2]) >= 0) && (as.numeric(lA[[1]][2]) <= 1)) {
-                    fig$Colors.Alpha <- as.numeric(lA[[1]][2])
-                }
-            }
-            else if (lA[[1]][1] == "Scatter Display") {
-                if (lA[[1]][2] %in% c("FALSE", "False", "false", 0)) {
-                    fig$Scatter.Disp <- FALSE
-                }
-            }
-            else if (lA[[1]][1] == "Scatter Alpha") {
-                if ((as.numeric(lA[[1]][2]) >= 0) && (as.numeric(lA[[1]][2]) <= 1)) {
-                    fig$Scatter.Alpha <- as.numeric(lA[[1]][2])
-                }
-            }
-            else if (lA[[1]][1] == "Scatter ColorShapeSize") {
+            } else if (lA[[1]][1] == "Scatter ColorShapeSize") {
                 # not doing much checking here, assume that anything from 1 to 3 items
                 # can be supplied here...
                 scatterDets = strsplit(lA[[1]][2], ",")[[1]]
@@ -196,9 +166,6 @@ load_file_head = function(hsa) {
                 }
                 if (length(scatterDets) >= 2) { fig$Scatter.Shape <- as.numeric(scatterDets[2]) }
                 if (length(scatterDets) >= 3) { fig$Scatter.Size <- as.numeric(scatterDets[3]) }
-            }
-            else if (lA[[1]][1] == "Scatter Stroke") {
-                fig$Scatter.Stroke <-  as.numeric(lA[[1]][2])
             }
             else if (lA[[1]][1] == "Whisker Plot") {
                 # this is also checked in generate_label_df(), if expanding options check there for continuity
@@ -272,18 +239,7 @@ load_file_head = function(hsa) {
                 else { stats$Caption.Display <- TRUE }
             }
             else if (lA[[1]][1] == "Stat Caption Size") { stats$Caption.Size <- as.numeric(lA[[1]][2]) }
-            ################ Figure Save (OPT) ################
-            else if (lA[[1]][1] == "Save Width") { fig$Save.Width <- as.numeric(lA[[1]][2]) }
-            else if (lA[[1]][1] == "Save Height") { fig$Save.Height <- as.numeric(lA[[1]][2]) }
-            else if (lA[[1]][1] == "Save DPI") { fig$Save.DPI <- as.numeric(lA[[1]][2]) }
-            else if (lA[[1]][1] == "Save Units") {
-                if (tolower(lA[[1]][2]) %in% c("in", "cm", "mm", "px")) { fig$Save.Units <- tolower(lA[[1]][2]) }
-                else { fig$Save.Units <- "in" }
-            }
-            else if (lA[[1]][1] == "Save Type") {
-                if (tolower(lA[[1]][2]) %in% c("tex", "pdf", "jpg", "jpeg", "tiff", "png", "bmp", "svg")) { fig$Save.Type <- tolower(lA[[1]][2]) }
-                else { fig$Save.Type <- "jpg" }
-            }
+
         }
 
         ################ Title & Axis Labels (REQ) ################

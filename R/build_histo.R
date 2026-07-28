@@ -36,9 +36,9 @@ build_histo <- function(hsa){
     if (stats$Transform == "TimeCourse") {
         gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(y=mean, label = .data$Group2, x = .data$Group1, fill = .data$Group2, width=.85)) +
             ggplot2::geom_bar(
-                alpha = fig$Colors.Alpha,
-                color = fig$Bar.Border.Color,
-                linewidth = fig$Bar.Border.Width,
+                alpha = hsa$get("fig.colors.alpha"),
+                color = has$get("fig.bar.border.color"),
+                linewidth = has$get("fig.bar.border.width"),
                 position = ggplot2::position_dodge(),
                 stat = 'identity') +
             # turn off the legend (or certain aspects of it)...
@@ -62,12 +62,12 @@ build_histo <- function(hsa){
             gplot = gplot +
                 ggplot2::geom_boxplot(
                     outlier.shape = NA,
-                    alpha = fig$Colors.Alpha)
+                    alpha = hsa$get("fig.colors.alpha"))
         } else if (fig$Plot.Whisker == "VIOLIN") {
             gplot = gplot +
                 ggplot2::geom_violin(
                     trim = TRUE,
-                    alpha = fig$Colors.Alpha)
+                    alpha = hsa$get("fig.colors.alpha"))
         }
         gplot = gplot + ggplot2::scale_fill_manual(
             values=fig$Color.List,
@@ -84,9 +84,9 @@ build_histo <- function(hsa){
         }
         gplot = gplot + ggplot2::geom_bar(
             alpha= fig$Color.Alpha.List,
-            color= fig$Bar.Border.Color,
-            linewidth = fig$Bar.Border.Width,
-            width= fig$Bar.Width,
+            color= hsa$get("fig.bar.border.color"),
+            linewidth = hsa$get("fig.bar.border.width"),
+            width= hsa$get("fig.bar.width"),
             position=ggplot2::position_dodge(),
             stat='identity') +
 
@@ -102,7 +102,7 @@ build_histo <- function(hsa){
         #caption = paste(Notes.Stats.Method, Notes.Stats.Outlier, sep="\n"),
         x=fig$X)
     gplot = gplot + ggplot2::theme(
-        text=ggplot2::element_text(family=fig$Font),
+        text=ggplot2::element_text(family=hsa$get("fig.font")),
         plot.title = ggtext::element_markdown(lineheight=0.8, size=hsa$get("fig.title.size"), hjust=0.5, vjust=0, margin=ggplot2::margin(b=0, unit = "pt")),
         plot.caption = ggplot2::element_text(color="black", size=stats$Caption.Size, face="italic"),
         axis.title = ggplot2::element_text(color="black", size=hsa$get("fig.axis.label.size") ),
@@ -124,7 +124,7 @@ build_histo <- function(hsa){
         panel.grid.minor.y = ggplot2::element_line(linewidth=3),
         legend.title = ggtext::element_markdown(colour="black", size=hsa$get("fig.legend.label.size")),
         legend.text = ggplot2::element_text(colour="black", size = hsa$get("fig.legend.label.size")),
-        legend.key.size = ggplot2::unit(fig$Legend.Key.Size, fig$Save.Units),
+        legend.key.size = ggplot2::unit(fig$Legend.Key.Size, hsa$get("fig.save.units")),
         strip.text.x = ggplot2::element_text(size = hsa$get("fig.axis.title.size"), colour = "black"), # defines the above figure sub titles
         strip.background = ggplot2::element_rect(colour="white", fill="white", linewidth=1.5, linetype="solid")
     )
@@ -169,14 +169,14 @@ build_histo <- function(hsa){
     # add scatter plot into the figure
     #
     ############################
-    if (fig$Scatter.Disp) {
+    if (hsa$get("fig.scatter.disp")) {
         if (stats$Transform == "TimeCourse") {
             gplot = gplot + ggplot2::geom_point(
                 data=raw$base, ggplot2::aes(x = .data$Group1, y = .data$Value, group = .data$statGroups, color = .data$Group2, shape = .data$Group2, size = .data$Group2, stroke = .data$Group2, alpha = .data$Group2),
                 position = ggplot2::position_dodge2(width=0.85,padding=0.35),
                 stat='identity',
-                #alpha=fig$Scatter.Alpha,
-                #stroke=fig$Scatter.Stroke,
+                #alpha=hsa$get("fig.scatter.alpha"),
+                #stroke=hsa$get("fig.scatter.stroke"),
                 show.legend = FALSE
             )
             # makes the scatter points placed in the legend match the group color
@@ -226,8 +226,8 @@ build_histo <- function(hsa){
 
     #
     # modify x axis labels to put them at an angle
-    if (fig$X.Angle != 0) {
-        gplot = gplot + ggplot2::theme(axis.text.x = ggplot2::element_text(angle=fig$X.Angle, hjust=1))
+    if (hsa$get("fig.x.angle") != 0) {
+        gplot = gplot + ggplot2::theme(axis.text.x = ggplot2::element_text(angle=hsa$get("fig.x.angle"), hjust=1))
     }
     #
     # break the figure into two separate ones for each secondary grouping
@@ -237,32 +237,9 @@ build_histo <- function(hsa){
         #gplot = gplot + ggplot2::facet_grid(~ Group2, scales="fixed", space="fixed")
     }
     #
-    # old code and not very useful until / if there are ever non discrete values for the x-axis
-    # having groups simply provide each group with equal width,
     # coord_fixed and aspect.ratio DO NOT work with facet_grid(space="free_x")... This option
     # would have to be avoided if deciding to use coord_fixed or aspect.ratio again...
     # at the moment all space / sizing is done by the width and height settings for saving the figure...
-    #
-    # determine if the fig shape should be modified:
-    #if (fig$Coord.Fixed) {
-    if (FALSE) {
-        ratio.reset = NULL
-        # determine the ratio for any auto requests
-        if (fig$Coord.Fixed.Ratio == "SQUARE") {
-            fig$Coord.Fixed.Ratio <- 1/(abs(fig$Y.Max-fig$Y.Min) / length(raw$summary[['statGroups']]))
-            ratio.reset = TRUE
-        }
-        histova_msg(sprintf("Figure coordinate ratio for display: %s", fig$Coord.Fixed.Ratio), tabs=2)
-        gplot = gplot + ggplot2::coord_fixed(ratio = fig$Coord.Fixed.Ratio)
-        # alternative method for controlling the plot dimensions
-        #gplot = gplot + ggplot2::theme(aspect.ratio = 1)
-        #
-        # reset the variable to SQUARE for when override is being used so that the ratio
-        # is calculated correctly for each figure
-        if (isTRUE(ratio.reset)) {
-            fig$Coord.Fixed.Ratio <- "SQUARE"
-        }
-    }
     #
     # determine where and how the stat letters are applied to each figure
     #

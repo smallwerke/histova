@@ -7,7 +7,7 @@
 #' is set as 'NA', next any colors defined in the old 'Colors' list option is *appended* onto the figure's
 #' color list. Finally 'Colors Specific' settings are added. These have a named group and will overwrite any
 #' color/setting specified by either 'Colors Unique' or 'Colors'.
-#' Finally all remaining 'NA' color values are replaced with valeus from the scales::hue_pal() function
+#' Finally all remaining 'NA' color values are replaced with values from the scales::hue_pal() function
 #' and all other values (color alpha & scatter details) still set as 'NA' are replaced by default values.
 #' IF 'Scatter ColorShapeSize' is set to MATCH then all scatter color values will be replaced by
 #' the corresponding fill color values *regardless* of what is specified in 'Colors Unique', or 'Colors Specific'.
@@ -21,9 +21,11 @@
 #' <br>Scatter.Stroke.List -> list of stroke width for the scatter points
 #' <br>Scatter.Alpha.List -> list of alpha levels for the scatter points
 #'
+#' @param hsa the R6 histoav object
+#'
 #' @export
 #'
-set_aesthetics <- function() {
+set_aesthetics <- function(hsa) {
 
     histova_msg("Setting Aesthetics", type="subhead")
     ##############################
@@ -187,14 +189,14 @@ set_aesthetics <- function() {
         }
         #histova_msg(sprintf("added %s colors for groups %s ", generatedColors, unsetNames), tabs=2, type="warn")
     }
-    fig$Color.Alpha.List[is.na(fig$Color.Alpha.List)] = fig$Colors.Alpha
+    fig$Color.Alpha.List[is.na(fig$Color.Alpha.List)] = hsa$get("fig.colors.alpha")
 
     # assign all remaining scatter NA values to the defaults
     fig$Scatter.Color.List[is.na(fig$Scatter.Color.List)] = fig$Scatter.Color
     fig$Scatter.Shape.List[is.na(fig$Scatter.Shape.List)] = as.numeric(fig$Scatter.Shape)
     fig$Scatter.Size.List[is.na(fig$Scatter.Size.List)] = as.numeric(fig$Scatter.Size)
-    fig$Scatter.Stroke.List[is.na(fig$Scatter.Stroke.List)] = as.numeric(fig$Scatter.Stroke)
-    fig$Scatter.Alpha.List[is.na(fig$Scatter.Alpha.List)] = as.numeric(fig$Scatter.Alpha)
+    fig$Scatter.Stroke.List[is.na(fig$Scatter.Stroke.List)] = as.numeric(hsa$get("fig.scatter.stroke"))
+    fig$Scatter.Alpha.List[is.na(fig$Scatter.Alpha.List)] = as.numeric(hsa$get("fig.scatter.alpha"))
 
     # IF MATCH IS SET OVERRIDE ALL OTHER ASSIGNMENTS
     if (fig$Scatter.Color.Source == "MATCH") {

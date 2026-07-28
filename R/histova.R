@@ -94,8 +94,8 @@ histova <- R6::R6Class(
         #' @param name.L the list name
         #' @param name.I the info name / variable
         is_style = function(name.L, name.I) {
-            if ( (name.L %in% names(private$styles)) && (name.I %in% private$styles[[name.L]]) ) {
-                return(TRUE)
+            if (is.list(private$default[[name.L]][[name.I]])) {
+                return(private$default[[name.L]][[name.I]]$style)
             } else {
                 return(FALSE)
             }
@@ -119,14 +119,52 @@ histova <- R6::R6Class(
             key = self$split(key)
             if (is.list(private$default[[key[1]]][[key[2]]])) {
                 message(paste0("in: ", key[1], " setting ", key[2], " as: ", val))
-                if (private$default[[key[1]]][[key[2]]]$type == "bool") {
+                if (private$default[[key[1]]][[key[2]]]$type == "alpha") {
+                    if ((as.numeric(val) >= 0) && (as.numeric(val) <= 1)) {
+                        self[[key[1]]][[key[2]]] = as.numeric(val)
+                    }
+                } else if (private$default[[key[1]]][[key[2]]]$type == "bool") {
                     if (val %in% c("TRUE", "True", "true", "1")) {
                         self[[key[1]]][[key[2]]] = TRUE
                     } else {
                         self[[key[1]]][[key[2]]] = FALSE
                     }
+
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "color") {
+                    isCol = FALSE
+                    tryCatch({
+                        isCol = is.matrix(grDevices::col2rgb(val))
+                    }, error = function(e) {
+                        isCol = FALSE
+                    })
+                    if (isTRUE(isCol)) {
+                        self[[key[1]]][[key[2]]] = val
+                    }
+                    rm(isCol)
+
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "font") {
+                    if (val %in% c("serif", "sans", "mono")) {
+                        self[[key[1]]][[key[2]]] <- val
+                    }
+
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "imgType") {
+                    if (tolower(val) %in% c("tex", "pdf", "jpg", "jpeg", "tiff", "png", "bmp", "svg")) {
+                        self[[key[1]]][[key[2]]] <- tolower(val)
+                    } else {
+                        self[[key[1]]][[key[2]]] <- "jpg"
+                    }
+
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "imgUnits") {
+                    if (tolower(val) %in% c("in", "cm", "mm", "px")) {
+                        self[[key[1]]][[key[2]]] <- tolower(val)
+                    } else {
+                        self[[key[1]]][[key[2]]] <- "in"
+                    }
                 } else if (private$default[[key[1]]][[key[2]]]$type == "num") {
-                    self[[key[1]]][[key[2]]] = as.numeric(val)
+                    self[[key[1]]][[key[2]]] <- as.numeric(val)
+
+                } else if (private$default[[key[1]]][[key[2]]]$type == "text") {
+
                 }
             }
         },
@@ -161,155 +199,99 @@ histova <- R6::R6Class(
             "Axis Label Size" = "fig.axis.label.size",
             "Axis Title Size" = "fig.axis.title.size",
             "Axis Value Size" = "fig.axis.value.size",
+            "Bar Width" = "fig.bar.width",
+            "Bar Border Color" = "fig.bar.border.color",
+            "Bar Border Width" = "fig.bar.border.width",
+            "Colors Alpha" = "fig.colors.alpha",
             "Legend Label Size" = "fig.legend.label.size",
+            "Save Width" = "fig.save.width",
+            "Save Height" = "fig.save.height",
+            "Save DPI" = "fig.save.dpi",
+            "Save Units" = "fig.save.units",
+            "Save Type" = "fig.save.type",
+            "Scatter Alpha" = "fig.scatter.alpha",
+            "Scatter Display" = "fig.scatter.disp",
             "Text Convert" = "fig.convert",
+            "Text Font" = "fig.font",
             "Title Size" = "fig.title.size",
+            "X Angle" = "fig.x.angle", # check / remove this option...
+            "X Value Angle" = "fig.x.angle",
             "X Tick Display" = "fig.x.tick.display",
             "X Value Display" = "fig.x.value.display"
-        ),
-        styles = list(
-            fig = c(
-                "axis.title.size",
-                "axis.label.sep",
-                "axis.label.size",
-                "axis.value.size",
-                "axis.x.main.color",
-                "axis.x.main.size",
-                "axis.x.tick.color",
-                "axis.x.tick.length",
-                "axis.x.tick.size",
-                "axis.y.main.color",
-                "axis.y.main.size",
-                "axis.y.tick.color",
-                "axis.y.tick.length",
-                "axis.y.tick.size",
-                "bar.border.color",
-                "bar.border.width",
-                "bar.width",
-                "colors.alpha",
-                "colors.unique",
-                "convert",
-                "coord.fixed",
-                "coord.fixed.ratio",
-                "font",
-                "legend.color.source",
-                "legend.display",
-                "legend.key.size",
-                "legend.label.size",
-                "legend.position",
-                "legend.title",
-                "legend.title.tmp",
-                "plot.errorbar.endwidth",
-                "plot.errorbar.color",
-                "plot.errorbar.size",
-                "plot.hline.def.color",
-                "plot.hline.def.size",
-                "plot.hline.OVRD.color",
-                "plot.hline.OVRD.size",
-                "plot.whisker",
-                "save.dpi",
-                "save.height",
-                "save.type",
-                "save.units",
-                "save.width",
-                "scatter.alpha",
-                "scatter.color",
-                "scatter.color.source",
-                "scatter.disp",
-                "scatter.shape",
-                "scatter.size",
-                "scatter.stroke",
-                "title.size",
-                "x.angle",
-                "x.tick.display",
-                "x.value.display"
-            ),
-            notes = c(
-                "stats.method",
-                "stats.outlier"
-            ),
-            stats = c(
-                "caption.display",
-                "caption.size",
-                "letters.offset",
-                "letters.size"
-            )
         ),
         # include ALL variables, if no default just return NULL
         # have a list w/ default AND check type
         default = list(
             behave = list(),
             fig = list(
-                "axis.label.sep" = list(val=20,type="num"),
-                "axis.label.size" = list(val=26,type="num"),
-                "axis.title.size" = list(val=26,type="num"),
-                "axis.value.size" = list(val=26,type="num"),
-                "axis.x.main.color" = "black",
-                "axis.x.main.size" = list(val=0.8,type="num"),
-                "axis.x.tick.color" = "black",
-                "axis.x.tick.length" = 0.1,
-                "axis.x.tick.size" = 0.6,
-                "axis.y.main.color" = "black",
-                "axis.y.main.size" = 0.8,
-                "axis.y.tick.color" = "black",
-                "axis.y.tick.length" = 0.1,
-                "axis.y.tick.size" = 0.6,
-                "bar.border.color" = "white",
-                "bar.border.width" = 0.2,
-                "bar.width" = 0.8,
-                "color.alpha.list" = "",
-                "color.list" = "",
-                "colors" = c(),
-                "colors.alpha" = 1,
+                "axis.label.sep" = list(val=20,type="num",style=TRUE),
+                "axis.label.size" = list(val=26,type="num",style=TRUE),
+                "axis.title.size" = list(val=26,type="num",style=TRUE),
+                "axis.value.size" = list(val=26,type="num",style=TRUE),
+                "axis.x.main.color" = list(val="black",type="color",style=TRUE),
+                "axis.x.main.size" = list(val=0.8,type="num",style=TRUE),
+                "axis.x.tick.color" = list(val="black",type="color",style=TRUE),
+                "axis.x.tick.length" = list(val=0.1,type="num",style=TRUE),
+                "axis.x.tick.size" = list(val=0.6,type="num",style=TRUE),
+                "axis.y.main.color" = list(val="black",type="color",style=TRUE),
+                "axis.y.main.size" = list(val=0.8,type="num",style=TRUE),
+                "axis.y.tick.color" = list(val="black",type="color",style=TRUE),
+                "axis.y.tick.length" = list(val=0.1,type="num",style=TRUE),
+                "axis.y.tick.size" = list(val=0.6,type="num",style=TRUE),
+                "bar.border.color" = list(val="white",type="color",style=TRUE),
+                "bar.border.width" = list(val=0.2,type="num",style=TRUE),
+                "bar.width" = list(val=0.8,type="num",style=TRUE),
+                "color.alpha.list" = list(val="",type="",style=FALSE),
+                "color.list" = list(val="",type="",style=FALSE),
+                "colors" = list(val=c(),type="",style=FALSE),
+                "colors.alpha" = list(val=1,type="alpha",style=TRUE),
                 "colors.unique" = list(val=data.frame(matrix(
-                    ncol = 8, nrow = 0,
-                    dimnames = list(NULL, c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha"))
-                )),type="df"),
-                "convert" = list(val=TRUE,type="bool"),
-                "coord.fixed" = TRUE,
-                "coord.fixed.ratio" = "SQUARE",
-                "facet.split" = TRUE,
-                "font" = "sans",
-                "legend.color.source" = "All",
-                "legend.display" = FALSE,
-                "legend.key.size" = 0.25,
-                "legend.label.size" = list(val=26,type="num"),
-                "legend.position" = "bottom",
-                "legend.title" = "Groups",
-                "legend.title.tmp" = "",
-                "plot.errorbar.color" = "black",
-                "plot.errorbar.endwidth" = 0.4,
-                "plot.errorbar.size" = 0.8,
-                "plot.hline" = data.frame(y=c(NA), size=c(0), color=c("")),
-                "plot.labels" = "",
-                "plot.whisker" = "FALSE",
-                "plot.hline.def.color" = "black",
-                "plot.hline.def.size" = 1,
-                "plot.hline.OVRD.color" = NA,
-                "plot.hline.OVRD.size" = NA,
-                "save.dpi" = 320,
-                "save.height" = 8.5,
-                "save.type" = "jpg",
-                "save.units" = "in",
-                "save.width" = 8,
-                "scatter.alpha" = 1,
-                "scatter.color" = "#FFD700",
-                "scatter.color.source" = "DEF",
-                "scatter.disp" = TRUE,
-                "scatter.shape" = 4,
-                "scatter.size" = 1.8,
-                "scatter.stroke" = 2,
+                        ncol = 8, nrow = 0,
+                        dimnames = list(NULL, c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha"))
+                    )),type="",style=TRUE),
+                "convert" = list(val=TRUE,type="bool",style=TRUE),
+                "facet.split" = list(val=TRUE,type="bool",style=FALSE),
+                "font" = list(val="sans",type="font",style=TRUE),
+                "legend.color.source" = list(val="All",type="",style=TRUE),
+                "legend.display" = list(val=FALSE,type="bool",style=TRUE),
+                "legend.key.size" = list(val=0.25,type="num",style=TRUE),
+                "legend.label.size" = list(val=26,type="num",style=TRUE),
+                "legend.position" = list(val="bottom",type="",style=TRUE),
+                "legend.title" = list(val="Groups",type="",style=TRUE),
+                "legend.title.tmp" = list(val="",type="",style=TRUE),
+                "plot.errorbar.color" = list(val="black",type="color",style=TRUE),
+                "plot.errorbar.endwidth" = list(val=0.4,type="num",style=TRUE),
+                "plot.errorbar.size" = list(val=0.8,type="num",style=TRUE),
+                "plot.hline" = list(val=data.frame(y=c(NA), size=c(0), color=c("")),type="",style=FALSE),
+                "plot.labels" = list(val="",type="",style=FALSE),
+                "plot.whisker" = list(val="FALSE",type="bool",style=TRUE),
+                "plot.hline.def.color" = list(val="black",type="bool",style=TRUE),
+                "plot.hline.def.size" = list(val=1,type="num",style=TRUE),
+                "plot.hline.OVRD.color" = list(val=NA,type="",style=TRUE),
+                "plot.hline.OVRD.size" = list(val=NA,type="",style=TRUE),
+                "save.dpi" = list(val=320,type="num",style=TRUE),
+                "save.height" = list(val=8.5,type="num",style=TRUE),
+                "save.type" = list(val="jpg",type="imgType",style=TRUE),
+                "save.units" = list(val="in",type="imgUnits",style=TRUE),
+                "save.width" = list(val=8,type="num",style=TRUE),
+                "scatter.alpha" = list(val=1,type="alpha",style=TRUE),
+                "scatter.color" = list(val="#FFD700",type="color",style=TRUE),
+                "scatter.color.source" = list(val="DEF",type="",style=TRUE),
+                "scatter.disp" = list(val=TRUE,type="bool",style=TRUE),
+                "scatter.shape" = list(val=4,type="num",style=TRUE),
+                "scatter.size" = list(val=1.8,type="num",style=TRUE),
+                "scatter.stroke" = list(val=2,type="num",style=TRUE),
                 "shape.list" = "",
                 "size.list" = "",
                 "stroke.list" = "",
                 "title" = "",
-                "title.size" = list(val=32,type="num"),
+                "title.size" = list(val=32,type="num",style=TRUE),
                 "title.tmp" = "",
                 "x" = "",
-                "x.angle" = 45,
-                "x.tick.display" = list(val=TRUE,type="bool"),
+                "x.angle" = list(val=45,type="num",style=TRUE),
+                "x.tick.display" = list(val=TRUE,type="bool",style=TRUE),
                 "x.tmp" = "",
-                "x.value.display" = list(val=TRUE,type="bool"),
+                "x.value.display" = list(val=TRUE,type="bool",style=TRUE),
                 "y" = "",
                 "y.break" = FALSE,
                 "y.break.df" = data.frame(matrix(
@@ -333,8 +315,8 @@ histova <- R6::R6Class(
                 "LOG" = ""
             ),
             notes = list(
-                "stats.method" = "",
-                "stats.outlier" = ""
+                "stats.method" = list(val="",type="",style=TRUE),
+                "stats.outlier" = list(val="",type="",style=TRUE)
             ),
             raw = list(
                 "anova.multi" = "",
@@ -348,10 +330,10 @@ histova <- R6::R6Class(
                 "summary.multi" = ""
             ),
             stats = list(
-                "caption.display" = TRUE,
-                "caption.size" = 6,
-                "letters.offset" = FALSE,
-                "letters.size" = 18
+                "caption.display" = list(val=TRUE,type="bool",style=TRUE),
+                "caption.size" = list(val=6,type="num",style=TRUE),
+                "letters.offset" = list(val=FALSE,type="bool",style=TRUE),
+                "letters.size" = list(val=18,type="num",style=TRUE)
             )
         )
     )

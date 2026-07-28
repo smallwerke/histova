@@ -27,32 +27,32 @@ init_vars <- function(hsa) {
         #fig$Axis.ValueSize <- histova::get_default("fig", "Axis.ValueSize")
         #fig$Legend.LabelSize <- histova::get_default("fig", "Legend.LabelSize")
         #fig$Convert <- histova::get_default("fig", "Convert")
-        fig$Font <- histova::get_default("fig", "Font")
+        #fig$Font <- histova::get_default("fig", "Font")
 
         ################ Display of the Axis & Plot (OPT) ################
-        fig$X.Angle <- histova::get_default("fig", "X.Angle")
+        #fig$X.Angle <- histova::get_default("fig", "X.Angle")
         #fig$X.Value.Display <- histova::get_default("fig", "X.Value.Display")
         #fig$X.Tick.Display <- histova::get_default("fig", "X.Tick.Display")
 
         # .Ratio for when a number is entered in config
         ### currently disabled ###
-        fig$Coord.Fixed <- histova::get_default("fig", "Coord.Fixed")
-        fig$Coord.Fixed.Ratio <- histova::get_default("fig", "Coord.Fixed.Ratio")
+        #fig$Coord.Fixed <- histova::get_default("fig", "Coord.Fixed")
+        #fig$Coord.Fixed.Ratio <- histova::get_default("fig", "Coord.Fixed.Ratio")
         ###
-        fig$Bar.Width <- histova::get_default("fig", "Bar.Width")
-        fig$Bar.Border.Color <- histova::get_default("fig", "Bar.Border.Color")
-        fig$Bar.Border.Width <- histova::get_default("fig", "Bar.Border.Width")
+        #fig$Bar.Width <- histova::get_default("fig", "Bar.Width")
+        #fig$Bar.Border.Color <- histova::get_default("fig", "Bar.Border.Color")
+        #fig$Bar.Border.Width <- histova::get_default("fig", "Bar.Border.Width")
 
         ################ Colors and Display Individual Points (OPT) ################
         fig$Colors.Unique <- histova::get_default("fig", "Colors.Unique")
-        fig$Colors.Alpha <- histova::get_default("fig", "Colors.Alpha")
-        fig$Scatter.Disp <- histova::get_default("fig", "Scatter.Disp")
-        fig$Scatter.Alpha <- histova::get_default("fig", "Scatter.Alpha")
+        #fig$Colors.Alpha <- histova::get_default("fig", "Colors.Alpha")
+        #fig$Scatter.Disp <- histova::get_default("fig", "Scatter.Disp")
+        #fig$Scatter.Alpha <- histova::get_default("fig", "Scatter.Alpha")
         fig$Scatter.Color.Source <- histova::get_default("fig", "Scatter.Color.Source") # INTERNAL SETTING
         fig$Scatter.Color <- histova::get_default("fig", "Scatter.Color")
         fig$Scatter.Shape <- histova::get_default("fig", "Scatter.Shape")
         fig$Scatter.Size <- histova::get_default("fig", "Scatter.Size")
-        fig$Scatter.Stroke <- histova::get_default("fig", "Scatter.Stroke")
+        #fig$Scatter.Stroke <- histova::get_default("fig", "Scatter.Stroke")
         fig$Plot.Whisker <- histova::get_default("fig", "Plot.Whisker")
 
         ################ Line Design Options (OPT) ################
@@ -89,11 +89,11 @@ init_vars <- function(hsa) {
         stats$Caption.Size <- histova::get_default("stats", "Caption.Size")
 
         ################ Figure Save (OPT) ################
-        fig$Save.DPI <- histova::get_default("fig", "Save.DPI")
-        fig$Save.Height <- histova::get_default("fig", "Save.Height")
-        fig$Save.Type <- histova::get_default("fig", "Save.Type")
-        fig$Save.Units <- histova::get_default("fig", "Save.Units")
-        fig$Save.Width <- histova::get_default("fig", "Save.Width")
+        #fig$Save.DPI <- histova::get_default("fig", "Save.DPI")
+        #fig$Save.Height <- histova::get_default("fig", "Save.Height")
+        #fig$Save.Type <- histova::get_default("fig", "Save.Type")
+        #fig$Save.Units <- histova::get_default("fig", "Save.Units")
+        #fig$Save.Width <- histova::get_default("fig", "Save.Width")
     }
 
     ################ Title & Axis Labels (REQ) ################

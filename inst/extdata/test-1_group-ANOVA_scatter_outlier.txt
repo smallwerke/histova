@@ -15,7 +15,6 @@
 ## X Value Angle -> Set the angle for X axis values (0 = no rotation, number = degree rotation)
 ## X Value Display -> display or not the values on the x-axis (TRUE / FALSE)
 ## X Tick Display -> display the tick marks on the x-axis (TRUE / FALSE)
-## Coord Fixed Ratio -> Coordinate ratio or manual (FALSE: disabled, SQUARE: 1/(Y Max / # of X Groups), NUM: [eg 1/2, 1/3])
 ## Bar Width -> how wide should the bar be (number)
 ## Bar Border Color -> color of the border (color code) ~ (TimeCourse def: black)
 ## Bar Border Width -> how thick should the bar border be (number) ~ (TimeCourse def: 1)

@@ -6,6 +6,7 @@
 #' only inputs are optional defining if the plot should be printed and / or if
 #' it should be saved to disk.
 #'
+#' @param hsa the histova R6 object
 #' @param printPlot T/F Should the finished plot be printed (def F)
 #' @param savePlot T/F Should the finished plot & log be saved to disk (def T)
 #' @param printEnvMsg T/F Passed on to set_env to determine if resume message printed (def T)
@@ -17,7 +18,7 @@ build_figure <- function(hsa, printPlot = FALSE, savePlot = TRUE, printEnvMsg = 
     set_env(the$Location.Dir, the$Location.File, the$Log.Save, env.new=FALSE, printEnvMsg)
 
     histova_msg("Build Histogram", type="head")
-    set_aesthetics()
+    set_aesthetics(hsa)
     build_histo(hsa)
 
     # add a line to the figure...
@@ -34,19 +35,19 @@ build_figure <- function(hsa, printPlot = FALSE, savePlot = TRUE, printEnvMsg = 
     # save the image to the working directory using the modified txt filename - this WILL
     # overwrite an existing image...
     if (savePlot) {
-        the$Location.Image = paste0(the$Location.Dir, "/", sub("txt", fig$Save.Type, the$Location.File))
+        the$Location.Image = paste0(the$Location.Dir, "/", sub("txt", hsa$get("fig.save.type"), the$Location.File))
         histova_msg("SAVE Histogram", type="head")
         histova_msg(sprintf("saving your new figure to: \'%s\'", the$Location.Image), tabs=1)
 
         # implement cairo package to better embed fonts into the output
-        if (fig$Save.Type %in% c("tex", "svg")) {
-            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, limitsize = FALSE)
-        } else if (fig$Save.Type == "pdf") {
-            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = grDevices::cairo_pdf, limitsize = FALSE)
-        } else if (fig$Save.Type %in% c("jpg", "jpeg", "png", "tiff")) {
-            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, limitsize = FALSE)
+        if (hsa$get("fig.save.type") %in% c("tex", "svg")) {
+            ggplot2::ggsave(the$Location.Image, width = hsa$get("fig.save.width"), height = hsa$get("fig.save.height"), dpi = hsa$get("fig.save.dpi"), units = hsa$get("fig.save.units"), device = hsa$get("fig.save.type"), limitsize = FALSE)
+        } else if (hsa$get("fig.save.type") == "pdf") {
+            ggplot2::ggsave(the$Location.Image, width = hsa$get("fig.save.width"), height = hsa$get("fig.save.height"), dpi = hsa$get("fig.save.dpi"), units = hsa$get("fig.save.units"), device = grDevices::cairo_pdf, limitsize = FALSE)
+        } else if (hsa$get("fig.save.type") %in% c("jpg", "jpeg", "png", "tiff")) {
+            ggplot2::ggsave(the$Location.Image, width = hsa$get("fig.save.width"), height = hsa$get("fig.save.height"), dpi = hsa$get("fig.save.dpi"), units = hsa$get("fig.save.units"), device = hsa$get("fig.save.type"), limitsize = FALSE)
         } else {
-            ggplot2::ggsave(the$Location.Image, width = fig$Save.Width, height = fig$Save.Height, dpi = fig$Save.DPI, units = fig$Save.Units, device = fig$Save.Type, type="cairo", limitsize = FALSE)
+            ggplot2::ggsave(the$Location.Image, width = hsa$get("fig.save.width"), height = hsa$get("fig.save.height"), dpi = hsa$get("fig.save.dpi"), units = hsa$get("fig.save.units"), device = hsa$get("fig.save.type"), type="cairo", limitsize = FALSE)
         }
     }
     histova_msg(sprintf("finihsed on %s", date()), type="title", breaker = "both")
