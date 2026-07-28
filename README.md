@@ -101,11 +101,17 @@ d = stringr::str_remove(histova_example(f), paste0("/",f))
 histova::generate_figure(d,f, FALSE, FALSE)
 #> --------------------------------------------------------------------------------
 #> ------------------------------- histova 3.5.0.3 --------------------------------
-#> ----------------------- run on Mon Jul 27 18:48:03 2026 ------------------------
+#> ----------------------- run on Tue Jul 28 15:41:26 2026 ------------------------
 #> --------------------------------------------------------------------------------
 #> -------- File exists & data environments ready --------
 #> ---- Initialize envrionment variables
 #> ---- Load config (file: test-1_group-ANOVA_scatter_outlier.txt)
+#> in: fig setting title.size as: 38
+#> in: fig setting convert as: true
+#> in: fig setting x.value.display as: true
+#> in: fig setting colors.alpha as: 0.6
+#> in: fig setting scatter.alpha as: 0.8
+#> KEY NOT FOUND
 #> ---- Load data (file: test-1_group-ANOVA_scatter_outlier.txt)
 #>     Data loaded and stored in the raw$IN environment
 #> -------- Data Manipulation --------
@@ -129,7 +135,7 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #> ---- Building Histogram
 #> ---- Generate Figure Labels
 #> --------------------------------------------------------------------------------
-#> --------------------- finihsed on Mon Jul 27 18:48:03 2026 ---------------------
+#> --------------------- finihsed on Tue Jul 28 15:41:26 2026 ---------------------
 #> --------------------------------------------------------------------------------
 #> <HISTOVA>
 #>   Public:
@@ -142,10 +148,12 @@ histova::generate_figure(d,f, FALSE, FALSE)
 #>     is_style: function (name.L, name.I) 
 #>     notes: list
 #>     raw: list
+#>     set: function (key, val, convert = FALSE) 
+#>     split: function (key) 
 #>     stats: list
 #>   Private:
+#>     convert: list
 #>     default: list
-#>     styles: list
 knitr::include_graphics("inst/extdata/test-1_group-ANOVA_scatter_outlier.jpg")
 ```
 
@@ -164,10 +172,6 @@ histova::opt_print("fig")
 #>     Data summary (first 40 characters) will be printed for each listed variable.
 #> ----------------------------------- ENV: fig -----------------------------------
 #> Axis
-#>     LabelSep                    Axis.LabelSep            20
-#>     LabelSize                   Axis.LabelSize           26
-#>     TitleSize                   Axis.TitleSize           26
-#>     ValueSize                   Axis.ValueSize           26
 #>     X
 #>         Main
 #>             Color               Axis.X.Main.Color        black
@@ -184,32 +188,20 @@ histova::opt_print("fig")
 #>             Color               Axis.Y.Tick.Color        black
 #>             Length              Axis.Y.Tick.Length       0.1
 #>             Size                Axis.Y.Tick.Size         0.6
-#> Bar
-#>     Border
-#>         Color                   Bar.Border.Color         white
-#>         Width                   Bar.Border.Width         0.2
-#>     Width                       Bar.Width                0.8
 #> Color
 #>     Alpha
 #>         List                    Color.Alpha.List         0.6, 0.6, 0.6, 0.6, 0.6, 0.6
 #>     List                        Color.List               #000000, #606060, #00c000, #f71480, #000
 #> Colors
-#>     Alpha                       Colors.Alpha             0.6
 #>     Unique                      Colors.Unique            c("G1", "G2", "G3", "G4", "G5", "G6"), c
-#> Convert                         Convert                  TRUE
-#> Coord
-#>     Fixed                       Coord.Fixed              TRUE
-#>         Ratio                   Coord.Fixed.Ratio        SQUARE
 #> Facet
 #>     Split                       Facet.Split              FALSE
-#> Font                            Font                     sans
 #> Legend
 #>     Color
 #>         Source                  Legend.Color.Source      All
 #>     Display                     Legend.Display           FALSE
 #>     Key
 #>         Size                    Legend.Key.Size          0.25
-#>     LabelSize                   Legend.LabelSize         26
 #>     Position                    Legend.Position          bottom
 #>     Title                       Legend.Title
 #>         tmp                     Legend.Title.tmp
@@ -221,35 +213,22 @@ histova::opt_print("fig")
 #>     HLine                       Plot.HLine               NA, 0,
 #>     Labels                      Plot.Labels              G5, G4, G3, G6, G2, G1
 #>     Whisker                     Plot.Whisker             FALSE
-#> Save
-#>     DPI                         Save.DPI                 320
-#>     Height                      Save.Height              8.5
-#>     Type                        Save.Type                jpg
-#>     Units                       Save.Units               in
-#>     Width                       Save.Width               8
 #> Scatter
-#>     Alpha                       Scatter.Alpha            0.8
+#>     Alpha
 #>         List                    Scatter.Alpha.List       0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8,
 #>     Color                       Scatter.Color            #FFD700
 #>         List                    Scatter.Color.List       #FFD700, #FFD700, #FFD700, #FFD700, #FFD
 #>         Source                  Scatter.Color.Source     UNIQUE
-#>     Disp                        Scatter.Disp             TRUE
 #>     Shape                       Scatter.Shape            4
 #>         List                    Scatter.Shape.List       4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 1, 1, 1
 #>     Size                        Scatter.Size             1.8
 #>         List                    Scatter.Size.List        1.8, 1.8, 1.8, 1.8, 1.8, 3.8, 3.8, 3.8,
-#>     Stroke                      Scatter.Stroke           1
-#>         List                    Scatter.Stroke.List      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+#>     Stroke
+#>         List                    Scatter.Stroke.List      2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 #> Title                           Title                    1 Group Test
-#>     Size                        Title.Size               32
 #>     tmp                         Title.tmp                1 Group Test
 #> X                               X                        Basic Figure<br>*differing scatter shape
-#>     Angle                       X.Angle                  45
-#>     Tick
-#>         Display                 X.Tick.Display           TRUE
 #>     tmp                         X.tmp                    Basic Figure<br>*differing scatter shape
-#>     Value
-#>         Display                 X.Value.Display          TRUE
 #> Y                               Y                        µ values
 #>     Break                       Y.Break                  FALSE
 #>         df                      Y.Break.df               logical(0), logical(0), logical(0)
@@ -262,15 +241,18 @@ histova::opt_print("fig")
 #>     tmp                         Y.tmp                    µ values
 ```
 
-### Edit Option
+### Edit Options
 
 Edit an aesthetic value.
 
 ``` r
 histova::opt_set("fig", "X.Angle", 90)
 #> ---------------------------------- Set Option ----------------------------------
-#> Updating fig$X.Angle from: 45 -> to -> 90
-#> [1] "PASS"
+#> Either the environment (fig) or the variable name (X.Angle) are incorrect. Run: 'opt_print("sum")' to get an overview.
+#> Warning: FROM histova::opt_set("fig", "X.Angle", 90): Either the environment
+#> (fig) or the variable name (X.Angle) are incorrect. Run: 'opt_print("sum")' to
+#> get an overview.
+#> [1] "FAIL"
 histova::opt_set("the", "Location.File", "test-1_group-ANOVA_scatter_outlier-90.txt")
 #> ---------------------------------- Set Option ----------------------------------
 #> Updating the$Location.File from: test-1_group-ANOVA_scatter_outlier.txt -> to -> test-1_group-ANOVA_scatter_outlier-90.txt
@@ -285,10 +267,20 @@ the *figure* environment).
 ``` r
 histova::opt_print("fig", "X.Angle")
 #> -------------------------- Variables per Environment ---------------------------
-#> -------- Env: fig --------
-#> -------- Var: X.Angle --------
-#> -------- Data: --------
-#> 90
+#> Either the variable (X.Angle) or the environment (fig) you supplied DO NOT EXIST
+#>  switching to: 'opt_print("sum")' for an overview of existing environments & variables!
+#> Warning: FROM histova::opt_print("fig", "X.Angle"): Either the variable (X.Angle) or the environment (fig) you supplied DO NOT EXIST
+#>  switching to: 'opt_print("sum")' for an overview of existing environments & variables!
+#> ----------------------------------- ENV: fig -----------------------------------
+#> CONTENTS OF ENV: Plot.ErrorBar.EndWidth, Y.Max, Legend.Title, Scatter.Color.Source, Y.Break.df, Scatter.Color, Scatter.Stroke.List, Facet.Split, Legend.Key.Size, Legend.Color.Source, Y.Rig.Newline, Scatter.Size.List, X.tmp, Plot.ErrorBar.Size, Axis.Y.Tick.Size, Y.Min, Legend.Title.tmp, Scatter.Color.List, Plot.Labels, Color.Alpha.List, Legend.Position, Scatter.Alpha.List, Y.tmp, Axis.Y.Main.Color, Axis.X.Tick.Size, Axis.X.Main.Size, Color.List, X, Scatter.Size, Colors.Unique, Scatter.Shape, Y, Y.Rig, Scatter.Shape.List, Y.Supp, Axis.Y.Tick.Length, Axis.X.Tick.Length, Axis.Y.Main.Size, Plot.ErrorBar.Color, Plot.Whisker, Title.tmp, Title, Legend.Display, Plot.HLine, Y.Interval, Axis.X.Tick.Color, Axis.X.Main.Color, Axis.Y.Tick.Color, Y.Break
+#> ---------------------------------- ENV: notes ----------------------------------
+#> CONTENTS OF ENV: Stats.Method, Stats.Outlier
+#> ----------------------------------- ENV: raw -----------------------------------
+#> CONTENTS OF ENV: aov.multi, outlier, multi, summary, summary.multi, aov.tukey.multi, anova.multi, base, IN
+#> ---------------------------------- ENV: stats ----------------------------------
+#> CONTENTS OF ENV: Outlier, Letters.Size, Caption.Display, Tukey.Labels, Test, Letters.Offset, STTest.Pairs, Group1.Mute, PTTest.Pairs, Caption.Size, Transform.Treatment, Tukey.Levels, Transform, Anova.Group2
+#> ----------------------------------- ENV: the -----------------------------------
+#> CONTENTS OF ENV: Location.Dir, Location.File, Location.File.Name, envList, Log.Save, Location.File.Suffix, gplot, Override, Location.Log, LOG
 histova::opt_print("the", "Location.File")
 #> -------------------------- Variables per Environment ---------------------------
 #> -------- Env: the --------

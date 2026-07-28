@@ -81,7 +81,7 @@ Print out the main aesthetic settings used for this plot (contained in the *figu
 histova::opt_print("fig")
 ```
 
-### Edit Option
+### Edit Options
 
 Edit an aesthetic value.
 

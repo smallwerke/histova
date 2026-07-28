@@ -23,6 +23,9 @@ generate_figure(
 
 \item{saveLog}{T/f Should a log file be generated for this session}
 }
+\value{
+hsa R6 histova object
+}
 \description{
 This is the main function that builds a plot based on the specified configuration file. Pass in
 the desired directory and file name in string format. By default the function does not print the

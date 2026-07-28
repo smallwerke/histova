@@ -34,6 +34,8 @@ Store all of the data and provide a get() function
 \item \href{#method-HISTOVA-get}{\code{histova$get()}}
 \item \href{#method-HISTOVA-get_default}{\code{histova$get_default()}}
 \item \href{#method-HISTOVA-is_style}{\code{histova$is_style()}}
+\item \href{#method-HISTOVA-set}{\code{histova$set()}}
+\item \href{#method-HISTOVA-split}{\code{histova$split()}}
 \item \href{#method-HISTOVA-clone}{\code{histova$clone()}}
 }
 }
@@ -90,6 +92,44 @@ is this a style variable that can be overidden?
 \item{\code{name.L}}{the list name}
 
 \item{\code{name.I}}{the info name / variable}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-HISTOVA-set"></a>}}
+\if{latex}{\out{\hypertarget{method-HISTOVA-set}{}}}
+\subsection{Method \code{set()}}{
+is this a style variable that can be overidden?
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{histova$set(key, val, convert = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{key}}{the list name}
+
+\item{\code{val}}{the info name / variable}
+
+\item{\code{convert}}{the info name / variable}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-HISTOVA-split"></a>}}
+\if{latex}{\out{\hypertarget{method-HISTOVA-split}{}}}
+\subsection{Method \code{split()}}{
+is this a style variable that can be overidden?
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{histova$split(key)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{key}}{the val to split}
 }
 \if{html}{\out{</div>}}
 }

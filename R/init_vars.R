@@ -10,6 +10,8 @@
 #' as the setting only needs to be edited in one config file and will be essentially
 #' inhereted by all subsequent figures provided the 'Override' option is not explicitly set.
 #'
+#' @param hsa the R6 histova object being worked on
+#'
 #' @export
 #'
 #' @examples

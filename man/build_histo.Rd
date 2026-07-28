@@ -6,6 +6,9 @@
 \usage{
 build_histo(hsa)
 }
+\arguments{
+\item{hsa}{active R6 histova object}
+}
 \description{
 Build histogram using data and configuration settings saved in the package environment. This function
 tries to put all the possible options specified in the configuration together into a working figure.

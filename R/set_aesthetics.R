@@ -21,7 +21,7 @@
 #' <br>Scatter.Stroke.List -> list of stroke width for the scatter points
 #' <br>Scatter.Alpha.List -> list of alpha levels for the scatter points
 #'
-#' @param hsa the R6 histoav object
+#' @param hsa the R6 histova object
 #'
 #' @export
 #'

@@ -6,6 +6,7 @@
 #' @param tabs Any indentation for the message (only compatible with msg and warn)
 #' @param PRINT T/F Print out to screen
 #' @param LOG  T/F Write to .histova log file
+#' @param hsa R6 histova object for settings details
 #'
 #' @export
 #'

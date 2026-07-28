@@ -17,6 +17,9 @@ set_env(location.dir, location.file, saveLog, env.new = TRUE, printMsg = TRUE)
 
 \item{printMsg}{T/F print a resume header message, only option when env.new is FALSE}
 }
+\value{
+hsa R6 histova object created in this function
+}
 \description{
 This function sets up the general environment, checking to make sure
 the needed environments for data & options storage exist and

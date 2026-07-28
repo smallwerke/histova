@@ -6,6 +6,9 @@
 \usage{
 load_file_head(hsa)
 }
+\arguments{
+\item{hsa}{R6 histova object being worked on}
+}
 \description{
 Load the configuration from the head of the file specified in the$Location.file. Each
 configuration file should begin with the settings section that details the aesthetics of

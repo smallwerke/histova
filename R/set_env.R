@@ -12,6 +12,8 @@
 #' @param env.new T/F is this a new environment or continued execution on an old one
 #' @param printMsg T/F print a resume header message, only option when env.new is FALSE
 #'
+#' @returns hsa R6 histova object created in this function
+#'
 #' @export
 #'
 #' @examples
@@ -27,7 +29,7 @@ set_env <- function(location.dir, location.file, saveLog, env.new = TRUE, printM
     #
 
     # create a new (and empty) histova object!
-    histova <- histova::histova$new()
+    hsa <- histova::histova$new()
     # set location
 
     # both directory and file location strings need to be character types...
@@ -56,28 +58,28 @@ set_env <- function(location.dir, location.file, saveLog, env.new = TRUE, printM
 
     # NEW OBJ
     # file & environments exist! let's get started
-    histova$file$location.file <- location.file
+    hsa$file$location.file <- location.file
 
     # use dirname function to pull the directory name by appending the given filename to it..
     # this will drop a '/' if it is included in the submitted dirname
-    histova$file$location.dir <- dirname(paste0(location.dir, "/", histova$get("file.location.file")))
+    hsa$file$location.dir <- dirname(paste0(location.dir, "/", hsa$get("file.location.file")))
 
     # pull the file suffix
-    histova$file$location.file.suffix <- histova::get_suffix(histova$get("file.location.file"))
+    hsa$file$location.file.suffix <- histova::get_suffix(hsa$get("file.location.file"))
     # remove the suffix AND the separating '.' the gsub drops the last character from the string regardless
     # of what it is - assuming it is a '.'... the '$' in the sub call replaces the suffix at the end of the filename
-    histova$file$location.file.name <- gsub('.{1}$', '', sub(paste0(histova$get("file.location.file.suffix"),"$"), "", histova$get("file.location.file")))
-    histova$file$location.log <- ""
-    histova$behave$log <- saveLog
+    hsa$file$location.file.name <- gsub('.{1}$', '', sub(paste0(hsa$get("file.location.file.suffix"),"$"), "", hsa$get("file.location.file")))
+    hsa$file$location.log <- ""
+    hsa$behave$log <- saveLog
 
     # setup the connection needed for the logfile (if in use)
     if (saveLog) {
-        histova$file$location.log <- paste0(histova$get("file.location.dir"), "/", histova$get("file.location.file.name"), ".histova")
-        if (!histova::is_con_open(histova$get("file.LOG"))) {
+        hsa$file$location.log <- paste0(hsa$get("file.location.dir"), "/", hsa$get("file.location.file.name"), ".histova")
+        if (!histova::is_con_open(hsa$get("file.LOG"))) {
             if (env.new) {
-                histova$file$LOG <- file(histova$get("file.location.log"), open = "w")
+                hsa$file$LOG <- file(hsa$get("file.location.log"), open = "w")
             } else {
-                histova$file$LOG <- file(histova$get("file.location.log"), open = "a")
+                hsa$file$LOG <- file(hsa$get("file.location.log"), open = "a")
             }
         }
     }
@@ -125,5 +127,5 @@ set_env <- function(location.dir, location.file, saveLog, env.new = TRUE, printM
         histova::histova_msg("Data environments ready", type = "head")
     }
 
-    return(histova)
+    return(hsa)
 }

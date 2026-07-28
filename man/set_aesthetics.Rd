@@ -4,7 +4,10 @@
 \alias{set_aesthetics}
 \title{Set Aesthetics}
 \usage{
-set_aesthetics()
+set_aesthetics(hsa)
+}
+\arguments{
+\item{hsa}{the R6 histova object}
 }
 \description{
 Generate the lists needed for displaying the correct aesthetics in the figure.
@@ -14,7 +17,7 @@ it is dumped in the order given in the file header into the corresponding lists,
 is set as 'NA', next any colors defined in the old 'Colors' list option is \emph{appended} onto the figure's
 color list. Finally 'Colors Specific' settings are added. These have a named group and will overwrite any
 color/setting specified by either 'Colors Unique' or 'Colors'.
-Finally all remaining 'NA' color values are replaced with valeus from the scales::hue_pal() function
+Finally all remaining 'NA' color values are replaced with values from the scales::hue_pal() function
 and all other values (color alpha & scatter details) still set as 'NA' are replaced by default values.
 IF 'Scatter ColorShapeSize' is set to MATCH then all scatter color values will be replaced by
 the corresponding fill color values \emph{regardless} of what is specified in 'Colors Unique', or 'Colors Specific'.

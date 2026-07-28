@@ -23,6 +23,8 @@
 #' @param savePlot Should the finished plot & log be saved to disk
 #' @param saveLog T/f Should a log file be generated for this session
 #'
+#' @returns hsa R6 histova object
+#'
 #' @export
 #'
 #' @examples

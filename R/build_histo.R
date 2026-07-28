@@ -6,6 +6,8 @@
 #' Package is typically called by generate_figure after environment variables have been loaded and all
 #' desired statistical tests have been carried out.
 #'
+#' @param hsa active R6 histova object
+#'
 #' @export
 #'
 #' @importFrom rlang .data

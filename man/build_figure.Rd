@@ -7,6 +7,8 @@
 build_figure(hsa, printPlot = FALSE, savePlot = TRUE, printEnvMsg = TRUE)
 }
 \arguments{
+\item{hsa}{the histova R6 object}
+
 \item{printPlot}{T/F Should the finished plot be printed (def F)}
 
 \item{savePlot}{T/F Should the finished plot & log be saved to disk (def T)}

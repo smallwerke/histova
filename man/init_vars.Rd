@@ -6,6 +6,9 @@
 \usage{
 init_vars(hsa)
 }
+\arguments{
+\item{hsa}{the R6 histova object being worked on}
+}
 \description{
 Reset the variables to the defaults used to load and generate another figure. These
 variables can all be set / changed in the config file. Nothing is passed in or

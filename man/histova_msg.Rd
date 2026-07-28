@@ -11,7 +11,7 @@ histova_msg(
   tabs = 0,
   PRINT = TRUE,
   LOG = TRUE,
-  hsa = na
+  hsa = NA
 )
 }
 \arguments{
@@ -26,6 +26,8 @@ histova_msg(
 \item{PRINT}{T/F Print out to screen}
 
 \item{LOG}{T/F Write to .histova log file}
+
+\item{hsa}{R6 histova object for settings details}
 }
 \description{
 Histova Message
