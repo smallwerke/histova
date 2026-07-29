@@ -4,7 +4,7 @@
 #' @export
 histova <- R6::R6Class(
     "HISTOVA",
-    public = list(
+    public <- list(
 
         #' @field behave list for object behavior, default to FALSE
         behave = list(
@@ -41,8 +41,8 @@ histova <- R6::R6Class(
             if (debug) { message(paste0("D: HISTOVA$GET pulling data: ", x)) }
 
             key = self$split(x)
-            name.L = key[1]
-            name.I = key[2]
+            name.L <- key[1]
+            name.I <- key[2]
 
             # IF the requested variable is a style type reference AND the
             # submitted reference is not NA
@@ -165,7 +165,13 @@ histova <- R6::R6Class(
 
                 } else if (private$default[[key[1]]][[key[2]]]$type == "text") {
                     self[[key[1]]][[key[2]]] <- val
+                }
 
+                # now check and see if the new value is the same as default
+                # IF it is go ahead and simply remove it from the list
+                # goal is to only store values that do NOT equal default
+                if ( (key[2] %in% names(self[[key[1]]])) && (private$default[[key[1]]][[key[2]]]$val == self[[key[1]]][[key[2]]]) ) {
+                        self[[key[1]]][[key[2]]] <- NULL
                 }
             }
         },
@@ -176,25 +182,25 @@ histova <- R6::R6Class(
             # do a quick check IN CASE behave.verbose was deleted, default to TRUE in this instance
             # as something fundamental is likely wrong...
             if ( ("behave" %in% names(self)) && ("debug" %in% names(self$behave)) ) {
-                debug = self$behave$debug
+                debug <- self$behave$debug
             } else {
-                debug = TRUE
+                debug <- TRUE
             }
 
-            name.L = ""
-            name.I = ""
+            name.L <- ""
+            name.I <- ""
             if (length(strsplit(key, ".", fixed=TRUE)[[1]]) < 2) {
                 if (debug) { message("    D: not enough depth (need at least a list.var) - try again!") }
                 return(NA)
             } else {
-                name.L =  strsplit(key, ".", fixed=TRUE)[[1]][1]
-                name.I =  paste(unlist(strsplit(key, ".", fixed=TRUE)[[1]][-1]), collapse=".")
+                name.L <-  strsplit(key, ".", fixed=TRUE)[[1]][1]
+                name.I <-  paste(unlist(strsplit(key, ".", fixed=TRUE)[[1]][-1]), collapse=".")
                 if (debug) { message(paste0("    D: pulling from list: \'", name.L, "\' var: \'", name.I, "\'")) }
             }
             return (c(name.L, name.I))
         }
     ),
-    private = list(
+    private <- list(
         convert = list(
             "Axis Label Sep" = "fig.axis.label.sep",
             "Axis Label Size" = "fig.axis.label.size",
