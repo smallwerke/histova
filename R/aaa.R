@@ -60,8 +60,8 @@ assign("Colors.Unique", colors.unique, envir=default_vals$fig)
 assign("Facet.Split", TRUE, envir=default_vals$fig)
 #assign("Font", "sans", envir=default_vals$fig)
 assign("Legend.Color.Source", "All", envir=default_vals$fig)
-assign("Legend.Display", FALSE, envir=default_vals$fig)
-assign("Legend.Key.Size", 0.25, envir=default_vals$fig)
+#assign("Legend.Display", FALSE, envir=default_vals$fig)
+#assign("Legend.Key.Size", 0.25, envir=default_vals$fig)
 #assign("Legend.LabelSize", 26, envir=default_vals$fig)
 assign("Legend.Position", "bottom", envir=default_vals$fig)
 assign("Legend.Title", "Groups", envir=default_vals$fig)
@@ -95,11 +95,11 @@ assign("Size.List", "", envir=default_vals$fig) #CHECK!
 assign("Stroke.List", "", envir=default_vals$fig) #CHECK!
 assign("Title", "", envir=default_vals$fig)
 #assign("Title.Size", 32, envir=default_vals$fig)
-assign("Title.tmp", "", envir=default_vals$fig)
+#assign("Title.tmp", "", envir=default_vals$fig)
 assign("X", "", envir=default_vals$fig)
 #assign("X.Angle", 45, envir=default_vals$fig)
 #assign("X.Tick.Display", TRUE, envir=default_vals$fig)
-assign("X.tmp", "", envir=default_vals$fig)
+#assign("X.tmp", "", envir=default_vals$fig)
 #assign("X.Value.Display", TRUE, envir=default_vals$fig)
 assign("Y", "", envir=default_vals$fig)
 assign("Y.Break", FALSE, envir=default_vals$fig)
@@ -110,7 +110,7 @@ assign("Y.Min", 0, envir=default_vals$fig)
 assign("Y.Rig", FALSE, envir=default_vals$fig)
 assign("Y.Rig.Newline", FALSE, envir=default_vals$fig)
 assign("Y.Supp", "", envir=default_vals$fig)
-assign("Y.tmp", "", envir=default_vals$fig)
+#assign("Y.tmp", "", envir=default_vals$fig)
 #
 ##########################################################
 #
@@ -140,7 +140,7 @@ assign("summary.multi", "", envir=default_vals$raw)
 assign("Letters.Offset", FALSE, envir=default_vals$stats)
 assign("Letters.Size", 18, envir=default_vals$stats)
 assign("Caption.Display", TRUE, envir=default_vals$stats)
-assign("Caption.Size", 6, envir=default_vals$stats)
+#assign("Caption.Size", 6, envir=default_vals$stats)
 #
 ##########################################################
 #

@@ -106,7 +106,7 @@ build_histo <- function(hsa){
     gplot = gplot + ggplot2::theme(
         text=ggplot2::element_text(family=hsa$get("fig.font")),
         plot.title = ggtext::element_markdown(lineheight=0.8, size=hsa$get("fig.title.size"), hjust=0.5, vjust=0, margin=ggplot2::margin(b=0, unit = "pt")),
-        plot.caption = ggplot2::element_text(color="black", size=stats$Caption.Size, face="italic"),
+        plot.caption = ggplot2::element_text(color="black", size=hsa$get("stats.caption.size"), face="italic"),
         axis.title = ggplot2::element_text(color="black", size=hsa$get("fig.axis.label.size") ),
         axis.title.y = ggplot2::element_text(angle = 90, margin = ggplot2::margin(t = 0, r = hsa$get("fig.axis.label.sep"), b = 0, l = 0)),
         axis.title.x = ggtext::element_markdown(margin = ggplot2::margin(t = hsa$get("fig.axis.label.sep"), r = 0, b = 0, l = 0)),
@@ -126,7 +126,7 @@ build_histo <- function(hsa){
         panel.grid.minor.y = ggplot2::element_line(linewidth=3),
         legend.title = ggtext::element_markdown(colour="black", size=hsa$get("fig.legend.label.size")),
         legend.text = ggplot2::element_text(colour="black", size = hsa$get("fig.legend.label.size")),
-        legend.key.size = ggplot2::unit(fig$Legend.Key.Size, hsa$get("fig.save.units")),
+        legend.key.size = ggplot2::unit(hsa$get("fig.legend.key.size"), hsa$get("fig.save.units")),
         strip.text.x = ggplot2::element_text(size = hsa$get("fig.axis.title.size"), colour = "black"), # defines the above figure sub titles
         strip.background = ggplot2::element_rect(colour="white", fill="white", linewidth=1.5, linetype="solid")
     )
@@ -309,7 +309,7 @@ build_histo <- function(hsa){
     }
 
     # set the position of the legend (IF there even is a legend)...
-    if (fig$Legend.Display == TRUE) {
+    if (hsa$get("fig.legend.display") == TRUE) {
         gplot = gplot + ggplot2::theme(legend.position = fig$Legend.Position)
     } else {
         gplot = gplot + ggplot2::theme(legend.position = "none")

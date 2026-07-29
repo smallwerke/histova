@@ -78,8 +78,8 @@ init_vars <- function(hsa) {
 
         ################ Legend Display Options (OPT) ################
         fig$Legend.Color.Source <- histova::get_default("fig", "Legend.Color.Source")
-        fig$Legend.Display <- histova::get_default("fig", "Legend.Display")
-        fig$Legend.Key.Size <- histova::get_default("fig", "Legend.Key.Size")
+        #fig$Legend.Display <- histova::get_default("fig", "Legend.Display")
+        #fig$Legend.Key.Size <- histova::get_default("fig", "Legend.Key.Size")
         fig$Legend.Position <- histova::get_default("fig", "Legend.Position")
         fig$Legend.Title <- histova::get_default("fig", "Legend.Title")
         fig$Legend.Title.tmp <- histova::get_default("fig", "Legend.Title.tmp")
@@ -88,7 +88,7 @@ init_vars <- function(hsa) {
         stats$Letters.Offset <- histova::get_default("stats", "Letters.Offset")
         stats$Letters.Size <- histova::get_default("stats", "Letters.Size")
         stats$Caption.Display <- histova::get_default("stats", "Caption.Display")
-        stats$Caption.Size <- histova::get_default("stats", "Caption.Size")
+        #stats$Caption.Size <- histova::get_default("stats", "Caption.Size")
 
         ################ Figure Save (OPT) ################
         #fig$Save.DPI <- histova::get_default("fig", "Save.DPI")
@@ -100,7 +100,7 @@ init_vars <- function(hsa) {
 
     ################ Title & Axis Labels (REQ) ################
     fig$Title <- histova::get_default("fig", "Title")
-    fig$Title.tmp <- histova::get_default("fig", "Title.tmp")
+    #fig$Title.tmp <- histova::get_default("fig", "Title.tmp")
     fig$X <- histova::get_default("fig", "X")
     fig$Y <- histova::get_default("fig", "Y")
 

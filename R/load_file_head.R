@@ -22,7 +22,7 @@ load_file_head = function(hsa) {
 
     # set the override placeholder to NULL
     Override.tmp <- NULL
-    Fig.Y.tmp <- NULL
+    hsa$set("fig.y.tmp", NULL)
 
     # read in the comments and set any specified variables (title, legend, etc)
     CON = file(fullPath, open = "r")
@@ -86,10 +86,13 @@ load_file_head = function(hsa) {
                  (lA[[1]][1] == "Scatter Alpha") || (lA[[1]][1] == "Colors Alpha") ||
                  (lA[[1]][1] == "Scatter Stroke") || (lA[[1]][1] == "Save Width") ||
                  (lA[[1]][1] == "Save Height") || (lA[[1]][1] == "Save DPI") ||
-                 (lA[[1]][1] == "Save Units") || (lA[[1]][1] == "Save Type")
+                 (lA[[1]][1] == "Save Units") || (lA[[1]][1] == "Save Type") ||
+                 (lA[[1]][1] == "Legend Display") || (lA[[1]][1] == "Stat Caption Size")
             ) {
                 hsa$set(lA[[1]][1], lA[[1]][2], TRUE)
             }
+
+
 
             ################ Figure Save (OPT) ################
 
@@ -210,10 +213,6 @@ load_file_head = function(hsa) {
                 else { fig$Plot.HLine.OVRD.Color <- fig$Plot.HLine.Def.Color } ### CHANGED - should be fine but was assumed pulling from gloabl env ###
             }
             ################ Legend Display Options (OPT) ################
-            else if (lA[[1]][1] == "Legend Display") {
-                if (lA[[1]][2] %in% c("TRUE", "True", "true", 0)) { fig$Legend.Display <- TRUE }
-                else { fig$Legend.Display <- FALSE }
-            }
             else if (lA[[1]][1] == "Legend Color Source") {
                 if (lA[[1]][2] %in% c("Group1", "group1", 1)) { fig$Legend.Color.Source <- "Group1" }
                 else { fig$Legend.Color.Source <- "All" }
@@ -225,9 +224,6 @@ load_file_head = function(hsa) {
                 else if (tolower(lA[[1]][2]) == "left") { fig$Legend.Position <- "left" }
                 else { fig$Legend.Position <- "bottom" }
             }
-            else if (lA[[1]][1] == "Legend Size") {
-                fig$Legend.Key.Size <- as.numeric(lA[[1]][2])
-            }
             ################ Stats Labels (OPT) ################
             else if (lA[[1]][1] == "Stat Offset") {
                 if (lA[[1]][2] %in% c("FALSE", "False", "false")) { stats$Letters.Offset <- FALSE }
@@ -238,16 +234,16 @@ load_file_head = function(hsa) {
                 if (lA[[1]][2] %in% c("FALSE", "False", "false", 0)) { stats$Caption.Display <- FALSE }
                 else { stats$Caption.Display <- TRUE }
             }
-            else if (lA[[1]][1] == "Stat Caption Size") { stats$Caption.Size <- as.numeric(lA[[1]][2]) }
 
         }
+        if ( (lA[[1]][1] == "Title Main") ||
+             (lA[[1]][1] == "X Leg") || (lA[[1]][1] == "Y Leg")  ### CHANGED - was not being assigned to global env ###
+        ) {
+            hsa$set(lA[[1]][1], lA[[1]][2], TRUE)
+        }
 
-        ################ Title & Axis Labels (REQ) ################
-        if (lA[[1]][1] == "Title Main") { fig$Title.tmp <- lA[[1]][2] } ### CHANGED - was not being assigned to global env ###
-        else if (lA[[1]][1] == "X Leg") { fig$X.tmp <- lA[[1]][2] } ### CHANGED - was not being assigned to global env ###
-        else if (lA[[1]][1] == "Y Leg") { fig$Y.tmp <- lA[[1]][2] } ### CHANGED - was not being assigned to global env ###
         ################ Height of Y-axis and Horizontal Line/s (REQ) ################
-        else if (lA[[1]][1] == "Y Min") { fig$Y.Min <- as.numeric(lA[[1]][2]) }
+        if (lA[[1]][1] == "Y Min") { fig$Y.Min <- as.numeric(lA[[1]][2]) }
         else if (lA[[1]][1] == "Y Max") { fig$Y.Max <- as.numeric(lA[[1]][2]) }
         else if (lA[[1]][1] == "Y Interval") { fig$Y.Interval <- as.numeric(lA[[1]][2]) }
         # any breaks in the y-axis? can handle comma delimited array of break details
@@ -381,15 +377,15 @@ load_file_head = function(hsa) {
     if (!is.null(Override.tmp)) { the$Override <- Override.tmp }
 
     if (exists("Title.Replace", envir=fig)) {
-        fig$Title.tmp <- fig$Title.Replace
+        hsa$fig$title.tmp <- fig$Title.Replace
         rm("Title.Replace", envir = fig)
     }
     if (exists("Y.Replace", envir=fig)) {
-        fig$Y.tmp <- fig$Y.Replace
+        hsa$set("fig.y.tmp", fig$Y.Replace)
         rm("Y.Replace", envir = fig)
     }
     if (exists("X.Replace", envir=fig)) {
-        fig$X.tmp <- fig$X.Replace
+        hsa$set("fig.x.tmp", fig$X.Replace)
         rm("X.Replace", envir = fig)
     }
     if (exists("Legend.Title.Replace", envir=fig)) {
@@ -398,9 +394,9 @@ load_file_head = function(hsa) {
     }
     #if (fig$Convert) {
     if (hsa$get("fig.convert")) {
-        fig$Title.tmp <- convert_text(fig$Title.tmp)
-        fig$Y.tmp <- convert_text(fig$Y.tmp)
-        fig$X.tmp <- convert_text(fig$X.tmp)
+        hsa$set("fig.title.tmp", convert_text(hsa$get("fig.title.tmp")))
+        hsa$set("fig.y.tmp", convert_text(hsa$get("fig.y.tmp")))
+        hsa$set("fig.x.tmp", convert_text(hsa$get("fig.x.tmp")))
         fig$Legend.Title.tmp <- convert_text(fig$Legend.Title.tmp)
     }
 
@@ -417,8 +413,8 @@ load_file_head = function(hsa) {
     }
     rm("Plot.HLine.Def.Color", "Plot.HLine.Def.Size", "Plot.HLine.OVRD.Color", "Plot.HLine.OVRD.Size", envir = fig)
 
-    fig$Title <- fig$Title.tmp
-    fig$Y <- fig$Y.tmp
-    fig$X <- fig$X.tmp
+    fig$Title <- hsa$get("fig.title.tmp")
+    fig$Y <- hsa$get("fig.y.tmp")
+    fig$X <- hsa$get("fig.x.tmp")
     fig$Legend.Title <- fig$Legend.Title.tmp
 }

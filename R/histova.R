@@ -164,6 +164,7 @@ histova <- R6::R6Class(
                     self[[key[1]]][[key[2]]] <- as.numeric(val)
 
                 } else if (private$default[[key[1]]][[key[2]]]$type == "text") {
+                    self[[key[1]]][[key[2]]] <- val
 
                 }
             }
@@ -203,7 +204,9 @@ histova <- R6::R6Class(
             "Bar Border Color" = "fig.bar.border.color",
             "Bar Border Width" = "fig.bar.border.width",
             "Colors Alpha" = "fig.colors.alpha",
+            "Legend Display" = "fig.legend.display",
             "Legend Label Size" = "fig.legend.label.size",
+            "Legend Size" = "fig.legend.key.size",
             "Save Width" = "fig.save.width",
             "Save Height" = "fig.save.height",
             "Save DPI" = "fig.save.dpi",
@@ -211,13 +214,17 @@ histova <- R6::R6Class(
             "Save Type" = "fig.save.type",
             "Scatter Alpha" = "fig.scatter.alpha",
             "Scatter Display" = "fig.scatter.disp",
+            "Stat Caption Size" = "stats.caption.size",
             "Text Convert" = "fig.convert",
             "Text Font" = "fig.font",
+            "Title Main" = "fig.title.tmp",
             "Title Size" = "fig.title.size",
             "X Angle" = "fig.x.angle", # check / remove this option...
+            "X Leg" = "fig.x.tmp",
             "X Value Angle" = "fig.x.angle",
             "X Tick Display" = "fig.x.tick.display",
-            "X Value Display" = "fig.x.value.display"
+            "X Value Display" = "fig.x.value.display",
+            "Y Leg" = "fig.y.tmp"
         ),
         # include ALL variables, if no default just return NULL
         # have a list w/ default AND check type
@@ -286,11 +293,11 @@ histova <- R6::R6Class(
                 "stroke.list" = "",
                 "title" = "",
                 "title.size" = list(val=32,type="num",style=TRUE),
-                "title.tmp" = "",
+                "title.tmp" = list(val="",type="text",style=FALSE),
                 "x" = "",
                 "x.angle" = list(val=45,type="num",style=TRUE),
                 "x.tick.display" = list(val=TRUE,type="bool",style=TRUE),
-                "x.tmp" = "",
+                "x.tmp" = list(val="",type="text",style=FALSE),
                 "x.value.display" = list(val=TRUE,type="bool",style=TRUE),
                 "y" = "",
                 "y.break" = FALSE,
@@ -304,7 +311,7 @@ histova <- R6::R6Class(
                 "y.rig" = FALSE,
                 "y.rig.newline" = FALSE,
                 "y.supp" = "",
-                "y.tmp" = ""
+                "y.tmp" = list(val="",type="text",style=FALSE)
             ),
             file = list(
                 "location.dir" = "",
