@@ -6,12 +6,13 @@
 #' package environment. However this function is not editing that many environment variables
 #' and is returning a data frame.
 #'
+#' @param hsa the histova object
 #' @param n The number of label subset (when Group2 is being compared separately)
 #'
 #' @return A data frame of labels
 #' @export
 #'
-generate_label_df <- function(n){
+generate_label_df <- function(hsa, n){
 
     ####################################################################################
     # ACTUAL CALLS:
@@ -77,7 +78,7 @@ generate_label_df <- function(n){
     # HSDsummary is from:
     # ddply(traw, c("variable"), summarise, N=sum(!is.na(value)), mean=mean(value, na.rm=TRUE),sd=sd(value, na.rm=TRUE),se=sd/sqrt(N))
     # ORIG: boxplot.df <- ddply(traw, flev, function (x) max(fivenum(x$value)) + .02)
-    if (fig$Plot.Whisker %in% c("BOX", "VIOLIN")) {
+    if (hsa$get("fig.plot.whisker") %in% c("BOX", "VIOLIN")) {
         boxplot.df = plyr::ddply(HSDsummary, flev, function (x) ifelse(x$IQR75>=0, ((x$IQR75) + yOff), ((x$IQR75) - yOff)))
     } else {
         boxplot.df = plyr::ddply(HSDsummary, flev, function (x) ifelse(x$mean>=0, ((x$mean) + (x$se) + yOff), ((x$mean) - (x$se) - yOff)))

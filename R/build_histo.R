@@ -54,18 +54,18 @@ build_histo <- function(hsa){
         # Basic Whiskerplot
         # ggplot(df, aes(x, y, <other aesthetics>))
         ##########################################
-    } else if (fig$Plot.Whisker %in% c("BOX", "VIOLIN")) {
+    } else if (hsa$get("fig.plot.whisker") %in% c("BOX", "VIOLIN")) {
         if (fig$Legend.Color.Source == "Group1") {
             gplot = ggplot2::ggplot(raw$base, ggplot2::aes(.data$Group1, .data$Value, label = .data$Group1, fill = .data$Group1))
         } else {
             gplot = ggplot2::ggplot(raw$base, ggplot2::aes(.data$Group1, .data$Value, label = .data$Group1, fill = .data$statGroups))
         }
-        if (fig$Plot.Whisker == "BOX") {
+        if (hsa$get("fig.plot.whisker") == "BOX") {
             gplot = gplot +
                 ggplot2::geom_boxplot(
                     outlier.shape = NA,
                     alpha = hsa$get("fig.colors.alpha"))
-        } else if (fig$Plot.Whisker == "VIOLIN") {
+        } else if (hsa$get("fig.plot.whisker") == "VIOLIN") {
             gplot = gplot +
                 ggplot2::geom_violin(
                     trim = TRUE,
@@ -110,13 +110,13 @@ build_histo <- function(hsa){
         axis.title = ggplot2::element_text(color="black", size=hsa$get("fig.axis.label.size") ),
         axis.title.y = ggplot2::element_text(angle = 90, margin = ggplot2::margin(t = 0, r = hsa$get("fig.axis.label.sep"), b = 0, l = 0)),
         axis.title.x = ggtext::element_markdown(margin = ggplot2::margin(t = hsa$get("fig.axis.label.sep"), r = 0, b = 0, l = 0)),
-        axis.line.y = ggplot2::element_line(color=fig$Axis.Y.Main.Color, linewidth=fig$Axis.Y.Main.Size),
-        axis.line.x = ggplot2::element_line(color=fig$Axis.X.Main.Color, linewidth=fig$Axis.X.Main.Size),
+        axis.line.y = ggplot2::element_line(color=hsa$get("fig.axis.y.main.color"), linewidth=hsa$get("fig.axis.y.main.size")),
+        axis.line.x = ggplot2::element_line(color=hsa$get("fig.axis.x.main.color"), linewidth=hsa$get("fig.axis.x.main.size")),
         axis.text = ggplot2::element_text(color="black", size=hsa$get("fig.axis.value.size")),                                                                  # defines the axis text for the ticks
-        axis.ticks.y = ggplot2::element_line(color=fig$Axis.Y.Tick.Color, linewidth=fig$Axis.Y.Tick.Size),
-        axis.ticks.length.y = ggplot2::unit(fig$Axis.Y.Tick.Length, "cm"),
-        axis.ticks.x = ggplot2::element_line(color=fig$Axis.X.Tick.Color, linewidth=fig$Axis.X.Tick.Size),
-        axis.ticks.length.x = ggplot2::unit(fig$Axis.X.Tick.Length, "cm"),
+        axis.ticks.y = ggplot2::element_line(color=hsa$get("fig.axis.y.tick.color"), linewidth=hsa$get("fig.axis.y.tick.size")),
+        axis.ticks.length.y = ggplot2::unit(hsa$get("fig.axis.y.tick.length"), "cm"),
+        axis.ticks.x = ggplot2::element_line(color=hsa$get("fig.axis.x.tick.color"), linewidth=hsa$get("fig.axis.x.tick.size")),
+        axis.ticks.length.x = ggplot2::unit(hsa$get("fig.axis.x.tick.length"), "cm"),
         # CUSTOMIZE
         #axis.text.y = element_text(color="black", size=hsa$get("fig.axis.value.size"), face="bold"),
         #axis.text.x = element_text(color="black", size=50, face="bold"),
@@ -208,20 +208,20 @@ build_histo <- function(hsa){
     #
     # keep this after the scatter plot to ensure the bars
     # aren't covered by the scatter...
-    if (fig$Plot.Whisker == "FALSE") {
+    if (hsa$get("fig.plot.whisker") == "FALSE") {
         if (stats$Transform == "TimeCourse") {
             gplot = gplot + ggplot2::geom_errorbar(
                 ggplot2::aes(ymin = .data$mean - .data$se, ymax = .data$mean + .data$se),
-                color=fig$Plot.ErrorBar.Color,
-                width=fig$Plot.ErrorBar.EndWidth,
-                linewidth=fig$Plot.ErrorBar.Size,
+                color=hsa$get("fig.plot.errorbar.color"),
+                width=hsa$get("fig.plot.errorbar.endwidth"),
+                linewidth=hsa$get("fig.plot.errorbar.size"),
                 position = ggplot2::position_dodge(width=0.85))
         } else {
             gplot = gplot + ggplot2::geom_errorbar(
                 ggplot2::aes(ymin = .data$mean - .data$se, ymax = .data$mean + .data$se),
-                color=fig$Plot.ErrorBar.Color,
-                width=fig$Plot.ErrorBar.EndWidth,
-                linewidth=fig$Plot.ErrorBar.Size,
+                color=hsa$get("fig.plot.errorbar.color"),
+                width=hsa$get("fig.plot.errorbar.endwidth"),
+                linewidth=hsa$get("fig.plot.errorbar.size"),
                 position=ggplot2::position_dodge(0.7))
         }
     }
@@ -253,11 +253,11 @@ build_histo <- function(hsa){
             s = "\n"
             if (notes$Stats.Method == "") { s = "" }
             notes$Stats.Method <- paste(notes$Stats.Method, sprintf("For group %s: ", l), sep=s)
-            #gplot = gplot + geom_text(data = generate_label_df(raw.multi[[n]], raw.aov.multi[[n]], raw.aov.tukey.multi[[n]], raw.summary.multi[[n]], Value ~ statGroups, 'statGroups', Stats.Letters.Offset), size = (Stats.Letters.Size / 2.834645669), fontface="bold", aes(x = Group1, y = V1, label = labels))
+            #gplot = gplot + geom_text(data = generate_label_df(hsa, raw.multi[[n]], raw.aov.multi[[n]], raw.aov.tukey.multi[[n]], raw.summary.multi[[n]], Value ~ statGroups, 'statGroups', Stats.Letters.Offset), size = (Stats.Letters.Size / 2.834645669), fontface="bold", aes(x = Group1, y = V1, label = labels))
             if (stats$Transform == "TimeCourse") {
-                gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.85))
+                gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.85))
             } else {
-                gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
+                gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
             }
         }
         # add border lines between / around the facet grids in order to make it clear that the stats are separate...
@@ -271,11 +271,11 @@ build_histo <- function(hsa){
         s = "\n"
         if (notes$Stats.Method == "") { s = "" }
         notes$Stats.Method <- paste(notes$Stats.Method, "Statistical test: ", sep=s)
-        #gplot = gplot + geom_text(data = generate_label_df(raw, raw.aov.multi, raw.aov.tukey.multi, raw.summary.multi, Value ~ statGroups, 'statGroups', Stats.Letters.Offset), size = (Stats.Letters.Size / 2.834645669), fontface="bold", aes(x = Group1, y = V1, label = labels))
+        #gplot = gplot + geom_text(data = generate_label_df(hsa,raw, raw.aov.multi, raw.aov.tukey.multi, raw.summary.multi, Value ~ statGroups, 'statGroups', Stats.Letters.Offset), size = (Stats.Letters.Size / 2.834645669), fontface="bold", aes(x = Group1, y = V1, label = labels))
         if (stats$Transform == "TimeCourse") {
-            gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.85))
+            gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.85))
         } else {
-            gplot = gplot + ggplot2::geom_text(data = generate_label_df(n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
+            gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
         }
     }
 
@@ -331,5 +331,5 @@ build_histo <- function(hsa){
     the$gplot = gplot
 
     #n = 2
-    #generate_label_df(raw.multi[[n]], raw.aov.tukey.multi[[n]], raw.summary.multi[[n]], Value ~ statGroups, 'statGroups', Stats.Letters.Offset)
+    #generate_label_df(hsa, raw.multi[[n]], raw.aov.tukey.multi[[n]], raw.summary.multi[[n]], Value ~ statGroups, 'statGroups', Stats.Letters.Offset)
 }

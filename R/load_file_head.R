@@ -87,11 +87,15 @@ load_file_head = function(hsa) {
                  (lA[[1]][1] == "Scatter Stroke") || (lA[[1]][1] == "Save Width") ||
                  (lA[[1]][1] == "Save Height") || (lA[[1]][1] == "Save DPI") ||
                  (lA[[1]][1] == "Save Units") || (lA[[1]][1] == "Save Type") ||
-                 (lA[[1]][1] == "Legend Display") || (lA[[1]][1] == "Stat Caption Size")
+                 (lA[[1]][1] == "Legend Display") || (lA[[1]][1] == "Stat Caption Size") ||
+                 (lA[[1]][1] == "Whisker Plot") || (lA[[1]][1] == "Scatter ColorShapeSize") ||
+                 (lA[[1]][1] == "Axis X Main Style") || (lA[[1]][1] == "Axis Y Main Style") ||
+                 (lA[[1]][1] == "Axis X Tick Style") || (lA[[1]][1] == "Axis Y Tick Style") ||
+                 (lA[[1]][1] == "Error Bars Style")
+
             ) {
                 hsa$set(lA[[1]][1], lA[[1]][2], TRUE)
             }
-
 
 
             ################ Figure Save (OPT) ################
@@ -158,53 +162,10 @@ load_file_head = function(hsa) {
                     # handle all formatting in set_aesthetics now
                     fig$Colors.Unique[nrow(fig$Colors.Unique)+1,] <- colorDets
                 }
-            } else if (lA[[1]][1] == "Scatter ColorShapeSize") {
-                # not doing much checking here, assume that anything from 1 to 3 items
-                # can be supplied here...
-                scatterDets = strsplit(lA[[1]][2], ",")[[1]]
-                if (length(scatterDets) >= 1) {
-                    if (tolower(trimws(scatterDets[1])) == "match") { fig$Scatter.Color.Source <- "MATCH" }
-                    else if ((tolower(trimws(scatterDets[1])) == "unique") || (trimws(scatterDets[1]) == "")) {  fig$Scatter.Color.Source <- "UNIQUE" }
-                    else { fig$Scatter.Color <- scatterDets[1] }
-                }
-                if (length(scatterDets) >= 2) { fig$Scatter.Shape <- as.numeric(scatterDets[2]) }
-                if (length(scatterDets) >= 3) { fig$Scatter.Size <- as.numeric(scatterDets[3]) }
             }
-            else if (lA[[1]][1] == "Whisker Plot") {
-                # this is also checked in generate_label_df(), if expanding options check there for continuity
-                if (lA[[1]][2] %in% c("TRUE", "True", "true", 1, "BOX", "Box", "box")) { fig$Plot.Whisker <- "BOX" }
-                else if (tolower(lA[[1]][2]) == "violin") { fig$Plot.Whisker <- "VIOLIN" }
-                else { fig$Plot.Whisker <- "FALSE" }
-            }
+
+
             ################ Line Design Options (OPT) ################
-            else if (lA[[1]][1] == "Axis Y Main Style") {
-                axisDets = strsplit(lA[[1]][2], ",")[[1]]
-                if (length(axisDets) >= 1) { if (as.numeric(axisDets[1]) >= 0) { fig$Axis.Y.Main.Size <- as.numeric(axisDets[1]) } }
-                if (length(axisDets) >= 2) { fig$Axis.Y.Main.Color <- axisDets[2] }
-            }
-            else if (lA[[1]][1] == "Axis X Main Style") {
-                axisDets = strsplit(lA[[1]][2], ",")[[1]]
-                if (length(axisDets) >= 1) { if (as.numeric(axisDets[1]) >= 0) { fig$Axis.X.Main.Size <- as.numeric(axisDets[1]) } }
-                if (length(axisDets) >= 2) { fig$Axis.X.Main.Color <- axisDets[2] }
-            }
-            else if (lA[[1]][1] == "Axis Y Tick Style") {
-                axisDets = strsplit(lA[[1]][2], ",")[[1]]
-                if (length(axisDets) >= 1) { if (as.numeric(axisDets[1]) >= 0) { fig$Axis.Y.Tick.Size <- as.numeric(axisDets[1])} }
-                if (length(axisDets) >= 2) { if (as.numeric(axisDets[2]) >= 0) { fig$Axis.Y.Tick.Length <- as.numeric(axisDets[2])} }
-                if (length(axisDets) >= 3) { fig$Axis.Y.Tick.Color <- axisDets[3] }
-            }
-            else if (lA[[1]][1] == "Axis X Tick Style") {
-                axisDets = strsplit(lA[[1]][2], ",")[[1]]
-                if (length(axisDets) >= 1) { if (as.numeric(axisDets[1]) >= 0) { fig$Axis.X.Tick.Size <- as.numeric(axisDets[1])} }
-                if (length(axisDets) >= 2) { if (as.numeric(axisDets[2]) >= 0) { fig$Axis.X.Tick.Length <- as.numeric(axisDets[2])} }
-                if (length(axisDets) >= 3) { fig$Axis.X.Tick.Color <- axisDets[3] }
-            }
-            else if (lA[[1]][1] == "Error Bars Style") {
-                axisDets = strsplit(lA[[1]][2], ",")[[1]]
-                if (length(axisDets) >= 1) { if (as.numeric(axisDets[1]) >= 0) { fig$Plot.ErrorBar.Size <- as.numeric(axisDets[1]) } }
-                if (length(axisDets) >= 2) { if (as.numeric(axisDets[2]) >= 0) {  fig$Plot.ErrorBar.EndWidth <- as.numeric(axisDets[2]) } }
-                if (length(axisDets) >= 3) { fig$Plot.ErrorBar.Color <- axisDets[3] }
-            }
             else if (lA[[1]][1] == "HLine Style OVRD") {
                 axisDets = strsplit(lA[[1]][2], ",")[[1]]
                 if (length(axisDets) >= 1) { if (as.numeric(axisDets[1]) >= 0) { fig$Plot.HLine.OVRD.Size <- as.numeric(axisDets[1]) } }

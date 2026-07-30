@@ -42,7 +42,7 @@ set_aesthetics <- function(hsa) {
     if (stats$Transform == "TimeCourse") {
         colorLength = length(raw$summary$Group2)
         colorNames = raw$summary$Group2
-    } else if (fig$Plot.Whisker %in% c("BOX", "VIOLIN")) {
+    } else if (hsa$get("fig.plot.whisker") %in% c("BOX", "VIOLIN")) {
         if (fig$Legend.Color.Source == "Group1") {
             colorLength = length(raw$base$Group1)
             colorNames = raw$base$Group1
@@ -192,14 +192,14 @@ set_aesthetics <- function(hsa) {
     fig$Color.Alpha.List[is.na(fig$Color.Alpha.List)] = hsa$get("fig.colors.alpha")
 
     # assign all remaining scatter NA values to the defaults
-    fig$Scatter.Color.List[is.na(fig$Scatter.Color.List)] = fig$Scatter.Color
-    fig$Scatter.Shape.List[is.na(fig$Scatter.Shape.List)] = as.numeric(fig$Scatter.Shape)
-    fig$Scatter.Size.List[is.na(fig$Scatter.Size.List)] = as.numeric(fig$Scatter.Size)
+    fig$Scatter.Color.List[is.na(fig$Scatter.Color.List)] = hsa$get("fig.scatter.color")
+    fig$Scatter.Shape.List[is.na(fig$Scatter.Shape.List)] = as.numeric(hsa$get("fig.scatter.shape"))
+    fig$Scatter.Size.List[is.na(fig$Scatter.Size.List)] = as.numeric(hsa$get("fig.scatter.size"))
     fig$Scatter.Stroke.List[is.na(fig$Scatter.Stroke.List)] = as.numeric(hsa$get("fig.scatter.stroke"))
     fig$Scatter.Alpha.List[is.na(fig$Scatter.Alpha.List)] = as.numeric(hsa$get("fig.scatter.alpha"))
 
     # IF MATCH IS SET OVERRIDE ALL OTHER ASSIGNMENTS
-    if (fig$Scatter.Color.Source == "MATCH") {
+    if (hsa$get("fig.scatter.color.source") == "MATCH") {
         fig$Scatter.Color.List = fig$Color.List
     }
 

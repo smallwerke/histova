@@ -119,10 +119,76 @@ histova <- R6::R6Class(
             key = self$split(key)
             if (is.list(private$default[[key[1]]][[key[2]]])) {
                 message(paste0("in: ", key[1], " setting ", key[2], " as: ", val))
+
                 if (private$default[[key[1]]][[key[2]]]$type == "alpha") {
                     if ((as.numeric(val) >= 0) && (as.numeric(val) <= 1)) {
                         self[[key[1]]][[key[2]]] = as.numeric(val)
                     }
+
+                # this is taking 5 similar BUT rather different settings and lumping them together
+                # in one rather ugly section... axis x & y main style should only have 2 entries
+                # and only check for 2... the second was just being directly assigned
+                # for tick & errobar style though item 2 is checked to be numeric before assigning
+                # and these should have a third option that is simply assigned...
+                #
+                # probably a more elegant way to do this but this is a direct copy of the previous
+                # setup for now...
+                } else if ( (private$default[[key[1]]][[key[2]]]$type == "axisX.main.style") ||
+                            (private$default[[key[1]]][[key[2]]]$type == "axisY.main.style") ||
+                            (private$default[[key[1]]][[key[2]]]$type == "axisX.tick.style") ||
+                            (private$default[[key[1]]][[key[2]]]$type == "axisY.tick.style") ||
+                            (private$default[[key[1]]][[key[2]]]$type == "error.bars.style") ) {
+
+                    pos.1 = ""
+                    pos.2 = ""
+                    # setup data details...
+                    if (private$default[[key[1]]][[key[2]]]$type == "axisX.main.style") {
+                        pos.1 <- "axis.x.main.size"
+                        pos.2 <- "axis.x.main.color"
+                    } else if (private$default[[key[1]]][[key[2]]]$type == "axisY.main.style") {
+                        pos.1 <- "axis.y.main.size"
+                        pos.2 <- "axis.y.main.color"
+                    } else if (private$default[[key[1]]][[key[2]]]$type == "axisX.tick.style") {
+                        pos.1 <- "axis.x.tick.size"
+                        pos.2 <- "axis.x.tick.length"
+                        pos.3 <- "axis.x.tick.color"
+                    } else if (private$default[[key[1]]][[key[2]]]$type == "axisY.tick.style") {
+                        pos.1 <- "axis.y.tick.size"
+                        pos.2 <- "axis.y.tick.length"
+                        pos.3 <- "axis.y.tick.color"
+                    } else if (private$default[[key[1]]][[key[2]]]$type == "error.bars.style") {
+                        pos.1 <- "plot.errorbar.size"
+                        pos.2 <- "plot.errorbar.endwidth"
+                        pos.3 <- "plot.errorbar.color"
+                    }
+                    setDets = strsplit(val, ",")[[1]]
+                    if (length(setDets) >= 1) {
+                        if (as.numeric(setDets[1]) >= 0) {
+                            self$fig[[pos.1]] <- as.numeric(setDets[1])
+                        }
+
+                        if (length(setDets) >= 2) {
+                            if ( (private$default[[key[1]]][[key[2]]]$type == "axisX.main.style") ||
+                                 (private$default[[key[1]]][[key[2]]]$type == "axisY.main.style") ) {
+
+                                self$fig[[pos.2]] <- setDets[2]
+
+                            } else if ( (private$default[[key[1]]][[key[2]]]$type == "axisX.tick.style") ||
+                                 (private$default[[key[1]]][[key[2]]]$type == "axisY.tick.style") ||
+                                 (private$default[[key[1]]][[key[2]]]$type == "error.bars.style") ) {
+
+                                if (as.numeric(setDets[2]) >= 0) {
+                                    self$fig[[pos.2]] <- as.numeric(setDets[2])
+                                }
+
+                                # these options have a 3RD position - go there now...
+                                if (length(setDets) >=3) {
+                                    self$fig[[pos.3]] <- setDets[3]
+                                }
+                            }
+                        }
+                    }
+
                 } else if (private$default[[key[1]]][[key[2]]]$type == "bool") {
                     if (val %in% c("TRUE", "True", "true", "1")) {
                         self[[key[1]]][[key[2]]] = TRUE
@@ -163,7 +229,39 @@ histova <- R6::R6Class(
                 } else if (private$default[[key[1]]][[key[2]]]$type == "num") {
                     self[[key[1]]][[key[2]]] <- as.numeric(val)
 
+                # this is a customized check for one variable... refine later if possible
+                } else if (private$default[[key[1]]][[key[2]]]$type == "GROUP.scatterCSS") {
+                    scatterDets = strsplit(val, ",")[[1]]
+                    if (length(scatterDets) >= 1) {
+                        if (tolower(trimws(scatterDets[1])) == "match") {
+                            self$fig$scatter.color.source <- "MATCH"
+                        } else if ((tolower(trimws(scatterDets[1])) == "unique") || (trimws(scatterDets[1]) == "")) {
+                            self$fig$scatter.color.source <- "UNIQUE"
+                        } else {
+                            self$fig$scatter.color <- scatterDets[1]
+                        }
+
+                        if (length(scatterDets) >= 2) {
+                            self$fig$scatter.shape <- as.numeric(scatterDets[2])
+
+                            if (length(scatterDets) >= 3) {
+                                self$fig$scatter.size <- as.numeric(scatterDets[2])
+                            }
+                        }
+                    }
+
+
                 } else if (private$default[[key[1]]][[key[2]]]$type == "text") {
+                    self[[key[1]]][[key[2]]] <- val
+
+                } else if (private$default[[key[1]]][[key[2]]]$type == "whisker") {
+                    if (val %in% c("TRUE", "true", 1, "BOX", "Box", "box")) {
+                        val <- "BOX"
+                    } else if (tolower(val) == "violin") {
+                        val <- "VIOLIN"
+                    } else {
+                        val <- FALSE
+                    }
                     self[[key[1]]][[key[2]]] <- val
                 }
 
@@ -206,10 +304,15 @@ histova <- R6::R6Class(
             "Axis Label Size" = "fig.axis.label.size",
             "Axis Title Size" = "fig.axis.title.size",
             "Axis Value Size" = "fig.axis.value.size",
+            "Axis X Main Style" = "fig.axis.x.main.style",
+            "Axis Y Main Style" = "fig.axis.y.main.style",
+            "Axis X Tick Style" = "fig.axis.x.tick.style",
+            "Axis Y Tick Style" = "fig.axis.y.tick.style",
             "Bar Width" = "fig.bar.width",
             "Bar Border Color" = "fig.bar.border.color",
             "Bar Border Width" = "fig.bar.border.width",
             "Colors Alpha" = "fig.colors.alpha",
+            "Error Bars Style" = "fig.plot.errorbar.style",
             "Legend Display" = "fig.legend.display",
             "Legend Label Size" = "fig.legend.label.size",
             "Legend Size" = "fig.legend.key.size",
@@ -219,6 +322,7 @@ histova <- R6::R6Class(
             "Save Units" = "fig.save.units",
             "Save Type" = "fig.save.type",
             "Scatter Alpha" = "fig.scatter.alpha",
+            "Scatter ColorShapeSize" = "fig.scatter.color.shape.size", # this should never be set in the public list
             "Scatter Display" = "fig.scatter.disp",
             "Stat Caption Size" = "stats.caption.size",
             "Text Convert" = "fig.convert",
@@ -243,14 +347,18 @@ histova <- R6::R6Class(
                 "axis.value.size" = list(val=26,type="num",style=TRUE),
                 "axis.x.main.color" = list(val="black",type="color",style=TRUE),
                 "axis.x.main.size" = list(val=0.8,type="num",style=TRUE),
+                "axis.x.main.style" = list(val=NULL,type="axisX.main.style",style=TRUE),
                 "axis.x.tick.color" = list(val="black",type="color",style=TRUE),
                 "axis.x.tick.length" = list(val=0.1,type="num",style=TRUE),
                 "axis.x.tick.size" = list(val=0.6,type="num",style=TRUE),
+                "axis.x.tick.style" = list(val=NULL,type="axisX.tick.style",style=TRUE),
                 "axis.y.main.color" = list(val="black",type="color",style=TRUE),
                 "axis.y.main.size" = list(val=0.8,type="num",style=TRUE),
+                "axis.y.main.style" = list(val=NULL,type="axisY.main.style",style=TRUE),
                 "axis.y.tick.color" = list(val="black",type="color",style=TRUE),
                 "axis.y.tick.length" = list(val=0.1,type="num",style=TRUE),
                 "axis.y.tick.size" = list(val=0.6,type="num",style=TRUE),
+                "axis.y.tick.style" = list(val=NULL,type="axisY.tick.style",style=TRUE),
                 "bar.border.color" = list(val="white",type="color",style=TRUE),
                 "bar.border.width" = list(val=0.2,type="num",style=TRUE),
                 "bar.width" = list(val=0.8,type="num",style=TRUE),
@@ -272,22 +380,24 @@ histova <- R6::R6Class(
                 "legend.position" = list(val="bottom",type="",style=TRUE),
                 "legend.title" = list(val="Groups",type="",style=TRUE),
                 "legend.title.tmp" = list(val="",type="",style=TRUE),
+                "plot.errorbar.style" = list(val=NULL,type="error.bars.style",style=TRUE),
                 "plot.errorbar.color" = list(val="black",type="color",style=TRUE),
                 "plot.errorbar.endwidth" = list(val=0.4,type="num",style=TRUE),
                 "plot.errorbar.size" = list(val=0.8,type="num",style=TRUE),
                 "plot.hline" = list(val=data.frame(y=c(NA), size=c(0), color=c("")),type="",style=FALSE),
                 "plot.labels" = list(val="",type="",style=FALSE),
-                "plot.whisker" = list(val="FALSE",type="bool",style=TRUE),
                 "plot.hline.def.color" = list(val="black",type="bool",style=TRUE),
                 "plot.hline.def.size" = list(val=1,type="num",style=TRUE),
                 "plot.hline.OVRD.color" = list(val=NA,type="",style=TRUE),
                 "plot.hline.OVRD.size" = list(val=NA,type="",style=TRUE),
+                "plot.whisker" = list(val="FALSE",type="whisker",style=TRUE),
                 "save.dpi" = list(val=320,type="num",style=TRUE),
                 "save.height" = list(val=8.5,type="num",style=TRUE),
                 "save.type" = list(val="jpg",type="imgType",style=TRUE),
                 "save.units" = list(val="in",type="imgUnits",style=TRUE),
                 "save.width" = list(val=8,type="num",style=TRUE),
                 "scatter.alpha" = list(val=1,type="alpha",style=TRUE),
+                "scatter.color.shape.size" = list(val=NULL,type="GROUP.scatterCSS",style=TRUE),
                 "scatter.color" = list(val="#FFD700",type="color",style=TRUE),
                 "scatter.color.source" = list(val="DEF",type="",style=TRUE),
                 "scatter.disp" = list(val=TRUE,type="bool",style=TRUE),
