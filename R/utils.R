@@ -61,6 +61,26 @@ get_suffix <- function(location.file) {
     }
 }
 
+#' Is Valid Color?
+#'
+#' Send in a variable to see if it is an acceptable color with R, checks against
+#' various notations including transparant values
+#'
+#' @param color variable to be checked if it is a R color
+#'
+#' @returns TRUE if color, FALSE if not
+#' @export
+#'
+is_color <- function(color) {
+    isCol = FALSE
+    tryCatch({
+        isCol = is.matrix(grDevices::col2rgb(color))
+    }, error = function(e) {
+        isCol = FALSE
+    })
+    return(isCol)
+}
+
 #' Is Connection Open
 #'
 #' Send in a variable that might be a connection to check... this simply catches
@@ -78,4 +98,22 @@ is_con_open <- function(con) {
     }, error = function(e) {
         FALSE  # If error occurs, connection is closed/invalid
     })
+}
+
+#' Is Numeric
+#'
+#' Is the value a legit number or not, this includes decimals and negatives
+#'
+#' @param num variable to be checked if it is a number
+#'
+#' @returns TRUE if numeric, FALSE if not
+#' @export
+#'
+is_num <- function(num) {
+
+    if (!is.na(suppressWarnings(as.numeric(num)))) {
+        return (TRUE)
+    } else {
+        return (FALSE)
+    }
 }

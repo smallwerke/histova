@@ -91,14 +91,12 @@ load_file_head = function(hsa) {
                  (lA[[1]][1] == "Whisker Plot") || (lA[[1]][1] == "Scatter ColorShapeSize") ||
                  (lA[[1]][1] == "Axis X Main Style") || (lA[[1]][1] == "Axis Y Main Style") ||
                  (lA[[1]][1] == "Axis X Tick Style") || (lA[[1]][1] == "Axis Y Tick Style") ||
-                 (lA[[1]][1] == "Error Bars Style")
-
+                 (lA[[1]][1] == "Error Bars Style") || (lA[[1]][1] == "HLine Style OVRD") ||
+                 (lA[[1]][1] == "Colors") || (lA[[1]][1] == "Colors Unique") ||
+                 (lA[[1]][1] == "Colors Specific")
             ) {
                 hsa$set(lA[[1]][1], lA[[1]][2], TRUE)
             }
-
-
-            ################ Figure Save (OPT) ################
 
 
             ################ Display of the Axis & Plot (OPT) ################
@@ -108,71 +106,6 @@ load_file_head = function(hsa) {
                     #fig$Coord.Fixed <- FALSE
                     #fig$Coord.Fixed.Ratio <- ""
 
-            ################ Colors and Display Individual Points (OPT) ################
-            # can handle "," and " " for splitting ([, ]+ looks for "," or " " multiple times for splitting)
-            if (lA[[1]][1] == "Colors") { fig$Colors <- strsplit(lA[[1]][2], "[, ]+")[[1]]
-            } else if ((lA[[1]][1] == "Colors Unique") || (lA[[1]][1] == "Colors Specific")) {
-                #Colors Unique	#000000, #FFD700, 4, 1.8
-                #Colors Unique	COLOR, ALPHA, COLOR, SHAPE, SIZE, STROKE, ALPHA
-                #Unique: will be loaded into color array, followed by any Colors list and finally any specific colors will be
-                #loaded (and override any previously set values)
-                #Colors Specific    G1_G2, HTML, ALPHA, HTML, SHAPE, SIZE, STROKE, ALPHA
-                #Colors Specific	G1_G2, #000000, 0.6, #FFD700, 0.8, 4, 1, 1.8
-                #Specific: first two (G1_G2 & HTML) are minimum required, will check for numeric for alpha or use default (NULL)
-                #then assume HTML is next followed by SHAPE, SIZE & ALPHA with defaults used for any missing values
-
-                # regardless of the setting break the values into an array
-                colorDets <- trimws(strsplit(lA[[1]][2], ",")[[1]])
-
-                # if it is colors unique just go ahead and insert an 'NA' value at the beginning for the G1_G2
-                # value and then treat it the same as Colors Specific
-                if (lA[[1]][1] == "Colors Unique") { colorDets = append(colorDets, NA, 0) }
-
-                if (length(colorDets) < 2) {
-                    histova_msg(sprintf("Colors Specific entry (%s) NOT VALID, at minimum \"G1_G2\", \"HTML\" is required", lA[[1]][2]), type="warn", tabs=1)
-                } else {
-                    #Colors Unique	G1_G2, #000000, 0.6, #FFD700, 0.8, 4, 1, 1.8
-                    #Colors Unique	G1_G2, HTML, ALPHA, HTML, SHAPE, SIZE, STROKE, ALPHA
-                    #Colors Unique	string, color, num, string, num, num, num, num
-                    #MIN: G1_G2, HTML -> G1_G2, HTML, NA, NA, NA, NA, NA, NA
-                    #Basic: G1_G2, HTML, HTML -> G1_G2, HTML, NA, HTML, NA, NA, NA, NA
-                    #NA = DEFAULT
-                    # pad out the length to 7 for now as the following are legal entries:
-                    #Colors Unique	G1_G2, #000000
-                    #Colors Unique	G1_G2, #000000, #FFD700
-                    #Colors Unique	G1_G2, #000000, , 0.8, 4 (or any other length of ending #s)
-                    while (length(colorDets) < 7) { colorDets <- append(colorDets, NA) }
-                    if (is.na(colorDets[3])) { colorDets[3] = "" }
-                    # assume that HTML codes will always evaluate to FALSE for numeric, IF TRUE assume unique ALPHA, otherwise assign NA
-                    if ((!varhandle::check.numeric(colorDets[3])) || (colorDets[3] == "")) { colorDets <- append(colorDets, NA, 2) }
-                    # see if a final item is needed
-                    while (length(colorDets) < 8) { colorDets <- append(colorDets, NA) }
-
-                    # check up on the scatter color, IF it is still lingering as "" then set it as NA (check for NA first as NA will crash the == "")
-                    if ((!is.na(colorDets[4])) && (colorDets[4] == "")) { colorDets[4] <- NA }
-                    # check to see that alpha, size & shape are all numeric OR force as defaults
-                    if (!varhandle::check.numeric(colorDets[5])) { colorDets[5] <- NA }
-                    if (!varhandle::check.numeric(colorDets[6])) { colorDets[6] <- NA }
-                    if (!varhandle::check.numeric(colorDets[7])) { colorDets[7] <- NA }
-                    if (!varhandle::check.numeric(colorDets[8])) { colorDets[8] <- NA }
-
-                    if ((!is.na(colorDets[3])) && ((as.numeric(colorDets[3]) < 0) || (as.numeric(colorDets[3]) > 1))) { colorDets[3] <- NA }
-                    if ((!is.na(colorDets[8])) && ((as.numeric(colorDets[8]) < 0) || (as.numeric(colorDets[8]) > 1))) { colorDets[8] <- NA }
-
-                    # handle all formatting in set_aesthetics now
-                    fig$Colors.Unique[nrow(fig$Colors.Unique)+1,] <- colorDets
-                }
-            }
-
-
-            ################ Line Design Options (OPT) ################
-            else if (lA[[1]][1] == "HLine Style OVRD") {
-                axisDets = strsplit(lA[[1]][2], ",")[[1]]
-                if (length(axisDets) >= 1) { if (as.numeric(axisDets[1]) >= 0) { fig$Plot.HLine.OVRD.Size <- as.numeric(axisDets[1]) } }
-                else { fig$Plot.HLine.OVRD.Size <- fig$Plot.HLine.Def.Size } ### CHANGED - should be fine but was assumed pulling from gloabl env ###
-                if (length(axisDets) >= 2) { fig$Plot.HLine.OVRD.Color <- axisDets[2] }
-                else { fig$Plot.HLine.OVRD.Color <- fig$Plot.HLine.Def.Color } ### CHANGED - should be fine but was assumed pulling from gloabl env ###
-            }
             ################ Legend Display Options (OPT) ################
             else if (lA[[1]][1] == "Legend Color Source") {
                 if (lA[[1]][2] %in% c("Group1", "group1", 1)) { fig$Legend.Color.Source <- "Group1" }
@@ -197,7 +130,7 @@ load_file_head = function(hsa) {
             }
 
         }
-        if ( (lA[[1]][1] == "Title Main") ||
+        if ( (lA[[1]][1] == "Title Main") || (lA[[1]][1] == "HLine") ||
              (lA[[1]][1] == "X Leg") || (lA[[1]][1] == "Y Leg")  ### CHANGED - was not being assigned to global env ###
         ) {
             hsa$set(lA[[1]][1], lA[[1]][2], TRUE)
@@ -219,20 +152,7 @@ load_file_head = function(hsa) {
             fig$Y.Break.df$start <- as.numeric(fig$Y.Break.df$start)
             fig$Y.Break.df$stop <- as.numeric(fig$Y.Break.df$stop)
         }
-        # can handle comma delimited array of horizontal lines
-        else if (lA[[1]][1] == "HLine") {
-            tmp <- unlist(strsplit(lA[[1]][2], ","))
-            # if the HLine provided by the user doesn't specify the size and color start by using the default
-            # going to deal with the overide option later since I don't want to impose config file line order requirements
-            if (length(tmp) < 2) { tmp[2] <- fig$Plot.HLine.Def.Size }
-            if (length(tmp) < 3) { tmp[3] <- fig$Plot.HLine.Def.Color }
-            if(is.na(fig$Plot.HLine$y[1])) {
-                fig$Plot.HLine[1,] <- list(as.numeric(tmp[1]), as.numeric(tmp[2]), tmp[3])
-            } else {
-                fig$Plot.HLine[nrow(fig$Plot.HLine) + 1,] <- list(as.numeric(tmp[1]), as.numeric(tmp[2]), tmp[3])
-            }
-            #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - should now be taken care of above when being setup... ###
-        }
+
         ################ Alter the Axis (REQ) ################
         else if (lA[[1]][1] == "Y Value Rig") {
             if (lA[[1]][2] %in% c("FALSE", "False", "false", "0")) { fig$Y.Rig <- FALSE
@@ -353,7 +273,6 @@ load_file_head = function(hsa) {
         fig$Legend.Title.tmp <- fig$Legend.Title.Replace
         rm("Legend.Title.Replace", envir = fig)
     }
-    #if (fig$Convert) {
     if (hsa$get("fig.convert")) {
         hsa$set("fig.title.tmp", convert_text(hsa$get("fig.title.tmp")))
         hsa$set("fig.y.tmp", convert_text(hsa$get("fig.y.tmp")))
@@ -362,17 +281,14 @@ load_file_head = function(hsa) {
     }
 
     # IF a master HLine style was provided replace the current value and cleanup
-    if (is.na(fig$Plot.HLine.OVRD.Color) == FALSE) {
-        fig$Plot.HLine$color <- fig$Plot.HLine.OVRD.Color
-        histova_msg(sprintf("OVERRIDING ALL horizontal line colors, set to: \'%s\'", fig$Plot.HLine$color[1]))
-        #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - should no longer be needed as assigned on the fly ###
+    if ( isFALSE(is.null(hsa$get("fig.plot.hline.OVRD.color"))) ) {
+        hsa$set("fig.plot.hline.color", hsa$get("fig.plot.hline.OVRD.color") )
+        histova_msg(sprintf("OVERRIDING ALL horizontal line colors, set to: \'%s\'", hsa$get("fig.plot.hline.OVRD.color")))
     }
-    if (is.na(fig$Plot.HLine.OVRD.Size) == FALSE) {
-        fig$Plot.HLine$size <- fig$Plot.HLine.OVRD.Size
-        histova_msg(sprintf("OVERRIDING ALL horizontal line sizes, set to: \'%s\'", fig$Plot.HLine$size[1]))
-        #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - should no longer be needed as assigned on the fly ###
+    if ( isFALSE(is.null(hsa$get("fig.plot.hline.OVRD.size"))) ) {
+        hsa$set("fig.plot.hline.size", hsa$get("fig.plot.hline.OVRD.size") )
+        histova_msg(sprintf("OVERRIDING ALL horizontal line sizes, set to: \'%s\'", hsa$get("fig.plot.hline.OVRD.size")))
     }
-    rm("Plot.HLine.Def.Color", "Plot.HLine.Def.Size", "Plot.HLine.OVRD.Color", "Plot.HLine.OVRD.Size", envir = fig)
 
     fig$Title <- hsa$get("fig.title.tmp")
     fig$Y <- hsa$get("fig.y.tmp")

@@ -48,7 +48,7 @@ build_histo <- function(hsa){
             #guides(size = 'none') +
             #guides(color = 'none') +
             ggplot2::scale_fill_manual(
-                values=fig$Color.List,
+                values=hsa$get("fig.color.list"),
                 name=fig$Legend.Title)
         ##########################################
         # Basic Whiskerplot
@@ -72,7 +72,7 @@ build_histo <- function(hsa){
                     alpha = hsa$get("fig.colors.alpha"))
         }
         gplot = gplot + ggplot2::scale_fill_manual(
-            values=fig$Color.List,
+            values=hsa$get("fig.color.list"),
             name=fig$Legend.Title)
         ##########################################
         # 'Standard' Figure
@@ -85,14 +85,14 @@ build_histo <- function(hsa){
             gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(.data$Group1, .data$mean, label = .data$Group1, fill = .data$statGroups))
         }
         gplot = gplot + ggplot2::geom_bar(
-            alpha= fig$Color.Alpha.List,
+            alpha= hsa$get("fig.color.alpha.list"),
             color= hsa$get("fig.bar.border.color"),
             linewidth = hsa$get("fig.bar.border.width"),
             width= hsa$get("fig.bar.width"),
             position=ggplot2::position_dodge(),
             stat='identity') +
 
-            ggplot2::scale_fill_manual(values=fig$Color.List, name=fig$Legend.Title)
+            ggplot2::scale_fill_manual(values=hsa$get("fig.color.list"), name=fig$Legend.Title)
     }
     ##########################################
     # Common Settings
@@ -140,13 +140,15 @@ build_histo <- function(hsa){
         histova_msg(sprintf("setting y-axis to use scientific notation, replacing existing scale_y_continuous..."), tabs=2)
         Y.Rig.SCI = TRUE
     }
-    if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
+
+    # see if the first entry has NA for the y position indicating NO lines...
+    if ( isFALSE(is.na(hsa$get("fig.plot.hline")$y[[1]])) ) {
         gplot = gplot + ggplot2::scale_y_continuous(
             labels = function(x) format(x, scientific = Y.Rig.SCI),
             expand = c(0, 0),                                          # make the bars touch the x-axis
             limits=c(fig$Y.Min,fig$Y.Max),
             breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
-            sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = fig$Plot.HLine$y, labels = format(fig$Plot.HLine$y, scientific = Y.Rig.SCI) )
+            sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = hsa$get("fig.plot.hline")$y, labels = format(hsa$get("fig.plot.hline")$y, scientific = Y.Rig.SCI) )
         )
     } else if (fig$Y.Break == TRUE) {
         # include a NULL secondary axis otherwise IF a y-axis break is included there will be a second y-axis added
@@ -196,11 +198,11 @@ build_histo <- function(hsa){
                 show.legend = FALSE
             )
         }
-        gplot = gplot + ggplot2::scale_color_manual(values=fig$Scatter.Color.List) +
-            ggplot2::scale_shape_manual(values=fig$Scatter.Shape.List) +
-            ggplot2::scale_size_manual(values=fig$Scatter.Size.List) +
-            ggplot2::scale_discrete_manual("stroke", values=fig$Scatter.Stroke.List) +
-            ggplot2::scale_alpha_manual(values=fig$Scatter.Alpha.List)
+        gplot = gplot + ggplot2::scale_color_manual(values=hsa$get("fig.scatter.color.list")) +
+            ggplot2::scale_shape_manual(values=hsa$get("fig.scatter.shape.list")) +
+            ggplot2::scale_size_manual(values=hsa$get("fig.scatter.size.list")) +
+            ggplot2::scale_discrete_manual("stroke", values=hsa$get("fig.scatter.stroke.list")) +
+            ggplot2::scale_alpha_manual(values=hsa$get("fig.scatter.alpha.list"))
 
     }
     #########################################################
@@ -300,7 +302,7 @@ build_histo <- function(hsa){
         }
         # remove the right Y axis from the plot (is added by default with a Y Break)...
         # BUT not when HLines have been included (as the right y axis holds that info)
-        if (is.na(fig$Plot.HLine$y[1]) == TRUE) {
+        if ( is.na(hsa$get("fig.plot.hline")$y[[1]]) ) {
              gplot = gplot +  ggplot2::theme(axis.text.y.right = ggplot2::element_blank(),
                 axis.ticks.y.right = ggplot2::element_blank(), axis.line.y.right = ggplot2::element_blank())
         } else {

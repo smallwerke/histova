@@ -4,7 +4,10 @@
 \alias{run_data}
 \title{Run Data}
 \usage{
-run_data()
+run_data(hsa)
+}
+\arguments{
+\item{hsa}{the histova R6 object}
 }
 \description{
 This function is a wrapper to run through all of the statistical operations

@@ -22,11 +22,11 @@ build_figure <- function(hsa, printPlot = FALSE, savePlot = TRUE, printEnvMsg = 
     build_histo(hsa)
 
     # add a line to the figure...
-    if (is.na(fig$Plot.HLine$y[1]) != TRUE) {
-        for (HL in 1:nrow(fig$Plot.HLine)) {
-            histova_msg(sprintf("adding a horizontal line to the figure at: \'%s\'", fig$Plot.HLine$y[HL]))
-            the$gplot = the$gplot + ggplot2::geom_hline(yintercept=fig$Plot.HLine$y[HL], linetype="solid", color=fig$Plot.HLine$color[HL], linewidth=fig$Plot.HLine$size[HL])
-        }
+    if ( isFALSE(is.na(hsa$get("fig.plot.hline")$y[[1]])) ) {
+         for (HL in 1:nrow(hsa$get("fig.plot.hline"))) {
+             histova_msg(sprintf("adding a horizontal line to the figure at: \'%s\'", hsa$get("fig.plot.hline")$y[HL]))
+             the$gplot = the$gplot + ggplot2::geom_hline(yintercept=hsa$get("fig.plot.hline")$y[HL], linetype="solid", color=hsa$get("fig.plot.hline")$color[HL], linewidth=hsa$get("fig.plot.hline")$size[HL])
+         }
     }
 
     # print out the plot for viewing in RStudio - probably good idea to make this an optional setting...

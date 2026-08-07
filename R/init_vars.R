@@ -46,7 +46,7 @@ init_vars <- function(hsa) {
         #fig$Bar.Border.Width <- histova::get_default("fig", "Bar.Border.Width")
 
         ################ Colors and Display Individual Points (OPT) ################
-        fig$Colors.Unique <- histova::get_default("fig", "Colors.Unique")
+        #fig$Colors.Unique <- histova::get_default("fig", "Colors.Unique")
         #fig$Colors.Alpha <- histova::get_default("fig", "Colors.Alpha")
         #fig$Scatter.Disp <- histova::get_default("fig", "Scatter.Disp")
         #fig$Scatter.Alpha <- histova::get_default("fig", "Scatter.Alpha")
@@ -71,10 +71,10 @@ init_vars <- function(hsa) {
         #fig$Plot.ErrorBar.Size <- histova::get_default("fig", "Plot.ErrorBar.Size")
         #fig$Plot.ErrorBar.EndWidth <- histova::get_default("fig", "Plot.ErrorBar.EndWidth")
         #fig$Plot.ErrorBar.Color <- histova::get_default("fig", "Plot.ErrorBar.Color")
-        fig$Plot.HLine.Def.Size <- histova::get_default("fig", "Plot.HLine.Def.Size")
-        fig$Plot.HLine.Def.Color <- histova::get_default("fig", "Plot.HLine.Def.Color")
-        fig$Plot.HLine.OVRD.Size <- histova::get_default("fig", "Plot.HLine.OVRD.Size")
-        fig$Plot.HLine.OVRD.Color <- histova::get_default("fig", "Plot.HLine.OVRD.Color")
+        #fig$Plot.HLine.Def.Size <- histova::get_default("fig", "Plot.HLine.Def.Size")
+        #fig$Plot.HLine.Def.Color <- histova::get_default("fig", "Plot.HLine.Def.Color")
+        #fig$Plot.HLine.OVRD.Size <- histova::get_default("fig", "Plot.HLine.OVRD.Size")
+        #fig$Plot.HLine.OVRD.Color <- histova::get_default("fig", "Plot.HLine.OVRD.Color")
 
         ################ Legend Display Options (OPT) ################
         fig$Legend.Color.Source <- histova::get_default("fig", "Legend.Color.Source")
@@ -110,7 +110,7 @@ init_vars <- function(hsa) {
     fig$Y.Interval <- histova::get_default("fig", "Y.Interval")
     fig$Y.Max <- histova::get_default("fig", "Y.Max")
     fig$Y.Min <- histova::get_default("fig", "Y.Min")
-    fig$Plot.HLine <- histova::get_default("fig", "Plot.HLine")
+    #fig$Plot.HLine <- histova::get_default("fig", "Plot.HLine")
 
     ################ Alter the Axis (REQ) ################
     fig$Y.Rig <- histova::get_default("fig", "Y.Rig")

@@ -79,58 +79,58 @@ set_aesthetics <- function(hsa) {
     histova_msg(sprintf("assigning settings for %s groups (%s)", colorLengthUnique, paste(colorNamesUnique, collapse=" ")), tabs=2)
 
     # setup the variables that will be used to build the histogram
-    fig$Color.List = rep(NA, colorLength)
-    names(fig$Color.List) = colorNames
-    fig$Color.Alpha.List = rep(NA, colorLength)
-    names(fig$Color.Alpha.List) = colorNames
+    hsa$fig$color.list = rep(NA, colorLength)
+    names(hsa$fig$color.list) = colorNames
+    hsa$fig$color.alpha.list = rep(NA, colorLength)
+    names(hsa$fig$color.alpha.list) = colorNames
 
-    fig$Scatter.Color.List = rep(NA, scatterLength)
-    names(fig$Scatter.Color.List) = scatterNames
-    fig$Scatter.Shape.List = rep(NA, scatterLength)
-    names(fig$Scatter.Shape.List) = scatterNames
-    fig$Scatter.Size.List = rep(NA, scatterLength)
-    names(fig$Scatter.Size.List) = scatterNames
-    fig$Scatter.Stroke.List = rep(NA, scatterLength)
-    names(fig$Scatter.Stroke.List) = scatterNames
-    fig$Scatter.Alpha.List = rep(NA, scatterLength)
-    names(fig$Scatter.Alpha.List) = scatterNames
+    hsa$fig$scatter.color.list = rep(NA, scatterLength)
+    names(hsa$fig$scatter.color.list) = scatterNames
+    hsa$fig$scatter.shape.list = rep(NA, scatterLength)
+    names(hsa$fig$scatter.shape.list) = scatterNames
+    hsa$fig$scatter.size.list = rep(NA, scatterLength)
+    names(hsa$fig$scatter.size.list) = scatterNames
+    hsa$fig$scatter.stroke.list = rep(NA, scatterLength)
+    names(hsa$fig$scatter.stroke.list) = scatterNames
+    hsa$fig$scatter.alpha.list = rep(NA, scatterLength)
+    names(hsa$fig$scatter.alpha.list) = scatterNames
 
     ##############################
     # HISTOGRAM COLOR
     #
     # take any entries from Fig.Colors.Unique where the group name is 'NA' and dump all setting data into the  lists
     # since any non specific values are always set to NA go ahead and load all rows where a group is set to NA
-    uniqueLength = length(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$color)
+    uniqueLength = length(hsa$get("fig.colors.specific")[is.na(hsa$get("fig.colors.specific")$group), ]$color)
     if (uniqueLength > 0) {
         # since this should all be based on G1_G2 names NOT simply length and some settings require a value PER sample
         # scan through and set it based on NAME not simply list location...
         for (i in 1:uniqueLength) {
-            #histova_msg(sprintf("AT %s in names = %s",i, colorNamesUnique[i]))
-            fig$Color.List[names(fig$Color.List) == colorNamesUnique[i]] =  fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$color[i]
-            fig$Color.Alpha.List[names(fig$Color.Alpha.List) == colorNamesUnique[i]] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$colorAlpha[i])
-            fig$Scatter.Color.List[names(fig$Scatter.Color.List) == colorNamesUnique[i]] =  fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterColor[i]
-            fig$Scatter.Shape.List[names(fig$Scatter.Shape.List) == colorNamesUnique[i]] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterShape[i])
-            fig$Scatter.Size.List[names(fig$Scatter.Size.List) == colorNamesUnique[i]] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterSize[i])
-            fig$Scatter.Stroke.List[names(fig$Scatter.Stroke.List) == colorNamesUnique[i]] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterStroke[i])
-            fig$Scatter.Alpha.List[names(fig$Scatter.Alpha.List) == colorNamesUnique[i]] =  as.numeric(fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$scatterAlpha[i])
+            histova_msg(sprintf("fig$colors.unique #%s set to group = %s",i, colorNamesUnique[i]))
+            hsa$fig$color.list[names(hsa$get("fig.color.list")) == colorNamesUnique[i]] = hsa$fig$colors.specific[is.na(hsa$fig$colors.specific$group), ]$color[i]
+            hsa$fig$color.alpha.list[names(hsa$get("fig.color.alpha.list")) == colorNamesUnique[i]] = as.numeric(hsa$fig$colors.specific[is.na(hsa$fig$colors.specific$group), ]$colorAlpha[i])
+            hsa$fig$scatter.color.list[names(hsa$get("fig.scatter.color.list")) == colorNamesUnique[i]] = hsa$fig$colors.specific[is.na(hsa$fig$colors.specific$group), ]$scatterColor[i]
+            hsa$fig$scatter.shape.list[names(hsa$get("fig.scatter.shape.list")) == colorNamesUnique[i]] = as.numeric(hsa$fig$colors.specific[is.na(hsa$fig$colors.specific$group), ]$scatterShape[i])
+            hsa$fig$scatter.size.list[names(hsa$get("fig.scatter.size.list")) == colorNamesUnique[i]] = as.numeric(hsa$fig$colors.specific[is.na(hsa$fig$colors.specific$group), ]$scatterSize[i])
+            hsa$fig$scatter.stroke.list[names(hsa$get("fig.scatter.stroke.list")) == colorNamesUnique[i]] = as.numeric(hsa$fig$colors.specific[is.na(hsa$fig$colors.specific$group), ]$scatterStroke[i])
+            hsa$fig$scatter.alpha.list[names(hsa$get("fig.scatter.alpha.list")) == colorNamesUnique[i]] = as.numeric(hsa$fig$colors.specific[is.na(hsa$fig$colors.specific$group), ]$scatterAlpha[i])
         }
         # old simple setting for X entries in the list...
         #fig$Color.List[1:uniqueLength] =  fig$Colors.Unique[is.na(fig$Colors.Unique$group), ]$color
     }
 
-    # start by simply assigning any entries in the fig$Colors list to the beginning of the
+    # start by simply assigning any entries in the $fig$colors list to the beginning of the
     # fig$Color.List list any unique entries will override any values and then the list will be padded as needed...
-    if (length(fig$Colors) > 0) {
-        for (i in (uniqueLength+1):(uniqueLength+length(fig$Colors)) ) {
-            #histova_msg(sprintf("Colors %s in names = %s",i, colorNamesUnique[i]))
-            fig$Color.List[names(fig$Color.List) == colorNamesUnique[i]] = fig$Colors[i - uniqueLength]
+    if (length(hsa$get("fig.colors")) > 0) {
+        for (i in (uniqueLength+1):(uniqueLength+length(hsa$get("fig.colors"))) ) {
+            histova_msg(sprintf("fig$colors #%s set to group = %s",i, colorNamesUnique[i]))
+            hsa$fig$color.list[names(hsa$fig$color.list) == colorNamesUnique[i]] = hsa$get("fig.colors")[i - uniqueLength]
         }
     }
     #
     # Fig.Colors.Unique is always initiated as an empty list in init_vars if it has data assume we're to use it...
     # go ahead and assign colors to corresponding group names in fig$Color.List
-    specificLength = length(fig$Colors.Unique[!is.na(fig$Colors.Unique$group), ]$color)
-    specificColors = fig$Colors.Unique[!is.na(fig$Colors.Unique$group), ]
+    specificLength <- length(hsa$get("fig.colors.specific")[!is.na(hsa$get("fig.colors.specific")$group), ]$color)
+    specificColors <- hsa$get("fig.colors.specific")[!is.na(hsa$get("fig.colors.specific")$group), ]
     if (specificLength > 0) {
         # loop through the data frame and pull the G1_G2 that corresponds to the type of figure (as defined above)
         # and if that group name exists in the colorNames list update the associated color in the fig$Color.List
@@ -144,74 +144,75 @@ set_aesthetics <- function(hsa) {
                 nameCheck <- specificColors$group[i]
             }
             if (nameCheck %in% colorNames) {
+                histova_msg(sprintf("fig$colors.specific setting %s", nameCheck))
                 # the minimum values to have a unique color are group name & color
                 # so the group color is assumed to exist, shouldn't be possible to have an NA value
                 # though even this would be cleaned up below
                 #fig$Color.List[[nameCheck]] <- specificColors$color[i]
-                fig$Color.List[names(fig$Color.List) == nameCheck] <- specificColors$color[i]
+                hsa$fig$color.list[names(hsa$fig$color.list) == nameCheck] <- specificColors$color[i]
 
                 # set the scatter color list if the unique value isn't NA
                 # after scrolling through the unique list all remaining NA's get set to default
                 if (!is.na(specificColors$colorAlpha[i])) {
-                    fig$Color.Alpha.List[names(fig$Color.Alpha.List) == nameCheck] <- as.numeric(specificColors$colorAlpha[i])
+                    hsa$fig$color.alpha.list[names(hsa$fig$color.alpha.list) == nameCheck] <- as.numeric(specificColors$colorAlpha[i])
                 }
                 if (!is.na(specificColors$scatterColor[i])) {
-                    fig$Scatter.Color.List[names(fig$Scatter.Color.List) == nameCheck] <- specificColors$scatterColor[i]
+                    hsa$fig$scatter.color.list[names(hsa$fig$scatter.color.list) == nameCheck] <- specificColors$scatterColor[i]
                 }
                 if (!is.na(specificColors$scatterShape[i])) {
-                    fig$Scatter.Shape.List[names(fig$Scatter.Shape.List) == nameCheck] <- as.numeric(specificColors$scatterShape[i])
+                    hsa$fig$scatter.shape.list[names(hsa$fig$scatter.shape.list) == nameCheck] <- as.numeric(specificColors$scatterShape[i])
                 }
                 if (!is.na(specificColors$scatterSize[i])) {
-                    fig$Scatter.Size.List[names(fig$Scatter.Size.List) == nameCheck] <- as.numeric(specificColors$scatterSize[i])
+                    hsa$fig$scatter.size.list[names(hsa$fig$scatter.size.list) == nameCheck] <- as.numeric(specificColors$scatterSize[i])
                 }
                 if (!is.na(specificColors$scatterStroke[i])) {
-                    fig$Scatter.Stroke.List[names(fig$Scatter.Stroke.List) == nameCheck] <- as.numeric(specificColors$scatterStroke[i])
+                    hsa$fig$scatter.stroke.list[names(hsa$fig$scatter.stroke.list) == nameCheck] <- as.numeric(specificColors$scatterStroke[i])
                 }
                 if (!is.na(specificColors$scatterAlpha[i])) {
-                    fig$Scatter.Alpha.List[names(fig$Scatter.Alpha.List) == nameCheck] <- as.numeric(specificColors$scatterAlpha[i])
+                    hsa$fig$scatter.alpha.list[names(hsa$fig$scatter.alpha.list) == nameCheck] <- as.numeric(specificColors$scatterAlpha[i])
                 }
             } else {
                 histova_msg(sprintf("Colors Specific: unable to find the group name %s, SKIPPING entry", nameCheck), tabs=2, type="warn")
-
             }
         }
     }
 
     # set the remaining colors that are still 'NA' to draw from scales::hue_pal()
     # color alpha level get set to default
-    if (length(unique(names(fig$Color.List[is.na(fig$Color.List)]))) > 0) {
-        histova_msg(sprintf("Only %s colors supplied when %s are needed, ADDING EXTRAS", length(unique(names(fig$Color.List[!is.na(fig$Color.List)]))), colorLengthUnique), tabs=2, type="warn")
+    if (length(unique(names(hsa$fig$color.list[is.na(hsa$fig$color.list)]))) > 0) {
+        histova_msg(sprintf("Only %s colors supplied when %s are needed, ADDING EXTRAS", length(unique(names(hsa$fig$color.list[!is.na(hsa$fig$color.list)]))), colorLengthUnique), tabs=2, type="warn")
         # replace any NA values with a color from scales::hue_pal
-        unsetNames =  unique(names(fig$Color.List[is.na(fig$Color.List)]))
+        unsetNames =  unique(names(hsa$fig$color.list[is.na(hsa$fig$color.list)]))
         generatedColors = scales::hue_pal()(length(unsetNames))
         for (i in 1:length(unsetNames)) {
-            fig$Color.List[names(fig$Color.List) == unsetNames[i]] <- generatedColors[i]
+            hsa$fig$color.list[names(hsa$fig$color.list) == unsetNames[i]] <- generatedColors[i]
         }
         #histova_msg(sprintf("added %s colors for groups %s ", generatedColors, unsetNames), tabs=2, type="warn")
     }
-    fig$Color.Alpha.List[is.na(fig$Color.Alpha.List)] = hsa$get("fig.colors.alpha")
+    hsa$fig$color.alpha.list[is.na(hsa$fig$color.alpha.list)] <- hsa$get("fig.colors.alpha")
 
     # assign all remaining scatter NA values to the defaults
-    fig$Scatter.Color.List[is.na(fig$Scatter.Color.List)] = hsa$get("fig.scatter.color")
-    fig$Scatter.Shape.List[is.na(fig$Scatter.Shape.List)] = as.numeric(hsa$get("fig.scatter.shape"))
-    fig$Scatter.Size.List[is.na(fig$Scatter.Size.List)] = as.numeric(hsa$get("fig.scatter.size"))
-    fig$Scatter.Stroke.List[is.na(fig$Scatter.Stroke.List)] = as.numeric(hsa$get("fig.scatter.stroke"))
-    fig$Scatter.Alpha.List[is.na(fig$Scatter.Alpha.List)] = as.numeric(hsa$get("fig.scatter.alpha"))
+    hsa$fig$scatter.color.list[is.na(hsa$fig$scatter.color.list)] <- hsa$get("fig.scatter.color")
+    hsa$fig$scatter.shape.list[is.na(hsa$fig$scatter.shape.list)] <- as.numeric(hsa$get("fig.scatter.shape"))
+    hsa$fig$scatter.size.list[is.na(hsa$fig$scatter.size.list)] <- as.numeric(hsa$get("fig.scatter.size"))
+    hsa$fig$scatter.stroke.list[is.na(hsa$fig$scatter.stroke.list)] <- as.numeric(hsa$get("fig.scatter.stroke"))
+    hsa$fig$scatter.alpha.list[is.na(hsa$fig$scatter.alpha.list)] <- as.numeric(hsa$get("fig.scatter.alpha"))
 
     # IF MATCH IS SET OVERRIDE ALL OTHER ASSIGNMENTS
     if (hsa$get("fig.scatter.color.source") == "MATCH") {
-        fig$Scatter.Color.List = fig$Color.List
+        hsa$fig$scatter.color.list <- NULL
+        hsa$fig$scatter.color.list <- hsa$get("fig.color.list")
     }
 
     # in rare instances the final colors list can be greater than what should be available
     # (eg when a group is dropped during treatment / control) so go ahead and trim
     # everything down to the length of determined colors to keep ggplot2 happy
-    fig$Color.List <- fig$Color.List[1:colorLength]
-    fig$Color.Alpha.List <- fig$Color.Alpha.List[1:colorLength]
+    hsa$fig$color.list <- hsa$fig$color.list[1:colorLength]
+    hsa$fig$color.alpha.list <- hsa$fig$color.alpha.list[1:colorLength]
 
-    fig$Scatter.Color.List <- fig$Scatter.Color.List[1:scatterLength]
-    fig$Scatter.Shape.List <- fig$Scatter.Shape.List[1:scatterLength]
-    fig$Scatter.Size.List <- fig$Scatter.Size.List[1:scatterLength]
-    fig$Scatter.Stroke.List <- fig$Scatter.Stroke.List[1:scatterLength]
-    fig$Scatter.Alpha.List <- fig$Scatter.Alpha.List[1:scatterLength]
+    hsa$fig$scatter.color.list <- hsa$fig$scatter.color.list[1:scatterLength]
+    hsa$fig$scatter.shape.list <- hsa$fig$scatter.shape.list[1:scatterLength]
+    hsa$fig$scatter.size.list <- hsa$fig$scatter.size.list[1:scatterLength]
+    hsa$fig$scatter.stroke.list <- hsa$fig$scatter.stroke.list[1:scatterLength]
+    hsa$fig$scatter.alpha.list <- hsa$fig$scatter.alpha.list[1:scatterLength]
 }

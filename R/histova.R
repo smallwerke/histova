@@ -10,11 +10,15 @@ histova <- R6::R6Class(
         behave = list(
             "verbose"=FALSE,
             "debug"=FALSE,
+            #"debug"=TRUE,
             "print"=TRUE,
             "log"=TRUE
         ),
         #' @field fig list for figure data
         fig = list(
+            "plot.hline" = data.frame(y=c(NA), size=c(0), color=c("")), # keep default as NA as this is the return from the sapply Y.Rig function...
+            "colors.specific" = data.frame(matrix(ncol = 8, nrow = 0,
+                        dimnames = list(NULL, c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha")) ) )
         ),
         #' @field file list for histova including open file connections
         file = list(),
@@ -110,19 +114,19 @@ histova <- R6::R6Class(
             # converting to the internal format by pulling from a list
             if (isTRUE(convert)) {
                 if (key %in% names(private$convert)) {
-                    key = private$convert[[key]]
+                    key <- private$convert[[key]]
                 } else {
-                    histova::histova_msg("KEY NOT FOUND")
+                    histova::histova_msg(paste0("KEY (", key, ") NOT FOUND"))
                     # ADD EXIT / ERROR MESSAGE FUNCTION HERE!!!!
                 }
             }
             key = self$split(key)
             if (is.list(private$default[[key[1]]][[key[2]]])) {
-                message(paste0("in: ", key[1], " setting ", key[2], " as: ", val))
+                histova_msg(paste0("in: ", key[1], " setting ", key[2], " as: ", val))
 
                 if (private$default[[key[1]]][[key[2]]]$type == "alpha") {
                     if ((as.numeric(val) >= 0) && (as.numeric(val) <= 1)) {
-                        self[[key[1]]][[key[2]]] = as.numeric(val)
+                        self[[key[1]]][[key[2]]] <- as.numeric(val)
                     }
 
                 # this is taking 5 similar BUT rather different settings and lumping them together
@@ -139,8 +143,11 @@ histova <- R6::R6Class(
                             (private$default[[key[1]]][[key[2]]]$type == "axisY.tick.style") ||
                             (private$default[[key[1]]][[key[2]]]$type == "error.bars.style") ) {
 
-                    pos.1 = ""
-                    pos.2 = ""
+                    # there are three possible HISTOVA variables to set here
+                    # going to go ahead and initialize the placeholders...
+                    pos.1 <- ""
+                    pos.2 <- ""
+                    pos.3 <- ""
                     # setup data details...
                     if (private$default[[key[1]]][[key[2]]]$type == "axisX.main.style") {
                         pos.1 <- "axis.x.main.size"
@@ -161,9 +168,17 @@ histova <- R6::R6Class(
                         pos.2 <- "plot.errorbar.endwidth"
                         pos.3 <- "plot.errorbar.color"
                     }
+
+                    # lumped together because the actual logic of what to set and why
+                    # is basically the same for all 5 different settings
+                    # 1: only set the size variable IF the input works to be numeric
+                    #       currently only looking to see if value > 0
+                    # 2: for the main.style settings simply assign pos2,
+                    #    for tick & bar styles this should be numeric and >= 0
+                    # 3: only for tick & bar styles ATM, simply assign, no check for now
                     setDets = strsplit(val, ",")[[1]]
                     if (length(setDets) >= 1) {
-                        if (as.numeric(setDets[1]) >= 0) {
+                        if ( (histova::is_num(setDets[1])) && (as.numeric(setDets[1]) >= 0) ) {
                             self$fig[[pos.1]] <- as.numeric(setDets[1])
                         }
 
@@ -177,13 +192,15 @@ histova <- R6::R6Class(
                                  (private$default[[key[1]]][[key[2]]]$type == "axisY.tick.style") ||
                                  (private$default[[key[1]]][[key[2]]]$type == "error.bars.style") ) {
 
-                                if (as.numeric(setDets[2]) >= 0) {
+                                if ( (histova::is_num(setDets[2])) && (as.numeric(setDets[2]) >= 0) ) {
                                     self$fig[[pos.2]] <- as.numeric(setDets[2])
                                 }
 
                                 # these options have a 3RD position - go there now...
                                 if (length(setDets) >=3) {
-                                    self$fig[[pos.3]] <- setDets[3]
+                                    if (histova::is_color(setDets[3])) {
+                                        self$fig[[pos.3]] <- setDets[3]
+                                    }
                                 }
                             }
                         }
@@ -191,47 +208,79 @@ histova <- R6::R6Class(
 
                 } else if (private$default[[key[1]]][[key[2]]]$type == "bool") {
                     if (val %in% c("TRUE", "True", "true", "1")) {
-                        self[[key[1]]][[key[2]]] = TRUE
+                        self[[key[1]]][[key[2]]] <- TRUE
                     } else {
-                        self[[key[1]]][[key[2]]] = FALSE
+                        self[[key[1]]][[key[2]]] <- FALSE
                     }
 
                 } else if  (private$default[[key[1]]][[key[2]]]$type == "color") {
-                    isCol = FALSE
-                    tryCatch({
-                        isCol = is.matrix(grDevices::col2rgb(val))
-                    }, error = function(e) {
-                        isCol = FALSE
-                    })
-                    if (isTRUE(isCol)) {
-                        self[[key[1]]][[key[2]]] = val
-                    }
-                    rm(isCol)
-
-                } else if  (private$default[[key[1]]][[key[2]]]$type == "font") {
-                    if (val %in% c("serif", "sans", "mono")) {
+                    if (histova::is_color(val)) {
                         self[[key[1]]][[key[2]]] <- val
                     }
 
-                } else if  (private$default[[key[1]]][[key[2]]]$type == "imgType") {
-                    if (tolower(val) %in% c("tex", "pdf", "jpg", "jpeg", "tiff", "png", "bmp", "svg")) {
-                        self[[key[1]]][[key[2]]] <- tolower(val)
-                    } else {
-                        self[[key[1]]][[key[2]]] <- "jpg"
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "colors") {
+                    self$fig$colors <- strsplit(val, "[, ]+")[[1]]
+
+                # this is a customized check for one variable... refine later if possible
+                } else if ( (private$default[[key[1]]][[key[2]]]$type == "colors.specific") ||
+                            (private$default[[key[1]]][[key[2]]]$type == "colors.unique") ) {
+                    #Colors Unique	#000000, #FFD700, 4, 1.8
+                    #Colors Unique	COLOR, ALPHA, COLOR, SHAPE, SIZE, STROKE, ALPHA
+                    #Unique: will be loaded into color array, followed by any Colors list and finally any specific colors will be
+                    #loaded (and override any previously set values)
+                    #Colors Specific    G1_G2, HTML, ALPHA, HTML, SHAPE, SIZE, STROKE, ALPHA
+                    #Colors Specific	G1_G2, #000000, 0.6, #FFD700, 0.8, 4, 1, 1.8
+                    #Specific: first two (G1_G2 & HTML) are minimum required, will check for numeric for alpha or use default (NULL)
+                    #then assume HTML is next followed by SHAPE, SIZE & ALPHA with defaults used for any missing values
+
+                    # regardless of the setting break the values into an array
+                    colorDets <- trimws(strsplit(val, ",")[[1]])
+
+                    # if it is colors unique just go ahead and insert an 'NA' value at the beginning for the G1_G2
+                    # value and then treat it the same as Colors Specific
+                    if (private$default[[key[1]]][[key[2]]]$type == "colors.unique") {
+                        colorDets = append(colorDets, NA, 0)
                     }
 
-                } else if  (private$default[[key[1]]][[key[2]]]$type == "imgUnits") {
-                    if (tolower(val) %in% c("in", "cm", "mm", "px")) {
-                        self[[key[1]]][[key[2]]] <- tolower(val)
+                    if (length(colorDets) < 2) {
+                        histova_msg(sprintf("Colors Specific entry (%s) NOT VALID, at minimum \"G1_G2\", \"HTML\" is required", lA[[1]][2]), type="warn", tabs=1)
                     } else {
-                        self[[key[1]]][[key[2]]] <- "in"
+                        #Colors Unique	G1_G2, #000000, 0.6, #FFD700, 0.8, 4, 1, 1.8
+                        #Colors Unique	G1_G2, HTML, ALPHA, HTML, SHAPE, SIZE, STROKE, ALPHA
+                        #Colors Unique	string, color, num, string, num, num, num, num
+                        #MIN: G1_G2, HTML -> G1_G2, HTML, NA, NA, NA, NA, NA, NA
+                        #Basic: G1_G2, HTML, HTML -> G1_G2, HTML, NA, HTML, NA, NA, NA, NA
+                        #NA = DEFAULT
+                        # pad out the length to 7 for now as the following are legal entries:
+                        #Colors Unique	G1_G2, #000000
+                        #Colors Unique	G1_G2, #000000, #FFD700
+                        #Colors Unique	G1_G2, #000000, , 0.8, 4 (or any other length of ending #s)
+                        while (length(colorDets) < 7) { colorDets <- append(colorDets, NA) }
+                        if (is.na(colorDets[3])) { colorDets[3] = "" }
+                        # assume that HTML codes will always evaluate to FALSE for numeric, IF TRUE assume unique ALPHA, otherwise assign NA
+                        if ((!varhandle::check.numeric(colorDets[3])) || (colorDets[3] == "")) { colorDets <- append(colorDets, NA, 2) }
+                        # see if a final item is needed
+                        while (length(colorDets) < 8) { colorDets <- append(colorDets, NA) }
+
+                        # check up on the scatter color, IF it is still lingering as "" then set it as NA (check for NA first as NA will crash the == "")
+                        if ((!is.na(colorDets[4])) && (colorDets[4] == "")) { colorDets[4] <- NA }
+                        # check to see that alpha, size & shape are all numeric OR force as defaults
+                        if (!varhandle::check.numeric(colorDets[5])) { colorDets[5] <- NA }
+                        if (!varhandle::check.numeric(colorDets[6])) { colorDets[6] <- NA }
+                        if (!varhandle::check.numeric(colorDets[7])) { colorDets[7] <- NA }
+                        if (!varhandle::check.numeric(colorDets[8])) { colorDets[8] <- NA }
+
+                        if ((!is.na(colorDets[3])) && ((as.numeric(colorDets[3]) < 0) || (as.numeric(colorDets[3]) > 1))) { colorDets[3] <- NA }
+                        if ((!is.na(colorDets[8])) && ((as.numeric(colorDets[8]) < 0) || (as.numeric(colorDets[8]) > 1))) { colorDets[8] <- NA }
+
+                        histova_msg(sprintf("Adding to %s: %s", private$default[[key[1]]][[key[2]]]$type, paste(colorDets, collapse=" ")))
+                        # handle all formatting in set_aesthetics now
+                        self$fig$colors.specific <- rbind(self$fig$colors.specific, setNames(as.list(colorDets), names(self$fig$colors.specific)))
                     }
-                } else if (private$default[[key[1]]][[key[2]]]$type == "num") {
-                    self[[key[1]]][[key[2]]] <- as.numeric(val)
 
                 # this is a customized check for one variable... refine later if possible
                 } else if (private$default[[key[1]]][[key[2]]]$type == "GROUP.scatterCSS") {
-                    scatterDets = strsplit(val, ",")[[1]]
+                    scatterDets <- strsplit(val, ",")[[1]]
                     if (length(scatterDets) >= 1) {
                         if (tolower(trimws(scatterDets[1])) == "match") {
                             self$fig$scatter.color.source <- "MATCH"
@@ -250,6 +299,111 @@ histova <- R6::R6Class(
                         }
                     }
 
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "font") {
+                    if (val %in% c("serif", "sans", "mono")) {
+                        self[[key[1]]][[key[2]]] <- val
+                    }
+
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "hline") {
+                    lines <- unlist(strsplit(val, ","))
+                    # if the first value is NOT numeric there is no real point in
+                    # any of this... even an empty string will have [1] set
+                    if (histova::is_num(lines[1])) {
+                        if (length(lines) < 2) {
+                            lines[2] <- self$get_default("fig", "plot.hline.def.size")
+                        }
+                        if (length(lines) < 3) {
+                            lines[3] <- self$get_default("fig", "plot.hline.def.color")
+                        }
+                        if(is.na(self$get("fig.plot.hline")$y[1])) {
+                            self$fig$plot.hline$y[1] <- as.numeric(lines[1])
+                            self$fig$plot.hline$size[1] <- as.numeric(lines[2])
+                            self$fig$plot.hline$color[1] <- lines[3]
+                        } else {
+                            self$fig$plot.hline <- rbind(self$fig$plot.hline, setNames(list(as.numeric(lines[1]), as.numeric(lines[2]), lines[3]), names(self$fig$plot.hline)) )
+                        }
+                    }
+
+                # goal is to set the color for ALL lines (if no Y position is given)
+                # or the color for any & all lines at the give Y position under the format:
+                # "color,pos"
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "hline.color") {
+                    if (!is.character(val)) { val = "" }
+                    axisDets = strsplit(val, ",")[[1]]
+
+                    # no point in any of this if the first position is not a valid color
+                    if (histova::is_color(axisDets[1])) {
+                        # larger than 1 indicates yPos given... not checking
+                        # for number here since a given value but no number we'll just move on
+                        if (length(axisDets) > 1) {
+                           if (histova::is_num(axisDets[2])) {
+                               self$fig$plot.hline[self$fig$plot.hline$y == axisDets[2],"color"] = axisDets[1]
+                           }
+                        # assign the color to ALL lines...
+                        } else {
+                           self$fig$plot.hline$color = axisDets[1]
+                        }
+                    }
+
+                # goal is to set the sizefor ALL lines (if no Y position is given)
+                # or the size for any & all lines at the give Y position under the format:
+                # "size,pos"
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "hline.size") {
+                    if (!is.character(val)) { val = "" }
+                    axisDets = strsplit(val, ",")[[1]]
+
+                    # no point in any of this if the first position is not a valid number
+                    if (histova::is_num(axisDets[1])) {
+                        # larger than 1 indicates yPos given... not checking
+                        # for number here since a given value but no number we'll just move on
+                        if (length(axisDets) > 1) {
+                            if (histova::is_num(axisDets[2])) {
+                                self$fig$plot.hline[self$fig$plot.hline$y == axisDets[2],"size"] = as.numeric(axisDets[1])
+                            }
+                            # assign the color to ALL lines...
+                        } else {
+                            self$fig$plot.hline$size= as.numeric(axisDets[1])
+                        }
+                    }
+
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "hline.style") {
+                    axisDets = strsplit(val, ",")[[1]]
+                    if (length(axisDets) >= 1) {
+                        histova_msg(paste0("\tval 1: ", axisDets[1]))
+                        if ( (histova::is_num(axisDets[1])) && (as.numeric(axisDets[1]) >= 0) ) {
+                            self$fig[["plot.hline.OVRD.size"]] <- axisDets[1]
+                        } else {
+                            ### CHANGED - should be fine but was assumed pulling from gloabl env ###
+                            self$fig[["plot.hline.OVRD.size"]] <- self$get_default("fig", "plot.hline.def.size")
+                        }
+                    }
+
+                    if ( (length(axisDets) >= 2) && (histova::is_color(axisDets[2])) ) {
+                        histova_msg(paste0("\tval 2: ", axisDets[2]))
+                        self$fig[["plot.hline.OVRD.color"]] <- axisDets[2]
+                    } else {
+                        ### CHANGED - should be fine but was assumed pulling from gloabl env ###
+                        self$fig[["plot.hline.OVRD.color"]] <- self$get_default("fig", "plot.hline.def.color")
+                    }
+
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "imgType") {
+                    if (tolower(val) %in% c("tex", "pdf", "jpg", "jpeg", "tiff", "png", "bmp", "svg")) {
+                        self[[key[1]]][[key[2]]] <- tolower(val)
+                    } else {
+                        self[[key[1]]][[key[2]]] <- "jpg"
+                    }
+
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "imgUnits") {
+                    if (tolower(val) %in% c("in", "cm", "mm", "px")) {
+                        self[[key[1]]][[key[2]]] <- tolower(val)
+                    } else {
+                        self[[key[1]]][[key[2]]] <- "in"
+                    }
+
+                } else if (private$default[[key[1]]][[key[2]]]$type == "num") {
+                    if (histova::is_num(val)) {
+                        self[[key[1]]][[key[2]]] <- as.numeric(val)
+                    }
 
                 } else if (private$default[[key[1]]][[key[2]]]$type == "text") {
                     self[[key[1]]][[key[2]]] <- val
@@ -268,8 +422,11 @@ histova <- R6::R6Class(
                 # now check and see if the new value is the same as default
                 # IF it is go ahead and simply remove it from the list
                 # goal is to only store values that do NOT equal default
-                if ( (key[2] %in% names(self[[key[1]]])) && (private$default[[key[1]]][[key[2]]]$val == self[[key[1]]][[key[2]]]) ) {
-                        self[[key[1]]][[key[2]]] <- NULL
+                # IF the default entry does NOT have a "val" key then assume no default value
+                # exists and DO NOT check (eg hline)
+                if ( (key[2] %in% names(self[[key[1]]])) && ("val" %in% names(private$default[[key[1]]][[key[2]]]) ) &&
+                          (private$default[[key[1]]][[key[2]]]$val == self[[key[1]]][[key[2]]]) ) {
+                    self[[key[1]]][[key[2]]] <- NULL
                 }
             }
         },
@@ -311,8 +468,13 @@ histova <- R6::R6Class(
             "Bar Width" = "fig.bar.width",
             "Bar Border Color" = "fig.bar.border.color",
             "Bar Border Width" = "fig.bar.border.width",
+            "Colors" = "fig.colors",
             "Colors Alpha" = "fig.colors.alpha",
+            "Colors Specific" = "fig.colors.specific",
+            "Colors Unique" = "fig.colors.unique",  # largely outmoded
             "Error Bars Style" = "fig.plot.errorbar.style",
+            "HLine" = "fig.plot.hline",
+            "HLine Style OVRD" = "fig.plot.hline.OVRD.style",
             "Legend Display" = "fig.legend.display",
             "Legend Label Size" = "fig.legend.label.size",
             "Legend Size" = "fig.legend.key.size",
@@ -324,6 +486,7 @@ histova <- R6::R6Class(
             "Scatter Alpha" = "fig.scatter.alpha",
             "Scatter ColorShapeSize" = "fig.scatter.color.shape.size", # this should never be set in the public list
             "Scatter Display" = "fig.scatter.disp",
+            "Scatter Stroke" = "fig.scatter.stroke",
             "Stat Caption Size" = "stats.caption.size",
             "Text Convert" = "fig.convert",
             "Text Font" = "fig.font",
@@ -339,7 +502,12 @@ histova <- R6::R6Class(
         # include ALL variables, if no default just return NULL
         # have a list w/ default AND check type
         default = list(
-            behave = list(),
+            behave = list(
+                "debug" = list(val=FALSE,type="bool",style=FALSE),
+                "log" = list(val=FALSE,type="bool",style=FALSE),
+                "print" = list(val=TRUE,type="bool",style=FALSE),
+                "verbose" = list(val=FALSE,type="bool",style=FALSE)
+            ),
             fig = list(
                 "axis.label.sep" = list(val=20,type="num",style=TRUE),
                 "axis.label.size" = list(val=26,type="num",style=TRUE),
@@ -362,14 +530,16 @@ histova <- R6::R6Class(
                 "bar.border.color" = list(val="white",type="color",style=TRUE),
                 "bar.border.width" = list(val=0.2,type="num",style=TRUE),
                 "bar.width" = list(val=0.8,type="num",style=TRUE),
-                "color.alpha.list" = list(val="",type="",style=FALSE),
-                "color.list" = list(val="",type="",style=FALSE),
-                "colors" = list(val=c(),type="",style=FALSE),
+                "color.alpha.list" = list(type="",style=FALSE),
+                "color.list" = list(type="",style=FALSE),
+                "colors" = list(type="colors",style=FALSE),
                 "colors.alpha" = list(val=1,type="alpha",style=TRUE),
-                "colors.unique" = list(val=data.frame(matrix(
-                        ncol = 8, nrow = 0,
-                        dimnames = list(NULL, c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha"))
-                    )),type="",style=TRUE),
+                #"colors.specific" = list(val=data.frame(matrix(
+                        #ncol = 8, nrow = 0,
+                        #dimnames = list(NULL, c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha"))
+                    #)),type="",style=TRUE),
+                "colors.specific" = list(type="colors.specific", style=TRUE),
+                "colors.unique" = list(type="colors.unique", style=TRUE),
                 "convert" = list(val=TRUE,type="bool",style=TRUE),
                 "facet.split" = list(val=TRUE,type="bool",style=FALSE),
                 "font" = list(val="sans",type="font",style=TRUE),
@@ -384,12 +554,15 @@ histova <- R6::R6Class(
                 "plot.errorbar.color" = list(val="black",type="color",style=TRUE),
                 "plot.errorbar.endwidth" = list(val=0.4,type="num",style=TRUE),
                 "plot.errorbar.size" = list(val=0.8,type="num",style=TRUE),
-                "plot.hline" = list(val=data.frame(y=c(NA), size=c(0), color=c("")),type="",style=FALSE),
-                "plot.labels" = list(val="",type="",style=FALSE),
-                "plot.hline.def.color" = list(val="black",type="bool",style=TRUE),
+                "plot.hline" = list(type="hline",style=FALSE), # no val so no default check after set!
+                "plot.hline.color" = list(val="black",type="hline.color",style=FALSE),
+                "plot.hline.size" = list(val=1,type="hline.size",style=FALSE),
+                "plot.hline.def.color" = list(val="black",type="color",style=TRUE),
                 "plot.hline.def.size" = list(val=1,type="num",style=TRUE),
-                "plot.hline.OVRD.color" = list(val=NA,type="",style=TRUE),
-                "plot.hline.OVRD.size" = list(val=NA,type="",style=TRUE),
+                "plot.hline.OVRD.color" = list(val=NULL,type="",style=TRUE),
+                "plot.hline.OVRD.size" = list(val=NULL,type="",style=TRUE),
+                "plot.hline.OVRD.style" = list(val=NULL,type="hline.style",style=TRUE),
+                "plot.labels" = list(val="",type="",style=FALSE),
                 "plot.whisker" = list(val="FALSE",type="whisker",style=TRUE),
                 "save.dpi" = list(val=320,type="num",style=TRUE),
                 "save.height" = list(val=8.5,type="num",style=TRUE),

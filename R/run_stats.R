@@ -2,9 +2,11 @@
 #'
 #' Wrapper that kicks off any statistical analysis that have been requested in the file.
 #'
+#' @param hsa the histova R6 object
+#'
 #' @export
 #'
-run_stats <- function() {
+run_stats <- function(hsa) {
     histova_msg("Statistical Analysis", type = "head")
 
     # move onto stats analysis
@@ -28,7 +30,8 @@ run_stats <- function() {
 
         # remove the treatment group (it will be indicated by a line at 1)
         stats$Group1.Mute = stats$Transform.Treatment[1]
-        fig$Plot.HLine = data.frame(y=c(1),size=c(1),color=c("black"))
+        # reset the entire hline data frame to only have one at 1
+        hsa$fig$plot.hline = data.frame(y=c(1),size=c(1),color=c("black"))
     }
 
     # if the Y-values were adjusted (eg all divided by 1,000 - in run_stats_prep()) this will append the modification

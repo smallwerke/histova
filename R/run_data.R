@@ -7,9 +7,11 @@
 #' All relevant data and settings should be stored in the environment variables
 #' that are accessed by this function.
 #'
+#' @param hsa the histova R6 object
+#'
 #' @export
 #'
-run_data <- function() {
+run_data <- function(hsa) {
 
     histova_msg("Data Manipulation", type = "head")
 
@@ -37,8 +39,7 @@ run_data <- function() {
             fig$Y.Break.df$stop <- fig$Y.Break.df$stop / fig$Y.Rig
         }
         # update the HLine values
-        fig$Plot.HLine$y = sapply(fig$Plot.HLine$y, function(x) x/fig$Y.Rig)
-        #assign("Fig.Plot.HLine", Fig.Plot.HLine, envir = .GlobalEnv) ### CHANGED - no longer needed ###
+        hsa$fig$plot.hline$y = sapply(hsa$fig$plot.hline$y, function(x) x/fig$Y.Rig)
         if (fig$Y.Rig > 100) {
             fig$Y.Supp <- sfsmisc::pretty10exp(fig$Y.Rig, drop.1=TRUE)
         } else {

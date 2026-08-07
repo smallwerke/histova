@@ -26,8 +26,8 @@ default_vals$the <- new.env(hash=TRUE, parent=default_vals)
 # FIG
 #
 # create some of the data structures for the environment
-colors.unique = data.frame(matrix(ncol = 8, nrow = 0))
-colnames(colors.unique) = c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha")
+#colors.unique = data.frame(matrix(ncol = 8, nrow = 0))
+#colnames(colors.unique) = c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha")
 #
 Y.Break.df <- data.frame(matrix(ncol=3, nrow=0))
 colnames(Y.Break.df) <- c("start","stop", "scales")
@@ -49,11 +49,11 @@ colnames(Y.Break.df) <- c("start","stop", "scales")
 #assign("Bar.Border.Color", "white", envir=default_vals$fig)
 #assign("Bar.Border.Width", 0.2, envir=default_vals$fig)
 #assign("Bar.Width", 0.8, envir=default_vals$fig)
-assign("Color.Alpha.List", "", envir=default_vals$fig) #CHECK!
-assign("Color.List", "", envir=default_vals$fig) #CHECK!
-assign("Colors", c(), envir=default_vals$fig)
+#assign("Color.Alpha.List", "", envir=default_vals$fig) #CHECK!
+#assign("Color.List", "", envir=default_vals$fig) #CHECK!
+#assign("Colors", c(), envir=default_vals$fig)
 #assign("Colors.Alpha", 1, envir=default_vals$fig)
-assign("Colors.Unique", colors.unique, envir=default_vals$fig)
+#assign("Colors.Unique", colors.unique, envir=default_vals$fig)
 #assign("Convert", TRUE, envir=default_vals$fig)
 #assign("Coord.Fixed", TRUE, envir=default_vals$fig)
 #assign("Coord.Fixed.Ratio", "SQUARE", envir=default_vals$fig)
@@ -69,30 +69,30 @@ assign("Legend.Title.tmp", "", envir=default_vals$fig)
 #assign("Plot.ErrorBar.Color", "black", envir=default_vals$fig)
 #assign("Plot.ErrorBar.EndWidth", 0.4, envir=default_vals$fig)
 #assign("Plot.ErrorBar.Size", 0.8, envir=default_vals$fig)
-assign("Plot.HLine", data.frame(y=c(NA),size=c(0),color=c("")), envir=default_vals$fig)
+#assign("Plot.HLine", data.frame(y=c(NA),size=c(0),color=c("")), envir=default_vals$fig)
 assign("Plot.Labels", "", envir=default_vals$fig) ### CHANGED ### PAY ATTENTION AND MAKE UPERCASE!
 #assign("Plot.Whisker", "FALSE", envir=default_vals$fig)
-assign("Plot.HLine.Def.Color", "black", envir=default_vals$fig) #CHECK!
-assign("Plot.HLine.Def.Size", 1, envir=default_vals$fig) #CHECK!
-assign("Plot.HLine.OVRD.Color", NA, envir=default_vals$fig) #CHECK!
-assign("Plot.HLine.OVRD.Size", NA, envir=default_vals$fig) #CHECK!
+#assign("Plot.HLine.Def.Color", "black", envir=default_vals$fig) #CHECK!
+#assign("Plot.HLine.Def.Size", 1, envir=default_vals$fig) #CHECK!
+#assign("Plot.HLine.OVRD.Color", NA, envir=default_vals$fig) #CHECK!
+#assign("Plot.HLine.OVRD.Size", NA, envir=default_vals$fig) #CHECK!
 #assign("Save.DPI", 320, envir=default_vals$fig)
 #assign("Save.Height", 8.5, envir=default_vals$fig)
 #assign("Save.Type", "jpg", envir=default_vals$fig)
 #assign("Save.Units", "in", envir=default_vals$fig)
 #assign("Save.Width", 8, envir=default_vals$fig)
 #assign("Scatter.Alpha", 1, envir=default_vals$fig)
-assign("Alpha.List", "", envir=default_vals$fig) #CHECK!
+#assign("Alpha.List", "", envir=default_vals$fig) #CHECK!
 #assign("Scatter.Color", "#FFD700", envir=default_vals$fig)
-assign("Color.List", "", envir=default_vals$fig) #CHECK!
+#assign("Color.List", "", envir=default_vals$fig) #CHECK!
 #assign("Scatter.Color.Source", "DEF", envir=default_vals$fig) # INTERNAL SETTING
 #assign("Scatter.Disp", TRUE, envir=default_vals$fig)
 #assign("Scatter.Shape", 4, envir=default_vals$fig)
 #assign("Scatter.Size", 1.8, envir=default_vals$fig)
 #assign("Scatter.Stroke", 2, envir=default_vals$fig)
-assign("Shape.List", "", envir=default_vals$fig) #CHECK!
-assign("Size.List", "", envir=default_vals$fig) #CHECK!
-assign("Stroke.List", "", envir=default_vals$fig) #CHECK!
+#assign("Shape.List", "", envir=default_vals$fig) #CHECK!
+#assign("Size.List", "", envir=default_vals$fig) #CHECK!
+#assign("Stroke.List", "", envir=default_vals$fig) #CHECK!
 assign("Title", "", envir=default_vals$fig)
 #assign("Title.Size", 32, envir=default_vals$fig)
 #assign("Title.tmp", "", envir=default_vals$fig)

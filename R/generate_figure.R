@@ -44,11 +44,11 @@ generate_figure <- function(location.dir, location.file, printPlot = FALSE, save
 
     ############################################
     # PREP DATA ADJUSTMENTS
-    run_data()
+    run_data(hsa)
 
     ############################################
     # RUN STATS
-    run_stats()
+    run_stats(hsa)
 
     ############################################
     # BUILD FIGURE

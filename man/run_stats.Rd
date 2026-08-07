@@ -4,7 +4,10 @@
 \alias{run_stats}
 \title{Run requested stats}
 \usage{
-run_stats()
+run_stats(hsa)
+}
+\arguments{
+\item{hsa}{the histova R6 object}
 }
 \description{
 Wrapper that kicks off any statistical analysis that have been requested in the file.

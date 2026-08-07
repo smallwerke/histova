@@ -4,9 +4,11 @@
 \alias{generate_label_df}
 \title{Generate Label df}
 \usage{
-generate_label_df(n)
+generate_label_df(hsa, n)
 }
 \arguments{
+\item{hsa}{the histova object}
+
 \item{n}{The number of label subset (when Group2 is being compared separately)}
 }
 \value{
