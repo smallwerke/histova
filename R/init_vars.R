@@ -77,17 +77,17 @@ init_vars <- function(hsa) {
         #fig$Plot.HLine.OVRD.Color <- histova::get_default("fig", "Plot.HLine.OVRD.Color")
 
         ################ Legend Display Options (OPT) ################
-        fig$Legend.Color.Source <- histova::get_default("fig", "Legend.Color.Source")
+        #fig$Legend.Color.Source <- histova::get_default("fig", "Legend.Color.Source")
         #fig$Legend.Display <- histova::get_default("fig", "Legend.Display")
         #fig$Legend.Key.Size <- histova::get_default("fig", "Legend.Key.Size")
-        fig$Legend.Position <- histova::get_default("fig", "Legend.Position")
-        fig$Legend.Title <- histova::get_default("fig", "Legend.Title")
-        fig$Legend.Title.tmp <- histova::get_default("fig", "Legend.Title.tmp")
+        #fig$Legend.Position <- histova::get_default("fig", "Legend.Position")
+        #fig$Legend.Title <- histova::get_default("fig", "Legend.Title")
+        #fig$Legend.Title.tmp <- histova::get_default("fig", "Legend.Title.tmp")
 
         ################ Stats Labels (OPT) ################
-        stats$Letters.Offset <- histova::get_default("stats", "Letters.Offset")
-        stats$Letters.Size <- histova::get_default("stats", "Letters.Size")
-        stats$Caption.Display <- histova::get_default("stats", "Caption.Display")
+        #stats$Letters.Offset <- histova::get_default("stats", "Letters.Offset")
+        #stats$Letters.Size <- histova::get_default("stats", "Letters.Size")
+        #stats$Caption.Display <- histova::get_default("stats", "Caption.Display")
         #stats$Caption.Size <- histova::get_default("stats", "Caption.Size")
 
         ################ Figure Save (OPT) ################

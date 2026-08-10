@@ -51,7 +51,7 @@ generate_label_df <- function(hsa, n){
     histova_msg("Generate Figure Labels", type="subhead")
     comparison = Value ~ statGroups
     flev = 'statGroups'
-    yOff = stats$Letters.Offset
+    yOff = hsa$get("stats.letters.offset")
     alpha = 0.05
 
     # the n corresponds to the Group2 number / index position

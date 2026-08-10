@@ -19,7 +19,7 @@ build_histo <- function(hsa){
     # to address warnings from check()
 
     # Determine if any calculations are to be done for the Stat Letter Offset
-    if (! isTRUE(stats$Letters.Offset)) {
+    if (! isTRUE(hsa$get("stats.letters.offset")) ) {
         # take into account the reduction due to any y-axis breaks
         breakLess = 0
         if (fig$Y.Break == TRUE) {
@@ -27,7 +27,7 @@ build_histo <- function(hsa){
                 breakLess = breakLess + abs(fig$Y.Break.df[i,]$stop - fig$Y.Break.df[i,]$start)
             }
         }
-        stats$Letters.Offset <- abs(fig$Y.Max - fig$Y.Min - breakLess) / 25
+        hsa$set("stats.letters.offset", abs(fig$Y.Max - fig$Y.Min - breakLess) / 25 )
     }
 
     mynamestheme = ggplot2::theme(plot.title = ggplot2::element_text(face = "bold", size = (18)))
@@ -49,13 +49,13 @@ build_histo <- function(hsa){
             #guides(color = 'none') +
             ggplot2::scale_fill_manual(
                 values=hsa$get("fig.color.list"),
-                name=fig$Legend.Title)
+                name=hsa$get("fig.legend.title"))
         ##########################################
         # Basic Whiskerplot
         # ggplot(df, aes(x, y, <other aesthetics>))
         ##########################################
     } else if (hsa$get("fig.plot.whisker") %in% c("BOX", "VIOLIN")) {
-        if (fig$Legend.Color.Source == "Group1") {
+        if (hsa$get("fig.legend.color.source") == "Group1") {
             gplot = ggplot2::ggplot(raw$base, ggplot2::aes(.data$Group1, .data$Value, label = .data$Group1, fill = .data$Group1))
         } else {
             gplot = ggplot2::ggplot(raw$base, ggplot2::aes(.data$Group1, .data$Value, label = .data$Group1, fill = .data$statGroups))
@@ -73,13 +73,13 @@ build_histo <- function(hsa){
         }
         gplot = gplot + ggplot2::scale_fill_manual(
             values=hsa$get("fig.color.list"),
-            name=fig$Legend.Title)
+            name=hsa$get("fig.legend.title"))
         ##########################################
         # 'Standard' Figure
         # ggplot(df, aes(x, y, <other aesthetics>))
         ##########################################
     } else {
-        if (fig$Legend.Color.Source == "Group1") {
+        if (hsa$get("fig.legend.color.source") == "Group1") {
             gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(.data$Group1, .data$mean, label = .data$Group1, fill = .data$Group1))
         } else {
             gplot = ggplot2::ggplot(raw$summary, ggplot2::aes(.data$Group1, .data$mean, label = .data$Group1, fill = .data$statGroups))
@@ -92,7 +92,7 @@ build_histo <- function(hsa){
             position=ggplot2::position_dodge(),
             stat='identity') +
 
-            ggplot2::scale_fill_manual(values=hsa$get("fig.color.list"), name=fig$Legend.Title)
+            ggplot2::scale_fill_manual(values=hsa$get("fig.color.list"), name=hsa$get("fig.legend.title"))
     }
     ##########################################
     # Common Settings
@@ -185,7 +185,7 @@ build_histo <- function(hsa){
             )
             # makes the scatter points placed in the legend match the group color
             #guides(fill = guide_legend(override.aes = list(shape = NA)))
-        } else if (fig$Legend.Color.Source == "Group1") {
+        } else if (hsa$get("fig.legend.color.source") == "Group1") {
             gplot = gplot + ggplot2::geom_point(
                 data=raw$base, ggplot2::aes(x = .data$Group1, y = .data$Value, color = .data$Group1, shape = .data$Group1, size = .data$Group1, stroke = .data$Group1, alpha = .data$Group1),
                 position=ggplot2::position_dodge2(width=0.7,padding=0.1),
@@ -257,9 +257,9 @@ build_histo <- function(hsa){
             notes$Stats.Method <- paste(notes$Stats.Method, sprintf("For group %s: ", l), sep=s)
             #gplot = gplot + geom_text(data = generate_label_df(hsa, raw.multi[[n]], raw.aov.multi[[n]], raw.aov.tukey.multi[[n]], raw.summary.multi[[n]], Value ~ statGroups, 'statGroups', Stats.Letters.Offset), size = (Stats.Letters.Size / 2.834645669), fontface="bold", aes(x = Group1, y = V1, label = labels))
             if (stats$Transform == "TimeCourse") {
-                gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.85))
+                gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (hsa$get("stats.letters.size") / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.85))
             } else {
-                gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
+                gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (hsa$get("stats.letters.size") / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
             }
         }
         # add border lines between / around the facet grids in order to make it clear that the stats are separate...
@@ -275,13 +275,13 @@ build_histo <- function(hsa){
         notes$Stats.Method <- paste(notes$Stats.Method, "Statistical test: ", sep=s)
         #gplot = gplot + geom_text(data = generate_label_df(hsa,raw, raw.aov.multi, raw.aov.tukey.multi, raw.summary.multi, Value ~ statGroups, 'statGroups', Stats.Letters.Offset), size = (Stats.Letters.Size / 2.834645669), fontface="bold", aes(x = Group1, y = V1, label = labels))
         if (stats$Transform == "TimeCourse") {
-            gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.85))
+            gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (hsa$get("stats.letters.size") / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.85))
         } else {
-            gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (stats$Letters.Size / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
+            gplot = gplot + ggplot2::geom_text(data = generate_label_df(hsa, n), size = (hsa$get("stats.letters.size") / 2.834645669), fontface="bold", ggplot2::aes(y = .data$V1, label = .data$labels), position = ggplot2::position_dodge(0.7))
         }
     }
 
-    if (isTRUE(stats$Caption.Display)) {
+    if ( isTRUE(hsa$get("stats.caption.display")) ) {
         if (notes$Stats.Method == "Statistical test: ") { notes$Stats.Method <- paste(notes$Stats.Method, "----") }
         gplot = gplot + ggplot2::labs(caption = paste(notes$Stats.Method, notes$Stats.Outlier, sep="\n"))
     }
@@ -312,7 +312,7 @@ build_histo <- function(hsa){
 
     # set the position of the legend (IF there even is a legend)...
     if (hsa$get("fig.legend.display") == TRUE) {
-        gplot = gplot + ggplot2::theme(legend.position = fig$Legend.Position)
+        gplot = gplot + ggplot2::theme(legend.position = hsa$get("fig.legend.position"))
     } else {
         gplot = gplot + ggplot2::theme(legend.position = "none")
     }

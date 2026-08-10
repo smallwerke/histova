@@ -93,40 +93,12 @@ load_file_head = function(hsa) {
                  (lA[[1]][1] == "Axis X Tick Style") || (lA[[1]][1] == "Axis Y Tick Style") ||
                  (lA[[1]][1] == "Error Bars Style") || (lA[[1]][1] == "HLine Style OVRD") ||
                  (lA[[1]][1] == "Colors") || (lA[[1]][1] == "Colors Unique") ||
-                 (lA[[1]][1] == "Colors Specific")
+                 (lA[[1]][1] == "Colors Specific") || (lA[[1]][1] == "Legend Color Source") ||
+                 (lA[[1]][1] == "Legend Title") || (lA[[1]][1] == "Legend Position") ||
+                 (lA[[1]][1] == "Stat Offset") || (lA[[1]][1] == "Stat Letter Size") ||
+                 (lA[[1]][1] == "Stat Caption Display")
             ) {
                 hsa$set(lA[[1]][1], lA[[1]][2], TRUE)
-            }
-
-
-            ################ Display of the Axis & Plot (OPT) ################
-            # THIS SETTING CURRENTLY DISABLED AND NOT IMPLEMENTED IN build_histo FUNCTION
-            # DROPPING THIS FROM HISTOVA:
-            # (lA[[1]][1] == "Coord Fixed Ratio")
-                    #fig$Coord.Fixed <- FALSE
-                    #fig$Coord.Fixed.Ratio <- ""
-
-            ################ Legend Display Options (OPT) ################
-            else if (lA[[1]][1] == "Legend Color Source") {
-                if (lA[[1]][2] %in% c("Group1", "group1", 1)) { fig$Legend.Color.Source <- "Group1" }
-                else { fig$Legend.Color.Source <- "All" }
-            }
-            else if (lA[[1]][1] == "Legend Title") { fig$Legend.Title.tmp <- lA[[1]][2] } ### CHANGED - this was not being assigned to globalenv previously ###
-            else if (lA[[1]][1] == "Legend Position") {
-                if (tolower(lA[[1]][2]) == "top") { fig$Legend.Position <- "top" }
-                else if (tolower(lA[[1]][2]) == "right") { fig$Legend.Position <- "right" }
-                else if (tolower(lA[[1]][2]) == "left") { fig$Legend.Position <- "left" }
-                else { fig$Legend.Position <- "bottom" }
-            }
-            ################ Stats Labels (OPT) ################
-            else if (lA[[1]][1] == "Stat Offset") {
-                if (lA[[1]][2] %in% c("FALSE", "False", "false")) { stats$Letters.Offset <- FALSE }
-                else { stats$Letters.Offset <- as.numeric(lA[[1]][2]) }
-            }
-            else if (lA[[1]][1] == "Stat Letter Size") { stats$Letters.Size <- as.numeric(lA[[1]][2]) }
-            else if (lA[[1]][1] == "Stat Caption Display") {
-                if (lA[[1]][2] %in% c("FALSE", "False", "false", 0)) { stats$Caption.Display <- FALSE }
-                else { stats$Caption.Display <- TRUE }
             }
 
         }
@@ -269,15 +241,15 @@ load_file_head = function(hsa) {
         hsa$set("fig.x.tmp", fig$X.Replace)
         rm("X.Replace", envir = fig)
     }
-    if (exists("Legend.Title.Replace", envir=fig)) {
-        fig$Legend.Title.tmp <- fig$Legend.Title.Replace
-        rm("Legend.Title.Replace", envir = fig)
-    }
+    # if (exists("Legend.Title.Replace", envir=fig)) {
+    #     fig$Legend.Title.tmp <- fig$Legend.Title.Replace
+    #     rm("Legend.Title.Replace", envir = fig)
+    # }
     if (hsa$get("fig.convert")) {
         hsa$set("fig.title.tmp", convert_text(hsa$get("fig.title.tmp")))
         hsa$set("fig.y.tmp", convert_text(hsa$get("fig.y.tmp")))
         hsa$set("fig.x.tmp", convert_text(hsa$get("fig.x.tmp")))
-        fig$Legend.Title.tmp <- convert_text(fig$Legend.Title.tmp)
+        hsa$set("fig.legend.title.tmp", convert_text(hsa$get("fig.legend.title.tmp")))
     }
 
     # IF a master HLine style was provided replace the current value and cleanup
@@ -293,5 +265,5 @@ load_file_head = function(hsa) {
     fig$Title <- hsa$get("fig.title.tmp")
     fig$Y <- hsa$get("fig.y.tmp")
     fig$X <- hsa$get("fig.x.tmp")
-    fig$Legend.Title <- fig$Legend.Title.tmp
+    hsa$set("fig.legend.title", hsa$get("fig.legend.title.tmp"))
 }

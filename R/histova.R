@@ -218,6 +218,13 @@ histova <- R6::R6Class(
                         self[[key[1]]][[key[2]]] <- val
                     }
 
+                } else if  (private$default[[key[1]]][[key[2]]]$type == "color.source") {
+                    if (val %in% c("Group1", "group1", 1)) {
+                        self$fig$legend.color.source <- "Group1"
+                    } else {
+                        self$fig$legend.color.source <- "All"
+                    }
+
                 } else if  (private$default[[key[1]]][[key[2]]]$type == "colors") {
                     self$fig$colors <- strsplit(val, "[, ]+")[[1]]
 
@@ -400,10 +407,22 @@ histova <- R6::R6Class(
                         self[[key[1]]][[key[2]]] <- "in"
                     }
 
+                } else if (private$default[[key[1]]][[key[2]]]$type == "legend.position") {
+                   if (tolower(val) %in% c("top", "right", "bottom", "left")) {
+                       self[[key[1]]][[key[2]]] <- tolower(val)
+                   }
+
                 } else if (private$default[[key[1]]][[key[2]]]$type == "num") {
                     if (histova::is_num(val)) {
                         self[[key[1]]][[key[2]]] <- as.numeric(val)
                     }
+
+                } else if (private$default[[key[1]]][[key[2]]]$type == "stats.offset") {
+                    if (val %in% c("FALSE", "False", "false")) {
+                        self[[key[1]]][[key[2]]] <- FALSE
+                        } else if (histova::is_num(val)) {
+                            self[[key[1]]][[key[2]]] <- as.numeric(val)
+                        }
 
                 } else if (private$default[[key[1]]][[key[2]]]$type == "text") {
                     self[[key[1]]][[key[2]]] <- val
@@ -475,9 +494,12 @@ histova <- R6::R6Class(
             "Error Bars Style" = "fig.plot.errorbar.style",
             "HLine" = "fig.plot.hline",
             "HLine Style OVRD" = "fig.plot.hline.OVRD.style",
+            "Legend Color Source" = "fig.legend.color.source",
             "Legend Display" = "fig.legend.display",
             "Legend Label Size" = "fig.legend.label.size",
+            "Legend Position" = "fig.legend.position",
             "Legend Size" = "fig.legend.key.size",
+            "Legend Title" = "fig.legend.title.tmp",
             "Save Width" = "fig.save.width",
             "Save Height" = "fig.save.height",
             "Save DPI" = "fig.save.dpi",
@@ -487,7 +509,10 @@ histova <- R6::R6Class(
             "Scatter ColorShapeSize" = "fig.scatter.color.shape.size", # this should never be set in the public list
             "Scatter Display" = "fig.scatter.disp",
             "Scatter Stroke" = "fig.scatter.stroke",
+            "Stat Caption Display" = "stats.caption.display",
             "Stat Caption Size" = "stats.caption.size",
+            "Stat Letter Size" = "stats.letters.size",
+            "Stat Offset" = "stats.letters.offset",
             "Text Convert" = "fig.convert",
             "Text Font" = "fig.font",
             "Title Main" = "fig.title.tmp",
@@ -543,13 +568,13 @@ histova <- R6::R6Class(
                 "convert" = list(val=TRUE,type="bool",style=TRUE),
                 "facet.split" = list(val=TRUE,type="bool",style=FALSE),
                 "font" = list(val="sans",type="font",style=TRUE),
-                "legend.color.source" = list(val="All",type="",style=TRUE),
+                "legend.color.source" = list(val="All",type="color.source",style=TRUE),
                 "legend.display" = list(val=FALSE,type="bool",style=TRUE),
                 "legend.key.size" = list(val=0.25,type="num",style=TRUE),
                 "legend.label.size" = list(val=26,type="num",style=TRUE),
-                "legend.position" = list(val="bottom",type="",style=TRUE),
-                "legend.title" = list(val="Groups",type="",style=TRUE),
-                "legend.title.tmp" = list(val="",type="",style=TRUE),
+                "legend.position" = list(val="bottom",type="legend.position",style=TRUE),
+                "legend.title" = list(val="Groups",type="text",style=TRUE),
+                "legend.title.tmp" = list(val="",type="text",style=TRUE),
                 "plot.errorbar.style" = list(val=NULL,type="error.bars.style",style=TRUE),
                 "plot.errorbar.color" = list(val="black",type="color",style=TRUE),
                 "plot.errorbar.endwidth" = list(val=0.4,type="num",style=TRUE),
@@ -628,7 +653,7 @@ histova <- R6::R6Class(
             stats = list(
                 "caption.display" = list(val=TRUE,type="bool",style=TRUE),
                 "caption.size" = list(val=6,type="num",style=TRUE),
-                "letters.offset" = list(val=FALSE,type="bool",style=TRUE),
+                "letters.offset" = list(val=FALSE,type="stats.offset",style=TRUE),
                 "letters.size" = list(val=18,type="num",style=TRUE)
             )
         )

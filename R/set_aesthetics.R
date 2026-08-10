@@ -43,7 +43,7 @@ set_aesthetics <- function(hsa) {
         colorLength = length(raw$summary$Group2)
         colorNames = raw$summary$Group2
     } else if (hsa$get("fig.plot.whisker") %in% c("BOX", "VIOLIN")) {
-        if (fig$Legend.Color.Source == "Group1") {
+        if (hsa$get("fig.legend.color.source") == "Group1") {
             colorLength = length(raw$base$Group1)
             colorNames = raw$base$Group1
         } else {
@@ -51,7 +51,7 @@ set_aesthetics <- function(hsa) {
             colorNames = raw$base$statGroups
         }
     } else {
-        if (fig$Legend.Color.Source == "Group1") {
+        if (hsa$get("fig.legend.color.source") == "Group1") {
             colorLength = length(raw$summary$Group1)
             colorNames = raw$summary$Group1
         } else {
@@ -64,7 +64,7 @@ set_aesthetics <- function(hsa) {
     if (stats$Transform == "TimeCourse") {
         scatterLength = length(raw$base$Group2)
         scatterNames = raw$base$Group2
-    } else if (fig$Legend.Color.Source == "Group1") {
+    } else if (hsa$get("fig.legend.color.source") == "Group1") {
         scatterLength = length(raw$base$Group1)
         scatterNames = raw$base$Group1
     } else {
@@ -138,7 +138,7 @@ set_aesthetics <- function(hsa) {
             # check the group is valid by seeing if it is in the previously created colorNames list
             if (stats$Transform == "TimeCourse") {
                 nameCheck <- strsplit(specificColors$group[i], "_")[[1]][2]
-            } else if (fig$Legend.Color.Source == "Group1") {
+            } else if (hsa$get("fig.legend.color.source") == "Group1") {
                 nameCheck <- strsplit(specificColors$group[i], "_")[[1]][1]
             } else {
                 nameCheck <- specificColors$group[i]
