@@ -36,8 +36,8 @@ run_stats <- function(hsa) {
 
     # if the Y-values were adjusted (eg all divided by 1,000 - in run_stats_prep()) this will append the modification
     # to the end of your y-axis label - you can select one or two lines...
-    if (is.numeric(fig$Y.Rig)) {
-        if (fig$Y.Rig.Newline) {
+    if (is.numeric(hsa$get("fig.y.rig")) ) {
+        if (hsa$get("fig.y.rig.newline") ) {
             # Two Lines
             #Fig.Y = bquote(bold(atop(.(Fig.Y), "(" * .(Fig.Y.Supp[[1]]) * ")")))
             fig$Y = bquote(atop(.(fig$Y), "(" * .(fig$Y.Supp[[1]]) * ")"))

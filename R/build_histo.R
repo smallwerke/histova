@@ -22,12 +22,12 @@ build_histo <- function(hsa){
     if (! isTRUE(hsa$get("stats.letters.offset")) ) {
         # take into account the reduction due to any y-axis breaks
         breakLess = 0
-        if (fig$Y.Break == TRUE) {
-            for(i in 1:nrow(fig$Y.Break.df)) {
-                breakLess = breakLess + abs(fig$Y.Break.df[i,]$stop - fig$Y.Break.df[i,]$start)
+        if (isTRUE(hsa$get("fig.y.break"))  ) {
+            for(i in 1:nrow(hsa$get("fig.y.break.df")) ) {
+                breakLess = breakLess + abs(hsa$get("fig.y.break.df")$stop[[i]] - hsa$get("fig.y.break.df")$start[[i]])
             }
         }
-        hsa$set("stats.letters.offset", abs(fig$Y.Max - fig$Y.Min - breakLess) / 25 )
+        hsa$set("stats.letters.offset", abs(hsa$get("fig.y.max") - hsa$get("fig.y.min") - breakLess) / 25 )
     }
 
     mynamestheme = ggplot2::theme(plot.title = ggplot2::element_text(face = "bold", size = (18)))
@@ -136,7 +136,7 @@ build_histo <- function(hsa){
     # the labels are going on the secondary y-axis
     # swap Y axis labels to scientific notation...
     Y.Rig.SCI = FALSE
-    if (fig$Y.Rig == "SCI") {
+    if (hsa$get("fig.y.rig") == "SCI") {
         histova_msg(sprintf("setting y-axis to use scientific notation, replacing existing scale_y_continuous..."), tabs=2)
         Y.Rig.SCI = TRUE
     }
@@ -146,17 +146,17 @@ build_histo <- function(hsa){
         gplot = gplot + ggplot2::scale_y_continuous(
             labels = function(x) format(x, scientific = Y.Rig.SCI),
             expand = c(0, 0),                                          # make the bars touch the x-axis
-            limits=c(fig$Y.Min,fig$Y.Max),
-            breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval),
+            limits=c(hsa$get("fig.y.min"), hsa$get("fig.y.max")),
+            breaks = seq(hsa$get("fig.y.min"), hsa$get("fig.y.max"), by = hsa$get("fig.y.interval")),
             sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = hsa$get("fig.plot.hline")$y, labels = format(hsa$get("fig.plot.hline")$y, scientific = Y.Rig.SCI) )
         )
-    } else if (fig$Y.Break == TRUE) {
+    } else if (isTRUE(hsa$get("fig.y.break")) ) {
         # include a NULL secondary axis otherwise IF a y-axis break is included there will be a second y-axis added
         gplot = gplot + ggplot2::scale_y_continuous(
             labels = function(x) format(x, scientific = Y.Rig.SCI),
             expand = c(0, 0),                                          # make the bars touch the x-axis
-            limits=c(fig$Y.Min,fig$Y.Max),
-            breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval)
+            limits=c(hsa$get("fig.y.min"), hsa$get("fig.y.max")),
+            breaks = seq(hsa$get("fig.y.min"), hsa$get("fig.y.max"), by = hsa$get("fig.y.interval"))
             #sec.axis = ggplot2::sec_axis(~ . * 1 , breaks = NULL, labels = NULL)
         )
     } else {
@@ -164,8 +164,8 @@ build_histo <- function(hsa){
         gplot = gplot + ggplot2::scale_y_continuous(
             labels = function(x) format(x, scientific = Y.Rig.SCI),
             expand = c(0, 0),                                          # make the bars touch the x-axis
-            limits=c(fig$Y.Min,fig$Y.Max),
-            breaks = seq(fig$Y.Min, fig$Y.Max, by = fig$Y.Interval)
+            limits=c(hsa$get("fig.y.min"), hsa$get("fig.y.max")),
+            breaks = seq(hsa$get("fig.y.min"), hsa$get("fig.y.max"), by = hsa$get("fig.y.interval"))
         )
     }
 
@@ -295,10 +295,10 @@ build_histo <- function(hsa){
     #grid.arrange(grobs=lapply(list(gplot), set_panel_size, height=unit(18, "cm"), width=unit(18, "cm")))
 
     # add the y-axis breaks to the figure
-    if (fig$Y.Break == TRUE) {
-        for(i in 1:nrow(fig$Y.Break.df)) {
-            histova_msg(sprintf("adding a break to the y-axis between %s and %s with scales of \'%s\'", fig$Y.Break.df[i,]$start, fig$Y.Break.df[i,]$stop, fig$Y.Break.df[i,]$scales), tabs=2)
-            gplot = gplot + ggbreak::scale_y_break(c(fig$Y.Break.df[i,]$start, fig$Y.Break.df[i,]$stop), scales = fig$Y.Break.df[i,]$scales)
+    if ( isTRUE(hsa$get("fig.y.break")) ) {
+        for(i in 1:nrow(hsa$get("fig.y.break.df")) ) {
+            histova_msg(sprintf("adding a break to the y-axis between %s and %s with scales of \'%s\'", hsa$get("fig.y.break.df")$start[[i]], hsa$get("fig.y.break.df")$stop[[i]], hsa$get("fig.y.break.df")$scales[[i]]), tabs=2)
+            gplot = gplot + ggbreak::scale_y_break(c(hsa$get("fig.y.break.df")$start[[i]], hsa$get("fig.y.break.df")$stop[[i]]), scales = hsa$get("fig.y.break.df")$scales[[i]])
         }
         # remove the right Y axis from the plot (is added by default with a Y Break)...
         # BUT not when HLines have been included (as the right y axis holds that info)

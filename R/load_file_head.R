@@ -103,40 +103,17 @@ load_file_head = function(hsa) {
 
         }
         if ( (lA[[1]][1] == "Title Main") || (lA[[1]][1] == "HLine") ||
-             (lA[[1]][1] == "X Leg") || (lA[[1]][1] == "Y Leg")  ### CHANGED - was not being assigned to global env ###
+             (lA[[1]][1] == "X Leg") || (lA[[1]][1] == "Y Leg")  || ### CHANGED - was not being assigned to global env ###
+             (lA[[1]][1] == "Y Min") || (lA[[1]][1] == "Y Max") ||
+             (lA[[1]][1] == "Y Interval") || (lA[[1]][1] == "Y Break") ||
+             (lA[[1]][1] == "Y Value Rig") || (lA[[1]][1] == "Y Value Rig Newline")
         ) {
             hsa$set(lA[[1]][1], lA[[1]][2], TRUE)
         }
 
-        ################ Height of Y-axis and Horizontal Line/s (REQ) ################
-        if (lA[[1]][1] == "Y Min") { fig$Y.Min <- as.numeric(lA[[1]][2]) }
-        else if (lA[[1]][1] == "Y Max") { fig$Y.Max <- as.numeric(lA[[1]][2]) }
-        else if (lA[[1]][1] == "Y Interval") { fig$Y.Interval <- as.numeric(lA[[1]][2]) }
-        # any breaks in the y-axis? can handle comma delimited array of break details
-        else if (lA[[1]][1] == "Y Break") {
-            fig$Y.Break <- TRUE
-            tmp <- unlist(strsplit(lA[[1]][2], ","))
-            # scales column is optional, if absent 'fixed' is default for ggbreak
-            if (length(tmp) < 3) { tmp[3] <- "fixed" }
-            # add a new row to the break data frame
-            fig$Y.Break.df[nrow(fig$Y.Break.df) + 1,] <- tmp
-            # start and stop columns must be numeric for ggbreak, scales column can be character
-            fig$Y.Break.df$start <- as.numeric(fig$Y.Break.df$start)
-            fig$Y.Break.df$stop <- as.numeric(fig$Y.Break.df$stop)
-        }
 
-        ################ Alter the Axis (REQ) ################
-        else if (lA[[1]][1] == "Y Value Rig") {
-            if (lA[[1]][2] %in% c("FALSE", "False", "false", "0")) { fig$Y.Rig <- FALSE
-            } else if (lA[[1]][2] %in% c("SCI", "Sci", "sci")) { fig$Y.Rig <- "SCI"
-            } else { fig$Y.Rig <- as.numeric(lA[[1]][2]) }
-        }
-        else if (lA[[1]][1] == "Y Value Rig Newline") {
-            if (lA[[1]][2] %in% c("TRUE", "True", "true", "1")) { fig$Y.Rig.Newline <- TRUE
-            } else { fig$Y.Rig.Newline <- FALSE }
-        }
         ################ Stats Tests (REQ) ################
-        else if (lA[[1]][1] == "Stats Test") {
+        if (lA[[1]][1] == "Stats Test") {
             # set the default value to FALSE whenever a user assigns any specific test
             stats$Test[1] <- FALSE ### CHANGED - was not explicitly changing global env previously... ###
             ### CHANGED - IS THERE A REASON I AM NOT CHECKING FOR ANOVA ALREADY IN THE stats$Test LIST? ###

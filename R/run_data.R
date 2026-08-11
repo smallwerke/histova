@@ -26,24 +26,24 @@ run_data <- function(hsa) {
 
     # address any value manipulations - this can apply a standard division to ALL data values (eg divide by 1,000)
     # prepare the Y axis label supplement that contains details on what was done to the data
-    if (is.numeric(fig$Y.Rig)) {
-        histova_msg(sprintf("MODIFYING VALUES: DIVIDING ALL BY %s (file: %s)", fig$Y.Rig, the$Location.File), type="warn")
-        raw$base['Value'] = raw$base['Value']/fig$Y.Rig
-        fig$Y.Min <- fig$Y.Min/fig$Y.Rig
-        fig$Y.Max <- fig$Y.Max/fig$Y.Rig
-        fig$Y.Interval <- fig$Y.Interval/fig$Y.Rig
+    if (is.numeric(hsa$get("fig.y.rig")) ) {
+        histova_msg(sprintf("MODIFYING VALUES: MULTIPLYING ALL BY %s (file: %s)", hsa$get("fig.y.rig"), the$Location.File), type="warn")
+        raw$base['Value'] = raw$base['Value']*hsa$get("fig.y.rig")
+        hsa$set("fig.y.min", hsa$get("fig.y.min")*hsa$get("fig.y.rig") )
+        hsa$set("fig.y.max", hsa$get("fig.y.max")*hsa$get("fig.y.rig") )
+        hsa$set("fig.y.interval", hsa$get("fig.y.interval")*hsa$get("fig.y.rig") )
 
         # update the y-break values
-        if (fig$Y.Break == TRUE) {
-            fig$Y.Break.df$start <- fig$Y.Break.df$start / fig$Y.Rig
-            fig$Y.Break.df$stop <- fig$Y.Break.df$stop / fig$Y.Rig
+        if (isTRUE(hsa$get("fig.y.break")) ) {
+            hsa$fig$y.break.df$start <- hsa$fig$y.break.df$start * hsa$get("fig.y.rig")
+            hsa$fig$y.break.df$stop <- hsa$fig$y.break.df$stop * hsa$get("fig.y.rig")
         }
         # update the HLine values
-        hsa$fig$plot.hline$y = sapply(hsa$fig$plot.hline$y, function(x) x/fig$Y.Rig)
-        if (fig$Y.Rig > 100) {
-            fig$Y.Supp <- sfsmisc::pretty10exp(fig$Y.Rig, drop.1=TRUE)
+        hsa$fig$plot.hline$y = sapply(hsa$fig$plot.hline$y, function(x) x * hsa$get("fig.y.rig") )
+        if (hsa$get("fig.y.rig") > 100) {
+            fig$Y.Supp <- sfsmisc::pretty10exp(hsa$get("fig.y.rig"), drop.1=TRUE)
         } else {
-            fig$Y.Supp <- paste("x ", fig$Y.Rig, sep="")
+            fig$Y.Supp <- paste("x ", hsa$get("fig.y.rig"), sep="")
         }
         #assign("Fig.Y.Supp", Fig.Y.Supp, envir = .GlobalEnv) ### CHANGED - no longer needed ###
     }

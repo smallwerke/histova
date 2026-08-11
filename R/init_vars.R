@@ -105,16 +105,16 @@ init_vars <- function(hsa) {
     fig$Y <- histova::get_default("fig", "Y")
 
     ################ Height of Y-axis and Horizontal Line/s (REQ) ################
-    fig$Y.Break <- histova::get_default("fig", "Y.Break")
-    fig$Y.Break.df <- histova::get_default("fig", "Y.Break.df")
-    fig$Y.Interval <- histova::get_default("fig", "Y.Interval")
-    fig$Y.Max <- histova::get_default("fig", "Y.Max")
-    fig$Y.Min <- histova::get_default("fig", "Y.Min")
+    #fig$Y.Break <- histova::get_default("fig", "Y.Break")
+    #fig$Y.Break.df <- histova::get_default("fig", "Y.Break.df")
+    #fig$Y.Interval <- histova::get_default("fig", "Y.Interval")
+    #fig$Y.Max <- histova::get_default("fig", "Y.Max")
+    #fig$Y.Min <- histova::get_default("fig", "Y.Min")
     #fig$Plot.HLine <- histova::get_default("fig", "Plot.HLine")
 
     ################ Alter the Axis (REQ) ################
-    fig$Y.Rig <- histova::get_default("fig", "Y.Rig")
-    fig$Y.Rig.Newline <- histova::get_default("fig", "Y.Rig.Newline")
+    #fig$Y.Rig <- histova::get_default("fig", "Y.Rig")
+    #fig$Y.Rig.Newline <- histova::get_default("fig", "Y.Rig.Newline")
     # if there is additional info from Y manipulation store here, not editable in CONFIG
     fig$Y.Supp <- histova::get_default("fig", "Y.Supp")
 

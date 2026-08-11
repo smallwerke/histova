@@ -18,7 +18,9 @@ histova <- R6::R6Class(
         fig = list(
             "plot.hline" = data.frame(y=c(NA), size=c(0), color=c("")), # keep default as NA as this is the return from the sapply Y.Rig function...
             "colors.specific" = data.frame(matrix(ncol = 8, nrow = 0,
-                        dimnames = list(NULL, c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha")) ) )
+                        dimnames = list(NULL, c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha")) ) ),
+            "y.break.df" = data.frame(matrix( ncol = 3, nrow = 0,
+                        dimnames = list(NULL, c("start", "stop", "scales")) ))
         ),
         #' @field file list for histova including open file connections
         file = list(),
@@ -436,6 +438,36 @@ histova <- R6::R6Class(
                         val <- FALSE
                     }
                     self[[key[1]]][[key[2]]] <- val
+
+                } else if (private$default[[key[1]]][[key[2]]]$type == "y.break") {
+
+                    # begin the work by splitting the incoming value by comma
+                    tmp <- unlist(strsplit(val, ","))
+
+                    # if this is shorter than 2 we can ignore this entire exercise (a min & max are required)
+                    if ((length(tmp) >= 2) && (histova::is_num(tmp[1])) && (histova::is_num(tmp[2])) ) {
+
+                        # if we are here we can assume there is a break in the y-axis, set it to TRUE
+                        self[[key[1]]][[key[2]]] <- TRUE
+
+                        # scales column (#3) is optional, if absent simply set 'fixed' as default for ggbreak
+                        if (length(tmp) < 3) {
+                            tmp[3] <- "fixed"
+                        }
+
+                        # now go ahead and set the values, col 1 & 2 must be numeric for ggbreak,
+                        # scales column can be character
+                        self$fig$y.break.df <- rbind(self$fig$y.break.df, setNames(list(as.numeric(tmp[1]), as.numeric(tmp[2]), tmp[3]), names(self$fig$y.break.df)) )
+                    }
+
+                } else if (private$default[[key[1]]][[key[2]]]$type == "y.rig") {
+                    if (val %in% c("FALSE", "False", "false", "0")) {
+                        self[[key[1]]][[key[2]]] <- FALSE
+                    } else if (val %in% c("SCI", "Sci", "sci")) {
+                        self[[key[1]]][[key[2]]] <- "SCI"
+                    } else if (histova::is_num(val) ) {
+                        self[[key[1]]][[key[2]]] <- as.numeric(val)
+                    }
                 }
 
                 # now check and see if the new value is the same as default
@@ -522,7 +554,13 @@ histova <- R6::R6Class(
             "X Value Angle" = "fig.x.angle",
             "X Tick Display" = "fig.x.tick.display",
             "X Value Display" = "fig.x.value.display",
-            "Y Leg" = "fig.y.tmp"
+            "Y Break" = "fig.y.break",
+            "Y Leg" = "fig.y.tmp",
+            "Y Interval" = "fig.y.interval",
+            "Y Max" = "fig.y.max",
+            "Y Min" = "fig.y.min",
+            "Y Value Rig" = "fig.y.rig",
+            "Y Value Rig Newline" = "fig.y.rig.newline"
         ),
         # include ALL variables, if no default just return NULL
         # have a list w/ default AND check type
@@ -559,10 +597,10 @@ histova <- R6::R6Class(
                 "color.list" = list(type="",style=FALSE),
                 "colors" = list(type="colors",style=FALSE),
                 "colors.alpha" = list(val=1,type="alpha",style=TRUE),
-                #"colors.specific" = list(val=data.frame(matrix(
-                        #ncol = 8, nrow = 0,
-                        #dimnames = list(NULL, c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha"))
-                    #)),type="",style=TRUE),
+                # "colors.specific" = list(val=data.frame(matrix(
+                #         ncol = 8, nrow = 0,
+                #         dimnames = list(NULL, c("group", "color", "colorAlpha", "scatterColor", "scatterShape", "scatterSize", "scatterStroke", "scatterAlpha"))
+                #     )),type="",style=TRUE),
                 "colors.specific" = list(type="colors.specific", style=TRUE),
                 "colors.unique" = list(type="colors.unique", style=TRUE),
                 "convert" = list(val=TRUE,type="bool",style=TRUE),
@@ -614,16 +652,16 @@ histova <- R6::R6Class(
                 "x.tmp" = list(val="",type="text",style=FALSE),
                 "x.value.display" = list(val=TRUE,type="bool",style=TRUE),
                 "y" = "",
-                "y.break" = FALSE,
-                "y.break.df" = data.frame(matrix(
-                    ncol = 3, nrow = 0,
-                    dimnames = list(NULL, c("start", "stop", "scales"))
-                )),
-                "y.interval" = "",
-                "y.max" = "",
-                "y.min" = 0,
-                "y.rig" = FALSE,
-                "y.rig.newline" = FALSE,
+                "y.break" = list(val=FALSE,type="y.break",style=FALSE), # this is the call that will edit the df
+                # "y.break.df" = data.frame(matrix(
+                #     ncol = 3, nrow = 0,
+                #     dimnames = list(NULL, c("start", "stop", "scales"))
+                # )),
+                "y.interval" = list(val="",type="num",style=FALSE),
+                "y.max" = list(val="",type="num",style=FALSE),
+                "y.min" = list(val=0,type="num",style=FALSE),
+                "y.rig" = list(val=FALSE,type="y.rig",style=FALSE),
+                "y.rig.newline" = list(val=FALSE,type="bool",style=FALSE),
                 "y.supp" = "",
                 "y.tmp" = list(val="",type="text",style=FALSE)
             ),
